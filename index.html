@@ -1297,7 +1297,7 @@ function show(name, el) {
       Интерактивная тёмная карта — основа для навигации по серверу
     </p>
     <div class="map-wrapper fu">
-      <div id="map"></div>
+      <div id="map" style="padding:0;overflow:hidden;"><iframe src="https://www.izurvive.com/#c=ChernarusPlus" style="width:100%;height:100%;border:none;display:block;" allowfullscreen title="Карта Chernarus+" loading="lazy"></iframe></div>
     </div>
   </div>
 </section>
@@ -1563,7 +1563,7 @@ function show(name, el) {
       </div>
       <div class="team-card fu">
         <div class="team-avatar" style="border-color:#cc1f1f55">
-          <img src="images/admins/_42Pensa_.jpg" alt="_42Pensa_">
+          <img src="images/admins/42Pensa.jpg" alt="_42Pensa_">
         </div>
         <div class="team-avatar-glow"></div>
         <div class="team-name">_42Pensa_</div>
@@ -1692,44 +1692,7 @@ setInterval(fetchPlayerCount, 60000);
 (function(){
   if(!document.getElementById('map')) return;
 
-  // Load Leaflet dynamically
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
-  document.head.appendChild(link);
-
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
-  script.onload = initMap;
-  document.head.appendChild(script);
-
-  function initMap() {
-    // iZurvive Chernarus+ tile system (CRS.Simple pixel coords)
-    const ChernarusProj = L.extend({}, L.CRS.Simple, {
-      transformation: new L.Transformation(1/5.12, 0, -1/5.12, 256)
-    });
-
-    const map = L.map('map', {
-      crs: ChernarusProj,
-      minZoom: 0, maxZoom: 5,
-      zoom: 2,
-      attributionControl: false,
-      zoomControl: true
-    });
-
-    // iZurvive Chernarus+ public tiles
-    L.tileLayer('https://www.izurvive.com/chernarusplus/tiles/{z}/{x}/{y}.png', {
-      tileSize: 256,
-      noWrap: true,
-      minZoom: 0,
-      maxZoom: 5,
-      errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-    }).addTo(map);
-
-    // Center on Chernarus (pixel coords: roughly middle of map)
-    map.setView([7168, 7680], 2);
-  }
-})();
+  // Map loaded via iframe
 
 
 // ── CAROUSEL ──
