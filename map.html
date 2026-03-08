@@ -89,27 +89,35 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 // Bounds: юго-запад [0,0] → северо-восток [15360,15360]
 
 const MAP_M = 15360;
-const BOUNDS = [[0, 0], [MAP_M, MAP_M]];
+// В CRS.Simple ось Y идёт вверх от нуля.
+// Кладём карту симметрично от -MAP_M/2 до MAP_M/2
+const HALF = MAP_M / 2;
+const BOUNDS = [[-HALF, -HALF], [HALF, HALF]];
 
 const map = L.map('map', {
   crs: L.CRS.Simple,
   minZoom: -3,
   maxZoom: 3,
-  zoomSnap: 0.5,
+  zoomSnap: 0.25,
   zoomControl: true,
   attributionControl: false,
-  maxBounds: [[-500, -500], [MAP_M + 500, MAP_M + 500]],
+  maxBounds: [[-HALF - 500, -HALF - 500], [HALF + 500, HALF + 500]],
   maxBoundsViscosity: 0.85
 });
 
-// Карта из файла (скачанная через map_downloader.html)
 L.imageOverlay('images/map_chernarus.jpg', BOUNDS, {
   opacity: 0.92,
   interactive: false
 }).addTo(map);
 
-// Показать всю карту
-map.fitBounds(BOUNDS, { padding: [10, 10] });
+map.fitBounds(BOUNDS);
+
+// Конвертация DayZ X,Z → Leaflet LatLng
+// DayZ: X,Z ∈ [0..15360], центр = 7680
+// Leaflet: lat,lng ∈ [-7680..7680]
+function toLL(x, z) {
+  return L.latLng(z - HALF, x - HALF);
+}
 
 // ══ МАРКЕРЫ ══
 const MARKERS = [
@@ -144,7 +152,7 @@ function makeIcon(emoji, color) {
 
 const allLayers = [];
 MARKERS.forEach(m => {
-  const marker = L.marker([m.z, m.x], { icon: makeIcon(m.icon, m.color) })
+  const marker = L.marker(toLL(m.x, m.z), { icon: makeIcon(m.icon, m.color) })
     .bindPopup(`
       <div class="popup-title">${m.text}</div>
       <div class="popup-type" style="color:${m.color}">${m.icon} ${m.sub}</div>
@@ -157,7 +165,7 @@ MARKERS.forEach(m => {
 
 const szLayers = [];
 SAFEZONES.forEach(sz => {
-  const c = L.circle([sz.z, sz.x], {
+  const c = L.circle(toLL(sz.x, sz.z), {
     radius: sz.r, color:'#7ec8a0', fillColor:'#7ec8a0',
     fillOpacity:0.08, weight:1.5, dashArray:'6,5'
   }).bindPopup(`
@@ -182,8 +190,9 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
 
 // ══ КООРДИНАТЫ ══
 map.on('mousemove', e => {
-  document.getElementById('coords').textContent =
-    `X: ${e.latlng.lng.toFixed(0)}  Z: ${e.latlng.lat.toFixed(0)}`;
+  const x = (e.latlng.lng + HALF).toFixed(0);
+  const z = (e.latlng.lat + HALF).toFixed(0);
+  document.getElementById('coords').textContent = `X: ${x}  Z: ${z}`;
 });
 
 // ══ ЛЕГЕНДА ══
