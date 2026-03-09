@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Механики сервера — Shelter PVE</title>
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="description" content="Уникальные механики сервера Shelter PVE — дроны, мутанты, трейдеры, радиация, оружие и многое другое.">
+<meta property="og:title" content="Механики — Shelter PVE">
+<meta property="og:image" content="https://alexdff-mun.github.io/Shelter/images/og-preview.jpg">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#cc1f1f;--ember:#e05a1a;
+  --khaki:#b7a98d;--khaki-dark:#7a6a53;
+  --bg:#080707;--bg2:#0c0a0a;--bg3:#101010;
+  --text:#d4c9b5;--text-dim:#6a6058;--text-muted:#3a3430;
+  --rad:#7ec8a0;--gold:#e0a020;--blue:#5b9bd5;
+  --mono:'Share Tech Mono',monospace;
+  --head:'Oswald',sans-serif;
+  --body:'Rajdhani',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;}
+
+/* ── TOPBAR ── */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:56px;background:rgba(8,7,7,0.97);border-bottom:1px solid rgba(204,31,31,0.2);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+.topbar-logo{display:flex;align-items:center;gap:0.6rem;text-decoration:none;}
+.topbar-logo img{height:30px;width:30px;object-fit:contain;}
+.topbar-logo-text{font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:0.12em;color:var(--text);}
+.topbar-logo-text span{color:var(--red);}
+.topbar-back{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.12em;color:var(--text-dim);text-decoration:none;transition:color 0.2s;}
+.topbar-back:hover{color:var(--red);}
+
+/* ── HERO ── */
+.hero{padding:7rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 60%,rgba(204,31,31,0.06),transparent);}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(204,31,31,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(204,31,31,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.hero-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.25em;color:var(--red);text-transform:uppercase;margin-bottom:0.8rem;position:relative;}
+.hero-title{font-family:var(--head);font-size:clamp(2.5rem,6vw,4rem);font-weight:700;letter-spacing:0.05em;text-transform:uppercase;line-height:1.1;margin-bottom:1rem;position:relative;}
+.hero-title span{color:var(--red);}
+.hero-desc{font-family:var(--body);font-size:1rem;color:var(--text-dim);line-height:1.7;max-width:560px;margin:0 auto;position:relative;}
+
+/* ── CONTAINER ── */
+.container{max-width:1100px;margin:0 auto;padding:0 2rem;}
+
+/* ── SECTION HEADER ── */
+.sec-label{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.2em;color:var(--red);text-transform:uppercase;margin-bottom:0.4rem;}
+.sec-title{font-family:var(--head);font-size:1.6rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);margin-bottom:1.5rem;}
+.sec-title span{color:var(--red);}
+
+/* ── GRID ── */
+.mech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:4rem;}
+@media(max-width:900px){.mech-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.mech-grid{grid-template-columns:1fr;}}
+.mech-card.wide{grid-column:span 2;}
+@media(max-width:560px){.mech-card.wide{grid-column:span 1;}}
+
+/* ── CARD ── */
+.mech-card{
+  background:var(--bg2);border:1px solid rgba(255,255,255,0.05);
+  border-top:2px solid var(--c,rgba(204,31,31,0.35));
+  padding:1.5rem;position:relative;overflow:hidden;
+  transition:border-top-color 0.25s,background 0.25s;
+}
+.mech-card:hover{background:var(--bg3);border-top-color:var(--c,var(--red));}
+.mech-card::after{content:'';position:absolute;bottom:-20px;right:-20px;width:100px;height:100px;background:radial-gradient(circle,var(--c,rgba(204,31,31,0.04)),transparent 70%);pointer-events:none;}
+.card-icon{font-size:1.8rem;margin-bottom:0.8rem;display:block;}
+.card-tag{display:inline-block;font-family:var(--mono);font-size:0.44rem;letter-spacing:0.12em;padding:0.12rem 0.5rem;text-transform:uppercase;margin-bottom:0.6rem;}
+.tag-active{background:rgba(126,200,160,0.1);color:var(--rad);border:1px solid rgba(126,200,160,0.2);}
+.tag-soon{background:rgba(224,160,32,0.1);color:var(--gold);border:1px solid rgba(224,160,32,0.2);}
+.card-title{font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);margin-bottom:0.6rem;}
+.card-desc{font-family:var(--body);font-size:0.87rem;color:var(--text-dim);line-height:1.65;}
+.card-desc strong{color:var(--text);}
+.card-list{list-style:none;margin-top:0.5rem;}
+.card-list li{padding:0.18rem 0;display:flex;align-items:flex-start;gap:0.4rem;font-size:0.84rem;color:var(--text-dim);}
+.card-list li::before{content:'//';font-family:var(--mono);font-size:0.48rem;color:var(--red);flex-shrink:0;margin-top:4px;}
+
+/* ── SOON ── */
+.soon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:5rem;}
+@media(max-width:800px){.soon-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:420px){.soon-grid{grid-template-columns:1fr;}}
+.soon-card{background:rgba(224,160,32,0.03);border:1px solid rgba(224,160,32,0.1);padding:1.2rem;text-align:center;}
+.soon-icon{font-size:1.6rem;margin-bottom:0.5rem;}
+.soon-name{font-family:var(--head);font-size:0.72rem;letter-spacing:0.12em;color:var(--text);text-transform:uppercase;margin-bottom:0.35rem;}
+.soon-desc{font-family:var(--mono);font-size:0.53rem;color:var(--text-muted);line-height:1.6;}
+.soon-badge{display:inline-block;font-family:var(--mono);font-size:0.43rem;padding:0.1rem 0.45rem;background:rgba(224,160,32,0.08);color:var(--gold);border:1px solid rgba(224,160,32,0.18);margin-top:0.5rem;letter-spacing:0.08em;}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(204,31,31,0.2),transparent);margin:0 2rem 3rem;}
+
+/* ── CTA ── */
+.cta{padding:4rem 2rem 5rem;text-align:center;}
+.cta-title{font-family:var(--head);font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.8rem;}
+.cta-title span{color:var(--red);}
+.cta-sub{font-family:var(--mono);font-size:0.62rem;color:var(--text-dim);margin-bottom:2rem;letter-spacing:0.05em;}
+.cta-btn{
+  display:inline-block;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;
+  padding:0.8rem 2rem;text-decoration:none;
+  background:rgba(204,31,31,0.12);color:var(--red);border:1px solid rgba(204,31,31,0.35);
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all 0.2s;
+}
+.cta-btn:hover{background:rgba(204,31,31,0.25);}
+
+.section-pad{padding:3rem 0 0;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a href="index.html" class="topbar-logo">
+    <img src="images/SHL_PVE.png" alt="Shelter PVE">
+    <span class="topbar-logo-text">SHELTER <span>PVE</span></span>
+  </a>
+  <a href="index.html" class="topbar-back">← НА ГЛАВНУЮ</a>
+</header>
+
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="hero-label">// server_mechanics.cfg</div>
+  <h1 class="hero-title">Механики <span>сервера</span></h1>
+  <p class="hero-desc">Shelter PVE — это не ванильный DayZ. Каждая зона, каждый ивент и каждый предмет подобраны вручную чтобы сделать выживание интереснее.</p>
+</section>
+
+<div class="container">
+
+  <!-- ── ВЫЖИВАНИЕ И МИР ── -->
+  <div class="section-pad">
+    <div class="sec-label">// survival</div>
+    <div class="sec-title">Выживание <span>и мир</span></div>
+  </div>
+  <div class="mech-grid">
+
+    <div class="mech-card" style="--c:var(--red)">
+      <span class="card-icon">🚁</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Боевые дроны</div>
+      <div class="card-desc">
+        На крупных военных объектах патрулируют <strong>автономные дроны</strong> — они засекают игрока и начинают преследование. Военки теперь — настоящее испытание.
+        <ul class="card-list">
+          <li>Сканируют периметр военных объектов</li>
+          <li>Преследуют при обнаружении</li>
+          <li>Требуют тактики и подготовки</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--rad)">
+      <span class="card-icon">☢️</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Радиационные зоны</div>
+      <div class="card-desc">
+        Вместо стандартных хим-зон — <strong>полноценные радиационные зоны</strong> с уникальной атмосферой и топовым лутом внутри.
+        <ul class="card-list">
+          <li>Нужна защита и антирад</li>
+          <li>Лучший лут только внутри зоны</li>
+          <li>Chernobyl-атмосфера на Chernarus+</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:#6a9e6a">
+      <span class="card-icon">🌿</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Выращивание каннабиса</div>
+      <div class="card-desc">
+        Найди семена, посади и вырасти <strong>собственную плантацию</strong> — готовый продукт можно сдать трейдеру или использовать как ценный ресурс.
+        <ul class="card-list">
+          <li>Полный цикл от семени до урожая</li>
+          <li>Требует воды и времени</li>
+          <li>Ценный товар у трейдеров</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--ember)">
+      <span class="card-icon">🏕️</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Охотничьи лагеря</div>
+      <div class="card-desc">
+        По лесам и глухим местам карты спрятаны <strong>охотничьи лагеря</strong> — точки интереса с уникальным охотничьим лутом для любителей исследовать.
+        <ul class="card-list">
+          <li>Спрятаны в лесах и глуши</li>
+          <li>Охотничье снаряжение и припасы</li>
+          <li>Хорошие точки для базирования</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--ember)">
+      <span class="card-icon">🏚️</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Укреплённые аванпосты</div>
+      <div class="card-desc">
+        По всей карте расставлены <strong>уникальные укреплённые точки интереса</strong> — нестандартные постройки с AI-охраной и ценными наградами внутри.
+        <ul class="card-list">
+          <li>Уникальная архитектура</li>
+          <li>Вооружённая AI-охрана</li>
+          <li>Высокий риск — высокая награда</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--blue)">
+      <span class="card-icon">✈️</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Крашсайты вертолётов</div>
+      <div class="card-desc">
+        По всему Chernarus+ случайно генерируются <strong>упавшие вертолёты</strong> с ценным военным снаряжением — ищи дым на горизонте.
+        <ul class="card-list">
+          <li>Случайная генерация по карте</li>
+          <li>Топовый военный лут</li>
+          <li>Охраняются зомби и AI</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--khaki)">
+      <span class="card-icon">🎵</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Аудиоплеер с флешками</div>
+      <div class="card-desc">
+        Найди <strong>флешку с музыкой</strong> в мире, вставь в плеер — и слушай треки прямо во время выживания. Делает долгие переходы по карте живее.
+        <ul class="card-list">
+          <li>Флешки спавнятся по всей карте</li>
+          <li>Каждая — свой трек или плейлист</li>
+          <li>Уникальная атмосферная механика</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── ТОРГОВЛЯ И КРАФТ ── -->
+  <div class="sec-label">// economy & craft</div>
+  <div class="sec-title">Торговля <span>и крафт</span></div>
+  <div class="mech-grid">
+
+    <div class="mech-card" style="--c:var(--gold)">
+      <span class="card-icon">🛒</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Кастомный трейдер</div>
+      <div class="card-desc">
+        Три <strong>уникальные торговые точки</strong> на карте — каждая со своим ассортиментом, атмосферой и расположением.
+        <ul class="card-list">
+          <li>Лагерь выживших — база</li>
+          <li>Терминал — военное снаряжение</li>
+          <li>Егерь — охота и природа</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--rad)">
+      <span class="card-icon">🔧</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Верстак для крафта</div>
+      <div class="card-desc">
+        Специальный <strong>верстак на инженерном посту</strong> позволяет создавать предметы, которые нельзя найти в луте — только через крафт.
+        <ul class="card-list">
+          <li>Инженерный пост — место крафта</li>
+          <li>Компоненты из трейдера и мира</li>
+          <li>Эксклюзивные предметы</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card" style="--c:var(--blue)">
+      <span class="card-icon">🏠</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Базы через авторизацию</div>
+      <div class="card-desc">
+        Построй базу и поставь <strong>ящик авторизации</strong> — только ты и твои союзники получат доступ. Надёжная защита от случайных игроков.
+        <ul class="card-list">
+          <li>Авторизованный доступ к постройкам</li>
+          <li>Список доверенных игроков</li>
+          <li>Защита от чужих без взлома</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── АРСЕНАЛ ── -->
+  <div class="sec-label">// arsenal</div>
+  <div class="sec-title">Транспорт <span>и оружие</span></div>
+  <div class="mech-grid">
+
+    <div class="mech-card" style="--c:var(--blue)">
+      <span class="card-icon">🚗</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Большой парк техники</div>
+      <div class="card-desc">
+        Расширенный автопарк — от гражданских машин до <strong>вертолётов и военной техники</strong>. Добраться до любой точки карты гораздо интереснее.
+        <ul class="card-list">
+          <li>Гражданский и военный транспорт</li>
+          <li>Вертолёты нескольких типов</li>
+          <li>Водный транспорт</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mech-card wide" style="--c:var(--red)">
+      <span class="card-icon">🔫</span>
+      <span class="card-tag tag-active">АКТИВНО</span>
+      <div class="card-title">Расширенный арсенал</div>
+      <div class="card-desc">
+        На сервере установлен <strong>большой пак оружия</strong> — пистолеты, штурмовые винтовки, дробовики и снайперки, которых нет в ванильном DayZ. Каждый ствол максимально близок по стилю к оригинальной игре.
+        <ul class="card-list">
+          <li>Glock, Desert Eagle, Beretta и другие пистолеты</li>
+          <li>AK-74M, M4A1, HK416, AKS-74U и другие штурмовые</li>
+          <li>Уникальные аттачменты: цевья, приклады, глушители, прицелы</li>
+          <li>Все модели оптимизированы под DayZ без лагов</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── СКОРО ── -->
+  <div class="divider"></div>
+  <div class="sec-label">// в разработке</div>
+  <div class="sec-title">Скоро <span>на сервере</span></div>
+  <div class="soon-grid">
+    <div class="soon-card">
+      <div class="soon-icon">💰</div>
+      <div class="soon-name">Несколько валют</div>
+      <div class="soon-desc">Разные типы валюты для разных зон и трейдеров</div>
+      <div class="soon-badge">В РАЗРАБОТКЕ</div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-icon">⛏️</div>
+      <div class="soon-name">Майнинг ферма</div>
+      <div class="soon-desc">Добыча ресурсов и пассивный доход для опытных игроков</div>
+      <div class="soon-badge">В РАЗРАБОТКЕ</div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-icon">🛢️</div>
+      <div class="soon-name">Нефтяные вышки</div>
+      <div class="soon-desc">Захват и удержание нефтяных вышек — борьба за ресурсы</div>
+      <div class="soon-badge">В РАЗРАБОТКЕ</div>
+    </div>
+    <div class="soon-card">
+      <div class="soon-icon">🗺️</div>
+      <div class="soon-name">Новые ивенты</div>
+      <div class="soon-desc">Динамические события по всей карте с уникальными наградами</div>
+      <div class="soon-badge">ПЛАНИРУЕТСЯ</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="divider"></div>
+
+<section class="cta">
+  <div class="cta-title">Готов <span>попробовать?</span></div>
+  <div class="cta-sub">Все механики доступны прямо сейчас — заходи и исследуй</div>
+  <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="cta-btn">⚡ ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ</a>
+</section>
+
+</body>
+</html>
