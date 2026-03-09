@@ -29,7 +29,7 @@ body.standalone .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:6
 .craft-section{background:var(--bg2);position:relative;overflow:hidden;}
 .craft-section::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0,transparent 40px,rgba(204,31,31,0.01) 40px,rgba(204,31,31,0.01) 41px),repeating-linear-gradient(-45deg,transparent 0,transparent 40px,rgba(204,31,31,0.01) 40px,rgba(204,31,31,0.01) 41px);pointer-events:none;}
 .craft-header-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.8rem;}
-.craft-embed-box{border:1px solid rgba(204,31,31,0.2);overflow:hidden;position:relative;}
+.craft-embed-box{border:1px solid rgba(204,31,31,0.2);position:relative;}
 .craft-embed-label{background:rgba(204,31,31,0.07);border-bottom:1px solid rgba(204,31,31,0.15);padding:0.5rem 1rem;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.2em;color:var(--red);display:flex;align-items:center;gap:0.5rem;}
 .craft-embed-label::before{content:'■';font-size:0.38rem;animation:blink 1.5s step-end infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
@@ -42,7 +42,7 @@ body.standalone .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:6
     --text: #d4c9b5; --text-dim: #6a6058; --border: #1e1818;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-.ctabs { display:flex; flex-wrap:wrap; gap:2px; background:var(--panel); padding:14px 48px 0; border-bottom:1px solid var(--border); position:sticky; top:60px; z-index:90; }
+.ctabs { display:flex; flex-wrap:wrap; gap:2px; background:var(--panel); padding:14px 48px 0; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:90; }
   .ctab { padding:10px 18px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap; }
   .ctab:hover { color:var(--text); }
   .ctab.active { color:var(--accent); border-bottom-color:var(--accent); }
@@ -133,17 +133,6 @@ if(window.self === window.top) {
 </header>
 
 <div class="craft-wrap">
-<section class="craft-section" id="craft">
-  <div class="container">
-    <div class="craft-header-row">
-      <div>
-        <div class="sec-label fu">Производство</div>
-        <h2 class="sec-title fu">База <span>крафта</span></h2>
-        <p class="fu" style="color:var(--khaki-dark);font-size:0.88rem;max-width:480px;line-height:1.7;margin-top:0.3rem">Полная база рецептов: оружие, броня, ПНВ, электроника, ёмкости, рюкзаки и добыча руды</p>
-      </div>
-    </div>
-    <div class="craft-embed-box fu">
-      <div class="craft-embed-label">Shelter PVE // База крафта</div>
 <div class="ctabs">
   <div class="ctab active" onclick="craftShow('weapons',this)">🔫 Оружие</div>
   <div class="ctab" onclick="craftShow('nvg',this)">🌙 ПНВ</div>
@@ -155,7 +144,7 @@ if(window.self === window.top) {
   <div class="ctab" onclick="craftShow('mining',this)">⛏ Добыча</div>
 </div>
 
-<main>
+<main style="padding:36px 48px;max-width:1400px;margin:0 auto;">
 <div class="legend">
   <div class="li"><div class="ld" style="border-color:var(--accent3)"></div> Уничтожается при крафте</div>
   <div class="li"><div class="ld" style="border-color:var(--accent2)"></div> Сохраняется</div>
@@ -616,9 +605,6 @@ function show(name, el) {
   }
 })();
 </script>
-    </div>
-  </div>
-</section>
 </div>
 
 <script>
