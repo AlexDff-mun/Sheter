@@ -13,17 +13,17 @@ html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px);}
 
-/* TOPBAR */
-.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;background:rgba(8,7,7,0.97);border-bottom:1px solid rgba(204,31,31,0.2);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+/* Если открыт standalone — показать шапку */
+.craft-wrap{padding-top:0;}
+body.standalone .craft-wrap{padding-top:60px;}
+.topbar{display:none;}
+body.standalone .topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;background:rgba(8,7,7,0.97);border-bottom:1px solid rgba(204,31,31,0.2);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
 .topbar-logo{display:flex;align-items:center;gap:0.7rem;text-decoration:none;}
 .topbar-logo img{height:34px;width:34px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(204,31,31,0.8));}
 .topbar-logo-text{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:700;letter-spacing:0.15em;color:var(--text);text-transform:uppercase;}
 .topbar-logo-text em{color:var(--red);font-style:normal;}
 .topbar-back{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;color:var(--text-dim);text-decoration:none;border:1px solid rgba(255,255,255,0.06);padding:0.35rem 0.9rem;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);transition:all 0.2s;}
 .topbar-back:hover{color:var(--red);border-color:rgba(204,31,31,0.3);}
-
-/* Отступ под шапку */
-.craft-wrap{padding-top:60px;}
 
 /* CRAFT SECTION */
 .craft-section{background:var(--bg2);position:relative;overflow:hidden;}
@@ -42,13 +42,13 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
     --text: #d4c9b5; --text-dim: #6a6058; --border: #1e1818;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-.tabs { display:flex; flex-wrap:wrap; gap:2px; background:var(--panel); padding:14px 48px 0; border-bottom:1px solid var(--border); position:sticky; top:60px; z-index:90; }
-  .tab { padding:10px 18px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap; }
-  .tab:hover { color:var(--text); }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.ctabs { display:flex; flex-wrap:wrap; gap:2px; background:var(--panel); padding:14px 48px 0; border-bottom:1px solid var(--border); position:sticky; top:60px; z-index:90; }
+  .ctab { padding:10px 18px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap; }
+  .ctab:hover { color:var(--text); }
+  .ctab.active { color:var(--accent); border-bottom-color:var(--accent); }
   main { padding:36px 48px; max-width:1400px; margin:0 auto; }
-  .section { display:none; }
-  .section.active { display:block; }
+  .csection { display:none; }
+  .csection.active { display:block; }
   .sec-title { font-family:'Oswald',sans-serif; font-size:26px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
   .sec-title::before { content:''; display:inline-block; width:4px; height:26px; background:var(--accent); }
   .sub-title { font-family:'Oswald',sans-serif; font-size:18px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin:24px 0 14px; }
@@ -112,6 +112,18 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </head>
 <body>
 
+<script>
+// Если открыт напрямую (не в iframe) — показать шапку
+if(window.self === window.top) {
+  document.documentElement.addEventListener('DOMContentLoaded', function(){
+    document.body.classList.add('standalone');
+  });
+  // fallback
+  document.addEventListener('DOMContentLoaded', function(){
+    document.body.classList.add('standalone');
+  });
+}
+</script>
 <header class="topbar">
   <a href="index.html" class="topbar-logo">
     <img src="images/SHL_PVE.png" alt="Shelter PVE">
@@ -132,15 +144,15 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
     </div>
     <div class="craft-embed-box fu">
       <div class="craft-embed-label">Shelter PVE // База крафта</div>
-<div class="tabs">
-  <div class="tab active" onclick="craftShow('weapons',this)">🔫 Оружие</div>
-  <div class="tab" onclick="craftShow('nvg',this)">🌙 ПНВ</div>
-  <div class="tab" onclick="craftShow('electronics',this)">🔌 Электроника</div>
-  <div class="tab" onclick="craftShow('barrels',this)">🛢 Ёмкости</div>
-  <div class="tab" onclick="craftShow('backpacks',this)">🎒 Рюкзаки</div>
-  <div class="tab" onclick="craftShow('armor',this)">🛡 Броня</div>
-  <div class="tab" onclick="craftShow('clothing',this)">👕 Одежда</div>
-   <div class="tab" onclick="craftShow('mining',this)">⛏ Добыча</div>
+<div class="ctabs">
+  <div class="ctab active" onclick="craftShow('weapons',this)">🔫 Оружие</div>
+  <div class="ctab" onclick="craftShow('nvg',this)">🌙 ПНВ</div>
+  <div class="ctab" onclick="craftShow('electronics',this)">🔌 Электроника</div>
+  <div class="ctab" onclick="craftShow('barrels',this)">🛢 Ёмкости</div>
+  <div class="ctab" onclick="craftShow('backpacks',this)">🎒 Рюкзаки</div>
+  <div class="ctab" onclick="craftShow('armor',this)">🛡 Броня</div>
+  <div class="ctab" onclick="craftShow('clothing',this)">👕 Одежда</div>
+  <div class="ctab" onclick="craftShow('mining',this)">⛏ Добыча</div>
 </div>
 
 <main>
@@ -151,7 +163,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ WEAPONS ═══ -->
-<div class="section active" id="tab-weapons">
+<div class="csection active" id="tab-weapons">
   <div class="sec-title">Оружие — VZP M107</div>
   <div class="note"><strong>Цепочка:</strong> Gamma → Beta → Alpha. Инструменты на всех этапах: <strong>Тиски + Дрель</strong>. Gamma крафтится 2.5 минуты и требует специальный верстак.</div>
   <div class="chain">
@@ -189,7 +201,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ NVG ═══ -->
-<div class="section" id="tab-nvg">
+<div class="csection" id="tab-nvg">
   <div class="sec-title">Приборы ночного видения</div>
   <div class="note"><strong>Продвинутый ПНВ и все фильтры</strong> требуют <strong>Чертёж ПНВ</strong> — расходует 14% прочности за крафт.</div>
   <div class="grid">
@@ -230,7 +242,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ ELECTRONICS ═══ -->
-<div class="section" id="tab-electronics">
+<div class="csection" id="tab-electronics">
   <div class="sec-title">Электроника</div>
   <div class="note"><strong>Паяльник</strong> нужен на всех этапах. Сначала разбираем электронику на компоненты, затем крафтим Чип Virtex и Дрон детектор (Тир 1-3). Для Virtex нужен <strong>Чертёж Иммобилайзера</strong>.</div>
   <div class="chain"><div class="chain-title">► Цепочка крафта компонентов</div><div class="steps"><div class="step"><span class="sn">РАЗБИРАЕМ</span><span class="sv">ОЗУ / Видеокарта / iPhone / Wi-Fi камера</span></div><div class="sarr">→</div><div class="step"><span class="sn">ПОЛУЧАЕМ</span><span class="sv">Микрочип / Плата / LCD / Камера</span></div><div class="sarr">→</div><div class="step"><span class="sn">ЭТАП</span><span class="sv">Чип Virtex</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 1</span><span class="sv">Дрон детектор</span></div><div class="sarr">→</div><div class="step"><span class="sn">ФИНАЛ ★</span><span class="sv">Дрон детектор Тир 3 ★</span></div></div></div>
@@ -248,7 +260,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ BARRELS ═══ -->
-<div class="section" id="tab-barrels">
+<div class="csection" id="tab-barrels">
   <div class="sec-title">Ёмкости и бочки</div>
   <div class="note"><strong>Цепочка крафта:</strong> Бочка 300л крафтится из обычной синей бочки (DayZ) + металлопластины. Бочка 500л — апгрейд соответствующей бочки 300л. Инструмент везде: <strong>Металлорез</strong>.</div>
   <div class="chain"><div class="chain-title">► Цепочка бочек 500л</div><div class="steps"><div class="step"><span class="sn">ОСНОВА</span><span class="sv">Бочка (синяя, обычная)</span></div><div class="sarr">→</div><div class="step"><span class="sn">ЭТАП 1</span><span class="sv">Бочка 300л (чёрная / синяя / красная)</span></div><div class="sarr">→</div><div class="step"><span class="sn">ЭТАП 2 ★</span><span class="sv">Бочка 500л (Flame / Camo / Palm)</span></div></div></div>
@@ -272,7 +284,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ BACKPACKS ═══ -->
-<div class="section" id="tab-backpacks">
+<div class="csection" id="tab-backpacks">
   <div class="sec-title">Рюкзаки (Тиры)</div>
   <div class="note">Все рюкзаки требуют <strong>Чертёж рюкзака</strong> (−50% на Тир 1-2, −100% на Тир 3-5). <strong>Тир 5</strong> дополнительно требует <strong>Металлорез</strong> и занимает 120 сек. Инструмент на всех этапах: <strong>Швейная машина</strong>.</div>
   <div class="chain"><div class="chain-title">► Цепочка улучшения рюкзака</div><div class="steps"><div class="step"><span class="sn">ОСНОВА</span><span class="sv">Тактический рюкзак (чёрный)</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 1</span><span class="sv">Рюкзак Тир 1</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 2</span><span class="sv">Рюкзак Тир 2</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 3</span><span class="sv">Рюкзак Тир 3</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 4</span><span class="sv">Рюкзак Тир 4</span></div><div class="sarr">→</div><div class="step"><span class="sn">ТИР 5 ★</span><span class="sv">Рюкзак Тир 5</span></div></div></div>
@@ -286,7 +298,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ ARMOR ═══ -->
-<div class="section" id="tab-armor">
+<div class="csection" id="tab-armor">
   <div class="sec-title">Броня</div>
   <div class="note"><strong>Жилеты Тир 2-5</strong> требуют Чертёж бронежилета (−100%). <strong>Тир 5</strong> — особый Чертёж бронежилета Тир 5. <strong>Шлемы Тир 2-5</strong> требуют Чертёж шлема (−100%). Тир 4 и 5 дополнительно нужна инструкция.</div>
 
@@ -312,7 +324,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ CLOTHING ═══ -->
-<div class="section" id="tab-clothing">
+<div class="csection" id="tab-clothing">
   <div class="sec-title">Одежда</div>
   <div class="note"><strong>Тир 2 и выше</strong> требуют <strong>Чертёж одежды</strong> (−100%). <strong>Тир 4-5</strong> дополнительно нужна Инструкция по одежде. Инструмент: <strong>Швейная машина</strong>.</div>
   <div class="warn"><strong>⚠ Тир 5 одежды</strong> полностью уничтожает швейную машину (−99-100% прочности). Убедитесь что инструмент в хорошем состоянии!</div>
@@ -355,7 +367,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ FUEL ═══ -->
-<div class="section" id="tab-fuel">
+<div class="csection" id="tab-fuel">
   <div class="sec-title">Бензин</div>
   <div class="grid">
     <div class="card">
@@ -372,7 +384,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 </div>
 
 <!-- ═══ MINING ═══ -->
-<div class="section" id="tab-mining">
+<div class="csection" id="tab-mining">
   <div class="sec-title">Добыча и переработка</div>
   <div class="note">Переработка камней в точильные камни и крафт деревянной кирки. Кирка крафтится по цепочке: сначала детали, потом сборка.</div>
   <div class="chain"><div class="chain-title">► Цепочка крафта: Деревянная кирка</div><div class="steps"><div class="step"><span class="sn">МАТЕРИАЛ</span><span class="sv">Слиток металла</span></div><div class="sarr">→</div><div class="step"><span class="sn">ЭТАП 1</span><span class="sv">Клин</span></div><div class="sarr">+</div><div class="step"><span class="sn">ЭТАП 2</span><span class="sv">Жало для кирки</span></div><div class="sarr">→</div><div class="step"><span class="sn">ФИНАЛ ★</span><span class="sv">Деревянная кирка</span></div></div></div>
@@ -424,8 +436,8 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;ba
 
 <script>
 function show(name, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.csection').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   el.classList.add('active');
 }
@@ -611,8 +623,8 @@ function show(name, el) {
 
 <script>
 function craftShow(name, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.csection').forEach(s => s.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
   el.classList.add('active');
 }
