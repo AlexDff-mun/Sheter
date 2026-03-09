@@ -997,6 +997,31 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
   border-color: var(--red);
   color: #fff;
 }
+
+/* ── NEWS & UPDATES SECTION ── */
+.news-section{background:var(--bg);padding:5rem 0;position:relative;}
+.news-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(204,31,31,0.2),transparent);}
+.news-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
+.news-col{background:var(--bg2);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden;}
+.news-col::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--col,var(--red)),transparent);}
+.news-col-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.04);}
+.news-col-title{font-family:'Oswald',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.2em;color:var(--text);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;}
+.news-col-count{font-family:var(--mono);font-size:0.5rem;background:rgba(204,31,31,0.15);color:var(--red);padding:0.15rem 0.5rem;letter-spacing:0.05em;}
+.news-col-body{padding:0.5rem 0;}
+.news-entry{padding:0.9rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.03);transition:background 0.15s;cursor:default;}
+.news-entry:last-child{border-bottom:none;}
+.news-entry:hover{background:rgba(255,255,255,0.02);}
+.news-entry-top{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.35rem;}
+.news-entry-type{font-family:var(--mono);font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.12rem 0.45rem;}
+.news-entry-date{font-family:var(--mono);font-size:0.5rem;color:var(--text-dim);margin-left:auto;}
+.news-entry-title{font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:0.25rem;letter-spacing:0.03em;}
+.news-entry-text{font-family:'Rajdhani',sans-serif;font-size:0.85rem;color:var(--text-dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.news-empty{padding:2.5rem 1.4rem;text-align:center;font-family:var(--mono);font-size:0.6rem;color:var(--text-muted);letter-spacing:0.08em;line-height:1.8;}
+.news-col-footer{padding:0.8rem 1.4rem;border-top:1px solid rgba(255,255,255,0.04);text-align:center;}
+.news-all-btn{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);background:none;border:1px solid rgba(255,255,255,0.06);padding:0.35rem 1rem;cursor:pointer;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);transition:all 0.2s;text-decoration:none;display:inline-block;}
+.news-all-btn:hover{border-color:rgba(204,31,31,0.3);color:var(--red);}
+@media(max-width:750px){.news-grid{grid-template-columns:1fr;}}
+
 </style>
   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
   <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
@@ -1025,7 +1050,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="tl">Discord</a>
     <a href="https://t.me/ShelterPVE" target="_blank" class="tl">Telegram</a>
     <a href="https://shelter-games.ru/products" target="_blank" class="tl">Магазин</a>
-    <a href="steam://connect/217.168.247.192:2312" class="tl primary">Подключиться</a>
+    <a href="steam://rungameid/221100//+connect 217.168.247.192:2312" class="tl primary">Подключиться</a>
   </div>
   <!-- MOBILE BURGER -->
   <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
@@ -1054,7 +1079,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="mob-link mob-social">💬 Discord</a>
     <a href="https://t.me/ShelterPVE" target="_blank" class="mob-link mob-social">✈️ Telegram</a>
     <a href="https://shelter-games.ru/products" target="_blank" class="mob-link mob-social">🛒 Магазин</a>
-    <a href="steam://connect/217.168.247.192:2312" class="mob-connect">⚡ Подключиться</a>
+    <a href="steam://rungameid/221100//+connect 217.168.247.192:2312" class="mob-connect">⚡ Подключиться</a>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeNav()"></div>
@@ -1102,7 +1127,7 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <h1 class="hero-title"><span class="t1">Shelter</span><span class="t2">PVE</span></h1>
     <p class="hero-sub">Выживание требует не только оружия,<br>но и смекалки, ресурсов и верных союзников</p>
     <div class="hero-cta">
-      <a href="steam://connect/217.168.247.192:2312" class="btn btn-red">Подключиться</a>
+      <a href="steam://rungameid/221100//+connect 217.168.247.192:2312" class="btn btn-red">Подключиться</a>
       <a href="#craft" class="btn btn-outline">База крафта</a>
       <a href="#features" class="btn btn-outline">О сервере</a>
     </div>
@@ -1142,6 +1167,37 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
       <div class="loot-item"><div class="loot-icon">🧰</div><div class="loot-name">Снаряжение</div><div class="loot-desc">Контейнеры, ящики, тайники — инструменты спрятаны</div></div>
       <div class="loot-item"><div class="loot-icon">🥫</div><div class="loot-name">Провизия</div><div class="loot-desc">Холодильники и продуктовые хранилища — источник питания</div></div>
       <div class="loot-item"><div class="loot-icon">📦</div><div class="loot-name">Тайники</div><div class="loot-desc">Сундуки, рюкзаки, схроны — для тех, кто ищет</div></div>
+    </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+
+<section class="news-section" id="news">
+  <div class="container">
+    <div class="sec-label fu">Жизнь сервера</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+      <h2 class="sec-title fu">Новости &amp; <span>Обновления</span></h2>
+    </div>
+    <div class="news-grid">
+      <!-- НОВОСТИ -->
+      <div class="news-col" style="--col:var(--khaki)">
+        <div class="news-col-header">
+          <div class="news-col-title">📰 <span>Новости</span></div>
+          <div class="news-col-count" id="news-count" style="background:rgba(183,169,141,0.15);color:var(--khaki)">0</div>
+        </div>
+        <div class="news-col-body" id="news-list"></div>
+        <div class="news-col-footer"><a href="#" class="news-all-btn" id="news-all-btn" style="display:none">Все новости →</a></div>
+      </div>
+      <!-- ОБНОВЛЕНИЯ -->
+      <div class="news-col" style="--col:var(--rad)">
+        <div class="news-col-header">
+          <div class="news-col-title">🔧 <span>Обновления</span></div>
+          <div class="news-col-count" id="updates-count" style="background:rgba(126,200,160,0.15);color:var(--rad)">0</div>
+        </div>
+        <div class="news-col-body" id="updates-list"></div>
+        <div class="news-col-footer"><a href="#" class="news-all-btn" id="updates-all-btn" style="display:none">Все обновления →</a></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1973,7 +2029,7 @@ function show(name, el) {
   <h2 class="cta-title fu">Готов <span style="color:var(--red)">выживать?</span></h2>
   <p class="cta-sub fu">Присоединяйся к Shelter PVE — сервер ждёт тебя</p>
   <div class="cta-links fu">
-    <a href="steam://connect/217.168.247.192:2312" class="btn btn-red" style="font-size:1rem;padding:1.1rem 2.8rem">Зайти на сервер</a>
+    <a href="steam://rungameid/221100//+connect 217.168.247.192:2312" class="btn btn-red" style="font-size:1rem;padding:1.1rem 2.8rem">Зайти на сервер</a>
     <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="btn btn-outline">Discord</a>
     <a href="https://shelter-games.ru/products" target="_blank" class="btn btn-outline">Магазин</a>
     <a href="https://t.me/ShelterPVE" target="_blank" class="btn btn-outline">Telegram</a>
@@ -2226,6 +2282,52 @@ document.querySelectorAll('.mob-link[href^="#"]').forEach(a => {
   a.addEventListener('click', () => setTimeout(closeNav, 120));
 });
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeNav(); });
+
+
+
+// ── NEWS & UPDATES ──
+(function() {
+  const TYPE_LABELS = {update:'🔧 Обновление',event:'🎯 Событие',announce:'📢 Объявление',warn:'⚠️ Предупреждение'};
+  const TYPE_COLORS = {update:'background:rgba(126,200,160,0.12);color:#7ec8a0',event:'background:rgba(224,160,32,0.12);color:#e0a020',announce:'background:rgba(91,155,213,0.12);color:#5b9bd5',warn:'background:rgba(204,31,31,0.12);color:#cc1f1f'};
+
+  function renderNews() {
+    let all = [];
+    try { all = JSON.parse(localStorage.getItem('shelter_news')) || []; } catch(e){}
+    const news    = all.filter(n => n.type !== 'update').slice(-5).reverse();
+    const updates = all.filter(n => n.type === 'update').slice(-5).reverse();
+
+    function renderList(items, listId, countId, btnId) {
+      const el = document.getElementById(listId);
+      const cnt = document.getElementById(countId);
+      const btn = document.getElementById(btnId);
+      if (!el) return;
+      cnt.textContent = items.length;
+      if (!items.length) {
+        el.innerHTML = '<div class="news-empty">Записей пока нет.<br>Следи за обновлениями!</div>';
+        return;
+      }
+      el.innerHTML = items.map(n => `
+        <div class="news-entry">
+          <div class="news-entry-top">
+            <span class="news-entry-type" style="${TYPE_COLORS[n.type]||''}">${TYPE_LABELS[n.type]||n.type}</span>
+            <span class="news-entry-date">${n.date||''}</span>
+          </div>
+          <div class="news-entry-title">${n.title}</div>
+          <div class="news-entry-text">${n.text}</div>
+        </div>
+      `).join('');
+      if (items.length >= 3 && btn) btn.style.display = 'inline-block';
+    }
+
+    renderList(news,    'news-list',    'news-count',    'news-all-btn');
+    renderList(updates, 'updates-list', 'updates-count', 'updates-all-btn');
+  }
+
+  // Обновить сразу и при фокусе окна (вдруг добавили в admin)
+  renderNews();
+  window.addEventListener('focus', renderNews);
+  window.addEventListener('storage', renderNews);
+})();
 
 </script>
 <div id="ip-toast" class="ip-toast">✓ IP скопирован в буфер</div>
