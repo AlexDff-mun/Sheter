@@ -774,7 +774,7 @@ async function sendForm() {
     const res = await fetch(WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ embeds: [embed] })
+      body: JSON.stringify({ content: '<@&1301959752170864872> <@&1368210437891424326>', embeds: [embed] })
     });
     if (res.ok) {
       document.getElementById('contact-form').classList.add('hidden');
