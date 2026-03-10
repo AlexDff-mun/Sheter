@@ -1112,6 +1112,14 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
 .news-all-btn{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);background:none;border:1px solid rgba(255,255,255,0.06);padding:0.35rem 1rem;cursor:pointer;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);transition:all 0.2s;text-decoration:none;display:inline-block;}
 .news-all-btn:hover{border-color:rgba(204,31,31,0.3);color:var(--red);}
 @media(max-width:750px){.news-grid{grid-template-columns:1fr;}}
+.news-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.06);margin-top:2rem;overflow-x:auto;scrollbar-width:none;}
+.news-tabs::-webkit-scrollbar{display:none;}
+.news-tab{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;padding:0.75rem 1.4rem;cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:0.5rem;}
+.news-tab:hover{color:var(--text);}
+.news-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.ntab-cnt{font-family:var(--mono);font-size:0.5rem;background:rgba(204,31,31,0.15);color:var(--red);padding:0.1rem 0.4rem;border-radius:2px;min-width:1.2rem;text-align:center;}
+.news-tab.active .ntab-cnt{background:rgba(204,31,31,0.25);}
+#panel-novosti,#panel-izmeneniya,#panel-mody{margin-top:0;border-top:none;border-radius:0;}
 
 
 /* ── HERO SECONDARY BUTTONS ── */
@@ -1348,26 +1356,25 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem">
       <h2 class="sec-title fu">Новости &amp; <span>Обновления</span></h2>
     </div>
-    <div class="news-grid">
-      <!-- НОВОСТИ -->
-      <div class="news-col" style="--col:var(--khaki)">
-        <div class="news-col-header">
-          <div class="news-col-title">📰 <span>Новости</span></div>
-          <div class="news-col-count" id="news-count" style="background:rgba(183,169,141,0.15);color:var(--khaki)">0</div>
-        </div>
-        <div class="news-col-body" id="news-list"></div>
-        <div class="news-col-footer"><a href="#" class="news-all-btn" id="news-all-btn" style="display:none">Все новости →</a></div>
-      </div>
-      <!-- ОБНОВЛЕНИЯ -->
-      <div class="news-col" style="--col:var(--rad)">
-        <div class="news-col-header">
-          <div class="news-col-title">🔧 <span>Обновления</span></div>
-          <div class="news-col-count" id="updates-count" style="background:rgba(126,200,160,0.15);color:var(--rad)">0</div>
-        </div>
-        <div class="news-col-body" id="updates-list"></div>
-        <div class="news-col-footer"><a href="#" class="news-all-btn" id="updates-all-btn" style="display:none">Все обновления →</a></div>
-      </div>
+
+    <!-- Вкладки -->
+    <div class="news-tabs" id="news-tabs">
+      <button class="news-tab active" data-tab="novosti"   onclick="switchNewsTab('novosti')">📰 Новости <span class="ntab-cnt" id="cnt-novosti">0</span></button>
+      <button class="news-tab"        data-tab="izmeneniya" onclick="switchNewsTab('izmeneniya')">📋 Изменения <span class="ntab-cnt" id="cnt-izmeneniya">0</span></button>
+      <button class="news-tab"        data-tab="mody"       onclick="switchNewsTab('mody')">🔧 Обновления модов <span class="ntab-cnt" id="cnt-mody">0</span></button>
     </div>
+
+    <!-- Панели -->
+    <div class="news-col" id="panel-novosti">
+      <div class="news-col-body" id="list-novosti"></div>
+    </div>
+    <div class="news-col" id="panel-izmeneniya" style="display:none">
+      <div class="news-col-body" id="list-izmeneniya"></div>
+    </div>
+    <div class="news-col" id="panel-mody" style="display:none">
+      <div class="news-col-body" id="list-mody"></div>
+    </div>
+
   </div>
 </section>
 <div class="divider"></div>
@@ -1924,48 +1931,86 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeNav(); });
 
 
 
-// ── NEWS & UPDATES ──
+// ── NEWS — 3 вкладки, данные с VPS ──
 (function() {
-  const TYPE_LABELS = {update:'🔧 Обновление',event:'🎯 Событие',announce:'📢 Объявление',warn:'⚠️ Предупреждение'};
-  const TYPE_COLORS = {update:'background:rgba(126,200,160,0.12);color:#7ec8a0',event:'background:rgba(224,160,32,0.12);color:#e0a020',announce:'background:rgba(91,155,213,0.12);color:#5b9bd5',warn:'background:rgba(204,31,31,0.12);color:#cc1f1f'};
+  const API = 'https://shelter-dayz.ru/api';
 
-  function renderNews() {
-    let all = [];
-    try { all = JSON.parse(localStorage.getItem('shelter_news')) || []; } catch(e){}
-    const news    = all.filter(n => n.type !== 'update').slice(-5).reverse();
-    const updates = all.filter(n => n.type === 'update').slice(-5).reverse();
+  // Маппинг channel → tab id
+  const CHANNEL_MAP = {
+    'новости':         'novosti',
+    'изменения':       'izmeneniya',
+    'обновления-модов':'mody',
+    // fallback по тегу
+    'НОВОСТИ':         'novosti',
+    'ИЗМЕНЕНИЯ':       'izmeneniya',
+    'ОБНОВЛЕНИЯ МОДОВ':'mody',
+  };
 
-    function renderList(items, listId, countId, btnId) {
-      const el = document.getElementById(listId);
-      const cnt = document.getElementById(countId);
-      const btn = document.getElementById(btnId);
-      if (!el) return;
-      cnt.textContent = items.length;
-      if (!items.length) {
-        el.innerHTML = '<div class="news-empty">Записей пока нет.<br>Следи за обновлениями!</div>';
-        return;
-      }
-      el.innerHTML = items.map(n => `
-        <div class="news-entry">
-          <div class="news-entry-top">
-            <span class="news-entry-type" style="${TYPE_COLORS[n.type]||''}">${TYPE_LABELS[n.type]||n.type}</span>
-            <span class="news-entry-date">${n.date||''}</span>
-          </div>
-          <div class="news-entry-title">${n.title}</div>
-          <div class="news-entry-text">${n.text}</div>
-        </div>
-      `).join('');
-      if (items.length >= 3 && btn) btn.style.display = 'inline-block';
-    }
+  let allNews = [];
 
-    renderList(news,    'news-list',    'news-count',    'news-all-btn');
-    renderList(updates, 'updates-list', 'updates-count', 'updates-all-btn');
+  function getTab(item) {
+    if (item.channel) return CHANNEL_MAP[item.channel] || 'novosti';
+    if (item.tag)     return CHANNEL_MAP[item.tag]     || 'novosti';
+    return 'novosti';
   }
 
-  // Обновить сразу и при фокусе окна (вдруг добавили в admin)
-  renderNews();
-  window.addEventListener('focus', renderNews);
-  window.addEventListener('storage', renderNews);
+  function renderEntry(n) {
+    const date = n.date || '';
+    const text = (n.text || '').replace(/</g,'&lt;');
+    // Показываем до 3 строк текста
+    return `<div class="news-entry">
+      <div class="news-entry-top">
+        <span class="news-entry-date">${date}</span>
+        ${n.author ? `<span class="news-entry-date" style="margin-left:.5rem;color:var(--khaki)">${n.author}</span>` : ''}
+      </div>
+      <div class="news-entry-title">${n.title || ''}</div>
+      <div class="news-entry-text" style="-webkit-line-clamp:3">${text}</div>
+    </div>`;
+  }
+
+  function renderAll() {
+    const tabs = { novosti:[], izmeneniya:[], mody:[] };
+    allNews.forEach(n => {
+      const t = getTab(n);
+      if (tabs[t]) tabs[t].push(n);
+    });
+
+    ['novosti','izmeneniya','mody'].forEach(tab => {
+      const items = tabs[tab].slice(0, 10);
+      const listEl = document.getElementById('list-' + tab);
+      const cntEl  = document.getElementById('cnt-'  + tab);
+      if (!listEl) return;
+      cntEl.textContent = items.length;
+      listEl.innerHTML = items.length
+        ? items.map(renderEntry).join('')
+        : '<div class="news-empty">Записей пока нет.<br>Следи за обновлениями!</div>';
+    });
+  }
+
+  async function fetchNews() {
+    try {
+      const data = await fetch(API + '/news').then(r => r.json());
+      if (Array.isArray(data) && data.length) {
+        allNews = data.slice().reverse(); // новые сверху
+        renderAll();
+        return;
+      }
+    } catch(e) {}
+    // fallback: localStorage
+    try { allNews = JSON.parse(localStorage.getItem('shelter_news')) || []; } catch(e) { allNews = []; }
+    renderAll();
+  }
+
+  window.switchNewsTab = function(tab) {
+    document.querySelectorAll('.news-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    ['novosti','izmeneniya','mody'].forEach(t => {
+      document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
+    });
+  };
+
+  fetchNews();
+  // Автообновление каждые 5 минут
+  setInterval(fetchNews, 5 * 60 * 1000);
 })();
 
 </script>
