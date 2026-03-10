@@ -564,7 +564,7 @@ async function doLogin() {
   if (!pwd) { err.textContent = 'Введите пароль'; return; }
   btn.disabled = true; btn.textContent = 'Вход...'; err.textContent = '';
   try {
-    const data = await fetch(API + '/login', {
+    const data = await fetch(API + '/auth', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ password: pwd })
@@ -586,7 +586,7 @@ async function doLogin() {
 async function checkExistingToken() {
   if (!TOKEN) return;
   try {
-    const d = await fetch(API + '/verify', { headers: { 'Authorization': 'Bearer ' + TOKEN } }).then(r => r.json());
+    const d = await fetch(API + '/auth/check', { headers: { 'Authorization': 'Bearer ' + TOKEN } }).then(r => r.json());
     if (d.ok) { showApp(); return; }
   } catch(e) {}
   TOKEN = '';

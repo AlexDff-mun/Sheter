@@ -112,26 +112,33 @@ POST /api/ticket       { name, topic, message, contact } → Discord webhook
 ## ✅ ЗАДАЧИ (приоритет)
 
 ### 🔴 Критично
-- [ ] **Счётчик игроков** — index.html обновлён (API_URL = https://shelter-dayz.ru/api/server), но старый файл ещё на GitHub. Залить новый index.html
-- [ ] **faq.html** — обновить API_TICKET на https://shelter-dayz.ru/api/ticket
+- [ ] **Счётчик игроков** — залить обновлённый index.html на GitHub (API_URL исправлен на https://shelter-dayz.ru/api/server)
+- [ ] **faq.html** — залить обновлённый faq.html (API_TICKET исправлен)
+- [ ] **VPS API v2** — задеплоить vps_api_v2.js (нужен для admin панели):
+  ```bash
+  cd /var/www/shelter-api && npm install jsonwebtoken
+  # заменить index.js содержимым vps_api_v2.js, затем:
+  pm2 restart shelter-api
+  curl -X POST http://localhost:3000/api/auth -H "Content-Type: application/json" -d '{"password":"shelter2024"}'
+  ```
+- [ ] **admin.html** — эндпоинты исправлены (/login→/auth, /verify→/auth/check), залить на GitHub
 
 ### 🟡 Важно
-- [ ] **VPS API v2** — задеплоить vps_api_v2.js (JWT auth, /api/news, /api/markers). Команды:
-  ```bash
-  cd /var/www/shelter-api
-  npm install jsonwebtoken
-  # заменить index.js на vps_api_v2.js
-  pm2 restart shelter-api
-  ```
-- [ ] **admin.html** — переключить авторизацию на POST /api/auth с токеном (сейчас пароль в коде)
-- [ ] **Новости** — подтягивать из GET /api/news вместо localStorage
-- [ ] **map.html** — маркеры из GET /api/markers вместо localStorage
+- [ ] **Карта — iZurvive стиль** — переделать map.html:
+  - Тайловая карта (Leaflet tiles) вместо одного imageOverlay
+  - Zoom levels 1-7, тайлы нарезать из map_chernarus.jpg
+  - Слои переключаемые (рельеф / маркеры / сейфзоны)
+  - Правый клик по карте — добавить маркер
+  - Мини-карта в углу
+  - Координаты в реальном времени как у iZurvive
+- [ ] **Новости из VPS** — GET /api/news → index.html (сейчас localStorage)
+- [ ] **Маркеры из VPS** — GET /api/markers → map.html (сейчас localStorage)
 
 ### 🟢 Улучшения
 - [ ] **mechanics.html** — написать контент для вкладки "Гайды"
-- [ ] **Discord интеграция** — новости из Discord канала (нужен бот или webhook)
-- [ ] **craft.html** — добавить новые рецепты если появятся
-- [ ] **game.shelter-dayz.ru** — настроить как основной домен (сейчас GitHub Pages на alexdff-mun.github.io/Shelter/)
+- [ ] **Discord интеграция** — новости из Discord канала на сайт
+- [ ] **craft.html** — добавить новые рецепты
+- [ ] **game.shelter-dayz.ru** — настроить как основной домен
 
 ### 🔵 Будущее
 - [ ] Донат — ЮКасса + Expansion автовыдача
