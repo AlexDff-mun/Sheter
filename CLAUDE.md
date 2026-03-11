@@ -143,8 +143,7 @@ POST /api/ticket       { name, topic, message, contact } → Discord webhook
 
 ### Auth
 - `Authorization: Bearer <token>` в заголовке
-- Пароль: через env ADMIN_PASSWORD на VPS
-
+- Пароль: env ADMIN_PASSWORD (задать через `pm2 set shelter-api:ADMIN_PASSWORD <YOUR_PASS>`)
 - JWT_SECRET: env JWT_SECRET
 
 ### Хранилище
@@ -197,7 +196,7 @@ POST /api/ticket       { name, topic, message, contact } → Discord webhook
   cd /var/www/shelter-api && npm install jsonwebtoken
   # заменить index.js содержимым vps_api_v2.js, затем:
   pm2 restart shelter-api
-  curl -X POST http://localhost:3000/api/auth -H "Content-Type: application/json" -d '{"password":"shelter2024"}'
+  curl -X POST http://localhost:3000/api/auth -H "Content-Type: application/json" -d '{"password":"<YOUR_PASS>"}'
   ```
 - [ ] **admin.html** — эндпоинты исправлены (/login→/auth, /verify→/auth/check), залить на GitHub
 
@@ -292,5 +291,5 @@ pm2 logs shelter-api --lines 20
 ### Проверить API
 ```bash
 curl https://shelter-dayz.ru/api/server
-curl -X POST https://shelter-dayz.ru/api/auth -H "Content-Type: application/json" -d '{"password":"shelter2024"}'
+curl -X POST https://shelter-dayz.ru/api/auth -H "Content-Type: application/json" -d '{"password":"<YOUR_PASS>"}'
 ```
