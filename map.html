@@ -419,8 +419,8 @@ body.admin-mode #map{cursor:crosshair;}
   <div class="sb-coords" id="coords">X: <span>—</span> &nbsp;/&nbsp; Z: <span>—</span></div>
   <div class="sb-zoom" id="zoom-indicator">ZOOM —</div>
   <div class="sb-right">
-    <button class="sb-link" onclick="map.setZoom(0)">Сбросить вид</button>
-    <button class="sb-link" onclick="map.fitBounds(BOUNDS)">Весь остров</button>
+    <button class="sb-link" onclick="map.fitBounds(BOUNDS,{padding:[10,10]})">Весь остров</button>
+    <button class="sb-link" onclick="map.setZoom(map.getZoom()+1)">+ zoom</button>
   </div>
 </div>
 
@@ -562,17 +562,34 @@ const DEFAULT_MARKERS = [
 ];
 
 // ════ КАРТА ════
+// Кастомный CRS: тайловая сетка 256px, zoom 0 = 1 тайл (256×256), zoom 5 = 32×32 тайлов (8192px)
+// Transformation(1/60, 128, -1/60, 128):
+//   pixel_x = scale * (lng/60 + 128)  →  lng=-7680: pixel_x=0, lng=7680: pixel_x=256*scale
+//   pixel_y = scale * (-lat/60 + 128) →  lat=7680:  pixel_y=0, lat=-7680: pixel_y=256*scale
+const GameCRS = L.extend({}, L.CRS.Simple, {
+  transformation: new L.Transformation(1/60, 128, -1/60, 128)
+});
+
 const map = L.map('map', {
-  crs: L.CRS.Simple,
-  minZoom: -3, maxZoom: 3, zoomSnap: 0.25,
+  crs: GameCRS,
+  minZoom: 0, maxZoom: 7, zoomSnap: 0.5,
   attributionControl: false,
   maxBounds:[[-HALF-500,-HALF-500],[HALF+500,HALF+500]],
   maxBoundsViscosity: 0.85,
   zoomControl: true,
 });
 
-L.imageOverlay('images/map_chernarus.jpg', BOUNDS, { opacity:0.92 }).addTo(map);
-map.fitBounds(BOUNDS);
+// Тайловая карта: images/tiles/{z}/{y}/{x}.jpg
+// Zoom 0-5 — реальные тайлы; zoom 6-7 — масштабирует тайлы zoom 5 (увеличенный вид)
+L.tileLayer('images/tiles/{z}/{y}/{x}.jpg', {
+  minZoom: 0, maxZoom: 7, maxNativeZoom: 5,
+  tileSize: 256,
+  keepBuffer: 2,
+  opacity: 0.92,
+  errorTileUrl: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+}).addTo(map);
+
+map.fitBounds(BOUNDS, { padding: [10, 10] });
 
 function toLL(x, z)  { return L.latLng(z - HALF, x - HALF); }
 function fromLL(ll)  { return { x: ll.lng + HALF, z: ll.lat + HALF }; }
@@ -787,7 +804,7 @@ document.addEventListener('click', e => {
 });
 
 function flyTo(x, z, name) {
-  map.flyTo(toLL(x, z), 1, {duration:0.8});
+  map.flyTo(toLL(x, z), 4, {duration:0.8});
   searchResults.classList.remove('show');
   searchInput.value = '';
   setTimeout(() => {
