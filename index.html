@@ -1128,6 +1128,27 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
 .hero-btn-sep { width:1px; height:20px; background:rgba(255,255,255,0.1); }
 @media(max-width:600px){ .hero-btn-sep{display:none;} .hero-secondary-btns{gap:0.4rem;} }
 
+/* ── COMBO CONNECT BUTTON ── */
+.connect-combo { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
+.connect-sub-row { display:flex; align-items:center; gap:0.5rem; }
+.connect-copy-btn { background:none; border:1px solid rgba(183,169,141,0.3); color:var(--khaki); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.7rem; cursor:pointer; transition:all 0.2s; border-radius:3px; display:flex; align-items:center; gap:0.3rem; }
+.connect-copy-btn:hover { border-color:var(--khaki); color:#fff; }
+.connect-copy-btn.copied { border-color:var(--rad); color:var(--rad); }
+.connect-copy-btn svg { width:12px; height:12px; }
+.connect-help-btn { background:none; border:1px solid rgba(183,169,141,0.3); color:var(--khaki); width:24px; height:24px; border-radius:50%; cursor:pointer; font-size:0.7rem; font-family:var(--body); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.connect-help-btn:hover { border-color:var(--khaki); color:#fff; }
+
+/* ── CONNECT HELP MODAL ── */
+.connect-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; display:none; align-items:center; justify-content:center; }
+.connect-modal-overlay.active { display:flex; }
+.connect-modal { background:#151312; border:1px solid rgba(204,31,31,0.3); border-radius:8px; padding:1.8rem 2rem; max-width:440px; width:90%; position:relative; }
+.connect-modal h3 { font-family:var(--head); color:var(--red); font-size:1.1rem; margin:0 0 1rem; text-transform:uppercase; letter-spacing:0.08em; }
+.connect-modal ol { margin:0; padding-left:1.2rem; }
+.connect-modal li { color:var(--khaki); font-size:0.85rem; line-height:1.7; margin-bottom:0.5rem; font-family:var(--body); }
+.connect-modal li code { background:rgba(255,255,255,0.06); padding:0.1rem 0.4rem; border-radius:3px; font-family:var(--mono); font-size:0.78rem; color:var(--text); }
+.connect-modal-close { position:absolute; top:0.8rem; right:0.8rem; background:none; border:none; color:var(--khaki); font-size:1.2rem; cursor:pointer; opacity:0.6; transition:opacity 0.2s; }
+.connect-modal-close:hover { opacity:1; }
+
 /* ── PILLARS REDESIGN ── */
 .pillar-icon { font-size:1.8rem; margin-bottom:0.6rem; display:block; filter:drop-shadow(0 0 8px rgba(204,31,31,0.3)); transition:transform 0.3s; }
 .pillar:hover .pillar-icon { transform:scale(1.15); }
@@ -1300,7 +1321,16 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <h1 class="hero-title"><span class="t1">Shelter</span><span class="t2">PVE</span></h1>
     <p class="hero-sub">Выживание требует не только оружия,<br>но и смекалки, ресурсов и верных союзников</p>
     <div class="hero-cta">
-      <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn btn-red hero-main-btn">⚡ Подключиться</a>
+      <div class="connect-combo">
+        <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn btn-red hero-main-btn">⚡ Подключиться</a>
+        <div class="connect-sub-row">
+          <button class="connect-copy-btn" onclick="copyHeroIP(this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Скопировать IP
+          </button>
+          <button class="connect-help-btn" onclick="document.getElementById('connect-modal').classList.add('active')">?</button>
+        </div>
+      </div>
       <div class="hero-secondary-btns">
         <a href="mechanics.html" class="btn btn-outline">Механики</a>
         <span class="hero-btn-sep"></span>
@@ -1848,6 +1878,25 @@ window.copyIP = function() {
   });
 };
 
+// ── COPY IP (hero combo button) ──
+window.copyHeroIP = function(btn) {
+  const ip = '217.168.247.192:2312';
+  navigator.clipboard.writeText(ip).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = btn.innerHTML.replace('Скопировать IP','Скопировано!');
+    const toast = document.getElementById('ip-toast');
+    if(toast) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = btn.innerHTML.replace('Скопировано!','Скопировать IP');
+    }, 2500);
+  }).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = ip; document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+  });
+};
+
 // ── RESTART TIMER (every 3h from 00:00 MSK) ──
 (function() {
   const el = document.getElementById('rt-time');
@@ -2015,5 +2064,19 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') closeNav(); });
 
 </script>
 <div id="ip-toast" class="ip-toast">✓ IP скопирован в буфер</div>
+
+<!-- Модалка: как подключиться -->
+<div class="connect-modal-overlay" id="connect-modal" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="connect-modal">
+    <button class="connect-modal-close" onclick="document.getElementById('connect-modal').classList.remove('active')">&times;</button>
+    <h3>Как подключиться</h3>
+    <ol>
+      <li>Нажми <strong>«Подключиться»</strong> — DayZ запустится и подключится автоматически</li>
+      <li>Если не сработало — нажми <strong>«Скопировать IP»</strong></li>
+      <li>Открой DayZ &rarr; <strong>Серверы</strong> &rarr; <strong>Remote</strong> &rarr; вставь IP <code>217.168.247.192:2312</code></li>
+      <li>Или используй <strong>DayZ Launcher</strong> &rarr; Direct Connect &rarr; вставь IP</li>
+    </ol>
+  </div>
+</div>
 </body>
 </html>
