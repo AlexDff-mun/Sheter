@@ -20,8 +20,8 @@ app.use(express.json());
 
 // ─ КОНФИГ ─────────────────────────────────────────────────────
 const PORT       = 3000;
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'shelter2024'; // задай через: pm2 set shelter-api:ADMIN_PASSWORD yourpass
-const JWT_SECRET = process.env.JWT_SECRET     || 'shelter_jwt_secret_change_me';
+const ADMIN_PASS = process.env.ADMIN_PASSWORD || (() => { throw new Error('ADMIN_PASSWORD env var is required'); })();
+const JWT_SECRET = process.env.JWT_SECRET     || (() => { throw new Error('JWT_SECRET env var is required'); })();
 const JWT_EXPIRY = '24h';
 const BM_ID      = '37659741';
 const MAX_PLAYERS = 50;

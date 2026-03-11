@@ -4,7 +4,7 @@ const https = require('https');
 
 const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const API_URL = 'https://shelter-dayz.ru/api';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'shelter2024';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || (() => { throw new Error('ADMIN_PASSWORD env var is required'); })();
 
 // ID каналов Discord
 const CHANNELS = {
