@@ -23,7 +23,7 @@
   --rad:#7ec8a0;--gold:#e0a020;--blue:#5b9bd5;
   --mono:'Share Tech Mono',monospace;
   --head:'Oswald',sans-serif;
-  --sb:56px; /* sidebar width */
+  --sb:56px;
 }
 html,body{height:100%;overflow:hidden;background:var(--bg);}
 
@@ -41,7 +41,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 .topbar-sep{width:1px;height:22px;background:rgba(255,255,255,0.07);flex-shrink:0;}
 .topbar-title{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.18em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;}
 
-/* Search в topbar */
+/* Search */
 .search-wrap{position:relative;margin-left:auto;flex-shrink:0;}
 .search-input{
   font-family:var(--mono);font-size:0.6rem;
@@ -96,8 +96,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 .sb-icon{font-size:1.1rem;line-height:1;}
 .sb-label{font-family:var(--mono);font-size:0.38rem;letter-spacing:0.1em;text-transform:uppercase;opacity:0.7;}
 .sb-divider{height:1px;background:rgba(255,255,255,0.05);margin:4px 8px;flex-shrink:0;}
-
-/* Tooltip при hover */
 .sb-btn::after{
   content:attr(title);
   position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);
@@ -110,9 +108,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 .sb-btn:hover::after{opacity:1;}
 
 /* ── MAP ── */
-#map{
-  position:fixed;top:52px;left:var(--sb);right:0;bottom:28px;
-}
+#map{position:fixed;top:52px;left:var(--sb);right:0;bottom:28px;}
 .leaflet-container{background:#04060a!important;}
 .leaflet-control-attribution{display:none!important;}
 .leaflet-control-zoom{
@@ -127,16 +123,53 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 }
 .leaflet-control-zoom a:hover{color:var(--red)!important;background:rgba(204,31,31,0.1)!important;}
 
-/* ── VILLAGE LABELS ── */
-.village-label{
-  font-family:var(--mono);font-size:9px;letter-spacing:0.08em;
-  color:rgba(183,169,141,0.55);text-transform:uppercase;
+/* ── VILLAGE LABELS — динамические ── */
+.vlbl{
+  font-family:var(--head);letter-spacing:0.14em;
+  color:rgba(212,201,181,0.7);text-transform:uppercase;
   pointer-events:none;white-space:nowrap;
-  text-shadow:0 0 4px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.7);
+  text-shadow:
+    0 0 3px rgba(0,0,0,1),
+    0 0 6px rgba(0,0,0,0.9),
+    0 0 12px rgba(0,0,0,0.7),
+    1px 1px 2px rgba(0,0,0,0.9);
+  transition:opacity 0.3s;
 }
-.village-label.city{font-size:11px;color:rgba(212,201,181,0.65);letter-spacing:0.12em;}
-.village-label.town{font-size:9.5px;color:rgba(183,169,141,0.55);}
-.village-label.village{font-size:8px;color:rgba(106,96,88,0.5);}
+.vlbl-capital{
+  font-size:13px;font-weight:600;
+  color:rgba(212,201,181,0.85);
+  letter-spacing:0.18em;
+}
+.vlbl-city{
+  font-size:11px;font-weight:600;
+  color:rgba(212,201,181,0.75);
+  letter-spacing:0.16em;
+}
+.vlbl-town{
+  font-size:9.5px;font-weight:400;
+  color:rgba(183,169,141,0.6);
+  letter-spacing:0.12em;
+}
+.vlbl-village{
+  font-size:8px;font-weight:300;
+  color:rgba(183,169,141,0.45);
+  letter-spacing:0.1em;
+  font-family:var(--mono);
+  text-transform:none;
+}
+.vlbl-military{
+  font-size:8.5px;font-weight:400;
+  color:rgba(204,31,31,0.55);
+  letter-spacing:0.1em;
+  font-family:var(--mono);
+}
+.vlbl-landmark{
+  font-size:7.5px;font-weight:300;
+  color:rgba(91,155,213,0.45);
+  letter-spacing:0.08em;
+  font-family:var(--mono);
+  font-style:italic;
+}
 
 /* ── CUSTOM POPUPS ── */
 .leaflet-popup-content-wrapper{
@@ -150,8 +183,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 .leaflet-popup-content{margin:0!important;min-width:200px;max-width:240px;}
 .leaflet-popup-close-button{color:var(--text-dim)!important;top:8px!important;right:10px!important;font-size:16px!important;z-index:10;}
 .leaflet-popup-close-button:hover{color:var(--red)!important;}
-
-/* Popup inner */
 .popup-stripe{height:3px;width:100%;}
 .popup-body{padding:12px 14px 14px;}
 .popup-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;}
@@ -170,16 +201,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);}
 }
 .popup-del-btn:hover{background:rgba(204,31,31,0.18);}
 
-/* ── STATUS BAR (bottom) ── */
+/* ── STATUS BAR ── */
 .statusbar{
   position:fixed;bottom:0;left:var(--sb);right:0;height:28px;
   background:rgba(6,5,5,0.97);border-top:1px solid rgba(204,31,31,0.1);
   z-index:900;display:flex;align-items:center;padding:0 1rem;gap:1.5rem;
 }
-.sb-coords{
-  font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);
-  letter-spacing:0.06em;min-width:200px;
-}
+.sb-coords{font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);letter-spacing:0.06em;min-width:200px;}
 .sb-coords span{color:var(--text);}
 .sb-zoom{font-family:var(--mono);font-size:0.55rem;color:rgba(106,96,88,0.5);letter-spacing:0.1em;}
 .sb-right{margin-left:auto;display:flex;align-items:center;gap:0.8rem;}
@@ -297,6 +325,15 @@ body.admin-mode .ctx-item.admin-only{display:flex;}
 .leg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .leg-ring{width:12px;height:12px;border-radius:50%;border:1.5px dashed;flex-shrink:0;}
 
+/* ── MEASURE TOOL ── */
+.measure-line{stroke:var(--gold);stroke-width:2;stroke-dasharray:6,4;opacity:0.8;}
+.measure-label{
+  font-family:var(--mono);font-size:10px;
+  color:var(--gold);background:rgba(6,5,5,0.9);
+  padding:2px 6px;border:1px solid rgba(224,160,32,0.3);
+  white-space:nowrap;pointer-events:none;
+}
+
 /* ── TOAST ── */
 .toast{
   position:fixed;bottom:40px;left:calc(50% + var(--sb)/2);transform:translateX(-50%) translateY(8px);
@@ -310,14 +347,12 @@ body.admin-mode .ctx-item.admin-only{display:flex;}
 
 body.admin-mode #map{cursor:crosshair;}
 
-/* ── Mobile ── */
 @media(max-width:640px){
   :root{--sb:44px;}
   .sb-label{display:none;}
   .topbar-title{display:none;}
   .minimap-wrap{width:120px;height:120px;}
   .admin-panel{width:100%;}
-  .ctx-menu{font-size:0.55rem;}
 }
 </style>
 </head>
@@ -341,66 +376,51 @@ body.admin-mode #map{cursor:crosshair;}
   </a>
   <div class="topbar-sep"></div>
   <div class="topbar-title">CHERNARUS+ // ИНТЕРАКТИВНАЯ КАРТА</div>
-
   <div class="search-wrap">
     <span class="search-icon">⌕</span>
     <input class="search-input" id="search-input" placeholder="Поиск на карте..." autocomplete="off">
     <div class="search-results" id="search-results"></div>
   </div>
-
   <a href="index.html" class="topbar-back">← Главная</a>
 </header>
 
 <!-- Left sidebar -->
 <nav class="sidebar" id="sidebar">
   <button class="sb-btn active" data-cat="all" style="--c:var(--text)" title="Все объекты">
-    <span class="sb-icon">⊕</span>
-    <span class="sb-label">ВСЕ</span>
+    <span class="sb-icon">⊕</span><span class="sb-label">ВСЕ</span>
   </button>
   <button class="sb-btn" data-cat="trader" style="--c:#e0a020" title="Трейдеры">
-    <span class="sb-icon">🛒</span>
-    <span class="sb-label">ТОРГ</span>
+    <span class="sb-icon">🛒</span><span class="sb-label">ТОРГ</span>
   </button>
   <button class="sb-btn" data-cat="craft" style="--c:#5b9bd5" title="Крафт / Верстак">
-    <span class="sb-icon">🔧</span>
-    <span class="sb-label">КРАФТ</span>
+    <span class="sb-icon">🔧</span><span class="sb-label">КРАФТ</span>
   </button>
   <button class="sb-btn" data-cat="danger" style="--c:#cc1f1f" title="Опасные зоны">
-    <span class="sb-icon">💀</span>
-    <span class="sb-label">ОПАСН</span>
+    <span class="sb-icon">💀</span><span class="sb-label">ОПАСН</span>
   </button>
   <button class="sb-btn" data-cat="radiation" style="--c:#7ec8a0" title="Радиация">
-    <span class="sb-icon">☢</span>
-    <span class="sb-label">РАД</span>
+    <span class="sb-icon">☢</span><span class="sb-label">РАД</span>
   </button>
-
   <div class="sb-divider"></div>
-
   <button class="sb-btn" id="sz-btn" style="--c:#7ec8a0" title="Сейфзоны">
-    <span class="sb-icon">🛡</span>
-    <span class="sb-label">СЗ</span>
+    <span class="sb-icon">🛡</span><span class="sb-label">СЗ</span>
   </button>
-  <button class="sb-btn" id="village-btn" style="--c:#b7a98d" title="Названия сёл">
-    <span class="sb-icon">🏘</span>
-    <span class="sb-label">СЁЛА</span>
+  <button class="sb-btn" id="village-btn" style="--c:#b7a98d" title="Названия населённых пунктов">
+    <span class="sb-icon">🏘</span><span class="sb-label">СЁЛА</span>
   </button>
-
   <div class="sb-divider"></div>
-
+  <button class="sb-btn" id="measure-btn" style="--c:var(--gold)" title="Измерить расстояние">
+    <span class="sb-icon">📏</span><span class="sb-label">РАССТ</span>
+  </button>
   <button class="sb-btn" id="legend-btn" style="--c:var(--khaki)" title="Легенда">
-    <span class="sb-icon">📋</span>
-    <span class="sb-label">ЛЕГЕНД</span>
+    <span class="sb-icon">📋</span><span class="sb-label">ЛЕГЕНД</span>
   </button>
   <button class="sb-btn" id="minimap-btn" style="--c:var(--text-dim)" title="Мини-карта">
-    <span class="sb-icon">🗺</span>
-    <span class="sb-label">МИНИ</span>
+    <span class="sb-icon">🗺</span><span class="sb-label">МИНИ</span>
   </button>
-
   <div style="flex:1"></div>
-
   <button class="sb-btn" id="admin-btn" style="--c:var(--gold)" title="Редактор карты" onclick="adminLogin()">
-    <span class="sb-icon">⚙</span>
-    <span class="sb-label">ADMIN</span>
+    <span class="sb-icon">⚙</span><span class="sb-label">ADMIN</span>
   </button>
 </nav>
 
@@ -419,8 +439,8 @@ body.admin-mode #map{cursor:crosshair;}
   <div class="sb-coords" id="coords">X: <span>—</span> &nbsp;/&nbsp; Z: <span>—</span></div>
   <div class="sb-zoom" id="zoom-indicator">ZOOM —</div>
   <div class="sb-right">
+    <button class="sb-link" id="share-link-btn" onclick="shareLink()">🔗 Поделиться</button>
     <button class="sb-link" onclick="map.fitBounds(BOUNDS,{padding:[10,10]})">Весь остров</button>
-    <button class="sb-link" onclick="map.setZoom(map.getZoom()+1)">+ zoom</button>
   </div>
 </div>
 
@@ -456,7 +476,6 @@ body.admin-mode #map{cursor:crosshair;}
   <div class="ap-body">
     <span class="ap-label">Название точки</span>
     <input class="ap-input" id="ap-name" placeholder="Лагерь выживших">
-
     <span class="ap-label">Категория</span>
     <select class="ap-select" id="ap-cat">
       <option value="trader">🛒 Трейдер</option>
@@ -464,19 +483,16 @@ body.admin-mode #map{cursor:crosshair;}
       <option value="danger">💀 Опасная зона</option>
       <option value="radiation">☢ Радиация</option>
     </select>
-
     <span class="ap-label">Координаты</span>
     <div class="ap-row">
       <input class="ap-input" id="ap-x" placeholder="X" type="number">
       <input class="ap-input" id="ap-z" placeholder="Z" type="number">
     </div>
-
     <div class="ap-sz-row">
       <input type="checkbox" id="ap-sz">
       <span>Сейфзона</span>
       <input class="ap-input" id="ap-sz-r" placeholder="90" type="number">
     </div>
-
     <button class="ap-btn ap-btn-add" onclick="addMarkerFromForm()">+ ДОБАВИТЬ ТОЧКУ</button>
     <hr class="ap-divider">
     <button class="ap-btn ap-btn-save" onclick="saveMarkers()">💾 СОХРАНИТЬ НА СЕРВЕР</button>
@@ -488,15 +504,20 @@ body.admin-mode #map{cursor:crosshair;}
 <div class="toast" id="toast"></div>
 
 <script>
-// ════ КОНФИГ ════
+// ════════════════════════════════════════════
+// КОНФИГ
+// ════════════════════════════════════════════
 const API = 'https://shelter-dayz.ru/api';
+const TILE_URL = 'https://shelter-dayz.ru/tiles/{z}/{x}/{y}.png';
 let mapAdminToken = sessionStorage.getItem('shelter_map_token') || '';
 const MAP_M = 15360;
 const HALF  = MAP_M / 2;
 const BOUNDS = [[-HALF, -HALF], [HALF, HALF]];
 const MINIMAP_SIZE = 180;
 
-// ════ КАТЕГОРИИ ════
+// ════════════════════════════════════════════
+// КАТЕГОРИИ
+// ════════════════════════════════════════════
 const CATS = {
   trader:    { icon:'🛒', color:'#e0a020', label:'Трейдер',           bg:'rgba(224,160,32,0.15)'  },
   craft:     { icon:'🔧', color:'#5b9bd5', label:'Крафт / Верстак',   bg:'rgba(91,155,213,0.15)'  },
@@ -504,52 +525,88 @@ const CATS = {
   radiation: { icon:'☢',  color:'#7ec8a0', label:'Радиационная зона', bg:'rgba(126,200,160,0.15)' },
 };
 
-// ════ СЁЛА CHERNARUS ════
-const VILLAGES = [
-  { name:'Chernogorsk',    x:3220,  z:2390,  type:'city' },
-  { name:'Elektrozavodsk', x:5450,  z:2430,  type:'city' },  // исправлено: z был 2720
-  { name:'Berezino',       x:11561, z:7140,  type:'city' },
-  { name:'Severograd',     x:7493,  z:13573, type:'city' },
-  { name:'Novodmitrovsk',  x:10042, z:13157, type:'city' },
-  { name:'Svetlojarsk',    x:12959, z:2946,  type:'city' },
-  { name:'Zelenogorsk',    x:2540,  z:7110,  type:'town' },  // исправлено: x был 2300, z был 6850
-  { name:'Krasnostav',     x:10311, z:5875,  type:'town' },
-  { name:'Polana',         x:9750,  z:6248,  type:'town' },
-  { name:'Stary Sobor',    x:5988,  z:7390,  type:'town' },
-  { name:'Novy Sobor',     x:7143,  z:7897,  type:'town' },
-  { name:'Kabanino',       x:5423,  z:8586,  type:'town' },
-  { name:'Novaya Petrovka',x:6088,  z:13099, type:'town' },
-  { name:'Kamensk',        x:12130, z:12610, type:'town' },
-  { name:'Olsha',          x:9600,  z:13300, type:'town' },
-  { name:'Krasnoe',        x:8500,  z:11500, type:'town' },
-  { name:'Kamenka',        x:696,   z:2348,  type:'village' },
-  { name:'Komarovo',       x:1460,  z:1978,  type:'village' },
-  { name:'Balota',         x:2145,  z:1792,  type:'village' },
-  { name:'Pavlovo',        x:2072,  z:3215,  type:'village' },
-  { name:'Solnichniy',     x:9420,  z:4610,  type:'village' },
-  { name:'Gorka',          x:8479,  z:7006,  type:'village' },
-  { name:'Mogilevka',      x:7600,  z:6900,  type:'village' },
-  { name:'Vybor',          x:4058,  z:9553,  type:'village' },  // исправлено: z был 9450
-  { name:'Pustoshka',      x:4167,  z:9834,  type:'village' },
-  { name:'Myshkino',       x:3296,  z:8249,  type:'village' },
-  { name:'Rogovo',         x:3889,  z:5954,  type:'village' },
-  { name:'Sosnovka',       x:3200,  z:4900,  type:'village' },
-  { name:'Drozhino',       x:3800,  z:6700,  type:'village' },
-  { name:'Pogorevka',      x:4499,  z:7399,  type:'village' },
-  { name:'Lopatino',       x:5492,  z:10199, type:'village' },
-  { name:'Vavilovo',       x:6190,  z:5510,  type:'village' },
-  { name:'Guglovo',        x:8400,  z:9100,  type:'village' },
-  { name:'Gvozdno',        x:7096,  z:9680,  type:'village' },
-  { name:'Dubrovka',       x:11250, z:8900,  type:'village' },
-  { name:'Tulga',          x:10700, z:8100,  type:'village' },
-  { name:'Veresnik',       x:10600, z:10400, type:'village' },
-  { name:'Sinistok',       x:4600,  z:11200, type:'village' },
-  { name:'Dichina',        x:6100,  z:8000,  type:'village' },
-  { name:'Tisy',           x:1460,  z:14054, type:'village' },
-  { name:'Novy Lug',       x:8000,  z:5300,  type:'village' },
+// ════════════════════════════════════════════
+// НАСЕЛЁННЫЕ ПУНКТЫ CHERNARUS+
+// type: capital / city / town / village / military / landmark
+// minZoom: минимальный зум на котором отображается
+// ════════════════════════════════════════════
+const LOCATIONS = [
+  // ── Крупные города ──
+  { name:'Черногорск',         x:6638, z:2578,  type:'capital', minZoom:1 },
+  { name:'Электрозаводск',    x:10189,z:2058,  type:'capital', minZoom:1 },
+  { name:'Березино',           x:12120,z:7944,  type:'city',    minZoom:1 },
+  { name:'Северо\u0433рад',   x:7976, z:12610, type:'city',    minZoom:1.5 },
+  { name:'Новодмитровск',     x:11317,z:14335, type:'city',    minZoom:1.5 },
+  { name:'Светлоярск',         x:13619,z:13291, type:'city',    minZoom:1.5 },
+
+  // ── Средние города ──
+  { name:'Зеленогорск',       x:2705, z:5205,  type:'town', minZoom:2 },
+  { name:'Старый Собор',      x:6110, z:7653,  type:'town', minZoom:2 },
+  { name:'Новый Собор',       x:7118, z:7704,  type:'town', minZoom:2 },
+  { name:'Кабанино',           x:5266, z:8682,  type:'town', minZoom:2 },
+  { name:'Красностав',         x:11209,z:12425, type:'town', minZoom:2 },
+  { name:'Полана',             x:10588,z:7708,  type:'town', minZoom:2 },
+  { name:'Горка',               x:9482, z:8802,  type:'town', minZoom:2 },
+  { name:'Выбор',               x:3425, z:8970,  type:'town', minZoom:2 },
+  { name:'Каменск',             x:12155,z:12768, type:'town', minZoom:2.5 },
+  { name:'Новая Петровка',     x:3455, z:12934, type:'town', minZoom:2.5 },
+
+  // ── Малые посёлки ──
+  { name:'Каменка',             x:1868, z:2234,  type:'village', minZoom:3 },
+  { name:'Комарово',           x:3568, z:2423,  type:'village', minZoom:3 },
+  { name:'Балота',             x:4490, z:2448,  type:'village', minZoom:3 },
+  { name:'Козловка',           x:4382, z:4618,  type:'village', minZoom:3 },
+  { name:'Павлово',             x:1735, z:3720,  type:'village', minZoom:3 },
+  { name:'Солничный',          x:13069,z:6139,  type:'village', minZoom:3 },
+  { name:'Каменка',             x:1868, z:2234,  type:'village', minZoom:3 },
+  { name:'Мышкино',             x:2074, z:7416,  type:'village', minZoom:3 },
+  { name:'Пусто\u0448ка',     x:3023, z:7788,  type:'village', minZoom:3 },
+  { name:'Рогово',             x:4753, z:6732,  type:'village', minZoom:3 },
+  { name:'Погоревка',          x:4426, z:6429,  type:'village', minZoom:3 },
+  { name:'Сосновка',           x:2540, z:6196,  type:'village', minZoom:3 },
+  { name:'Дрожжино',           x:3330, z:4958,  type:'village', minZoom:3 },
+  { name:'Лопатино',           x:2733, z:10005, type:'village', minZoom:3 },
+  { name:'Синисток',           x:1454, z:11541, type:'village', minZoom:3 },
+  { name:'Гвоздно',             x:8576, z:11750, type:'village', minZoom:3 },
+  { name:'Дубровка',           x:10378,z:9918,  type:'village', minZoom:3 },
+  { name:'Тульга',             x:12834,z:8138,  type:'village', minZoom:3 },
+  { name:'Ольша',               x:10242,z:13788, type:'village', minZoom:3 },
+  { name:'Нагорное',           x:8133, z:14725, type:'village', minZoom:3 },
+  { name:'Могилевка',          x:7546, z:5137,  type:'village', minZoom:3 },
+  { name:'Гуглово',             x:8515, z:6683,  type:'village', minZoom:3.5 },
+  { name:'Шаховка',             x:6224, z:6092,  type:'village', minZoom:3.5 },
+  { name:'Поляна',             x:7505, z:6548,  type:'village', minZoom:3.5 },
+  { name:'Вересник',           x:4290, z:8024,  type:'village', minZoom:3.5 },
+  { name:'Дичина',             x:4060, z:7478,  type:'village', minZoom:3.5 },
+  { name:'Тисы',               x:1620, z:14288, type:'village', minZoom:3 },
+  { name:'Крас\u043dое',      x:6292, z:11608, type:'village', minZoom:3 },
+  { name:'Стари Яр',           x:8942, z:10370, type:'village', minZoom:3.5 },
+  { name:'Новый Луг',          x:7826, z:4438,  type:'village', minZoom:3.5 },
+  { name:'Долина',             x:11120,z:6262,  type:'village', minZoom:3 },
+  { name:'Нижнее',             x:12975,z:8160,  type:'village', minZoom:3.5 },
+  { name:'Орловец',             x:12226,z:10740, type:'village', minZoom:3.5 },
+  { name:'Черная Поляна',      x:11992,z:14220, type:'village', minZoom:3.5 },
+
+  // ── Военные объекты ──
+  { name:'СЗАФ (NWAF)',        x:4430, z:10236, type:'military', minZoom:2 },
+  { name:'Балота (аэродр.)',   x:4778, z:2368,  type:'military', minZoom:3 },
+  { name:'Тисы военбаза',     x:1546, z:13890, type:'military', minZoom:2.5 },
+  { name:'Павлово военбаза',  x:2218, z:3298,  type:'military', minZoom:3 },
+  { name:'Зеленог. военбаза', x:2226, z:5464,  type:'military', minZoom:3 },
+  { name:'Мышкино военбаза',  x:1298, z:7280,  type:'military', minZoom:3 },
+  { name:'Камень военбаза',   x:12580,z:12420, type:'military', minZoom:3 },
+  { name:'Троицкое',           x:11634,z:12268, type:'military', minZoom:3.5 },
+
+  // ── Достопримечательности ──
+  { name:'Остров Скалистый',   x:13574,z:3212,  type:'landmark', minZoom:3 },
+  { name:'Замок Зуб',          x:6542, z:11308, type:'landmark', minZoom:3.5 },
+  { name:'Рог',                 x:11230,z:3668,  type:'landmark', minZoom:3.5 },
+  { name:'Тюрьма (о. Алькатрас)', x:2666,z:1230, type:'landmark', minZoom:3 },
 ];
 
-// ════ МАРКЕРЫ ════
+// ════════════════════════════════════════════
+// ДЕФОЛТНЫЕ МАРКЕРЫ
+// ════════════════════════════════════════════
 const DEFAULT_MARKERS = [
   { id:'m1', text:'Лагерь выживших',    cat:'trader',    x:7856,    z:10544, sz:true,  szr:90  },
   { id:'m2', text:'Терминал',           cat:'trader',    x:13859,   z:12789, sz:true,  szr:108 },
@@ -561,28 +618,25 @@ const DEFAULT_MARKERS = [
   { id:'m8', text:'Радиация (Павлово)',cat:'radiation', x:2072,    z:3215,  sz:false, szr:0   },
 ];
 
-// ════ КАРТА ════
-// Кастомный CRS: тайловая сетка 256px, zoom 0 = 1 тайл (256×256), zoom 5 = 32×32 тайлов (8192px)
-// Transformation(1/60, 128, -1/60, 128):
-//   pixel_x = scale * (lng/60 + 128)  →  lng=-7680: pixel_x=0, lng=7680: pixel_x=256*scale
-//   pixel_y = scale * (-lat/60 + 128) →  lat=7680:  pixel_y=0, lat=-7680: pixel_y=256*scale
+// ════════════════════════════════════════════
+// LEAFLET — CRS + КАРТА
+// ════════════════════════════════════════════
 const GameCRS = L.extend({}, L.CRS.Simple, {
   transformation: new L.Transformation(1/60, 128, -1/60, 128)
 });
 
 const map = L.map('map', {
   crs: GameCRS,
-  minZoom: 0, maxZoom: 7, zoomSnap: 0.5,
+  minZoom: 1, maxZoom: 7, zoomSnap: 0.5,
   attributionControl: false,
   maxBounds:[[-HALF-500,-HALF-500],[HALF+500,HALF+500]],
   maxBoundsViscosity: 0.85,
   zoomControl: true,
 });
 
-// Тайловая карта: images/tiles/{z}/{y}/{x}.jpg
-// Zoom 0-5 — реальные тайлы; zoom 6-7 — масштабирует тайлы zoom 5 (увеличенный вид)
-L.tileLayer('images/tiles/{z}/{y}/{x}.jpg', {
-  minZoom: 0, maxZoom: 7, maxNativeZoom: 5,
+// Тайлы с VPS
+L.tileLayer(TILE_URL, {
+  minZoom: 1, maxZoom: 7, maxNativeZoom: 6,
   tileSize: 256,
   keepBuffer: 2,
   opacity: 0.92,
@@ -591,53 +645,61 @@ L.tileLayer('images/tiles/{z}/{y}/{x}.jpg', {
 
 map.fitBounds(BOUNDS, { padding: [10, 10] });
 
+// Координаты: игровые (0..15360) ↔ Leaflet latlng (центрировано в 0)
 function toLL(x, z)  { return L.latLng(z - HALF, x - HALF); }
 function fromLL(ll)  { return { x: ll.lng + HALF, z: ll.lat + HALF }; }
 
-// ════ ИКОНКИ МАРКЕРОВ ════
+// ════════════════════════════════════════════
+// ИКОНКИ МАРКЕРОВ (SVG)
+// ════════════════════════════════════════════
 function makeIcon(cat) {
   const {icon, color} = CATS[cat] || CATS.danger;
   return L.divIcon({
     html:`<div style="position:relative;width:40px;height:48px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.6)) drop-shadow(0 0 6px ${color}55)">
       <svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">
-        <defs>
-          <radialGradient id="rg${cat}" cx="50%" cy="40%" r="50%">
-            <stop offset="0%" stop-color="${color}" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="${color}" stop-opacity="0.08"/>
-          </radialGradient>
-        </defs>
+        <defs><radialGradient id="rg${cat}" cx="50%" cy="40%" r="50%">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0.08"/>
+        </radialGradient></defs>
         <path d="M20 3C11.2 3 4 10.2 4 19c0 12 16 27 16 27S36 31 36 19C36 10.2 28.8 3 20 3z"
           fill="url(#rg${cat})" stroke="${color}" stroke-width="1.5" stroke-opacity="0.8"/>
         <circle cx="20" cy="19" r="10" fill="${color}" fill-opacity="0.2" stroke="${color}" stroke-width="1" stroke-opacity="0.6"/>
         <circle cx="20" cy="19" r="6" fill="${color}" fill-opacity="0.3"/>
         <text x="20" y="25" text-anchor="middle" font-size="13" style="filter:none">${icon}</text>
-      </svg>
-    </div>`,
+      </svg></div>`,
     iconSize:[40,48], iconAnchor:[20,48], popupAnchor:[0,-50], className:''
   });
 }
 
-// ════ СОСТОЯНИЕ ════
+// ════════════════════════════════════════════
+// СОСТОЯНИЕ
+// ════════════════════════════════════════════
 let markers = [];
 let adminMode = false;
-let villagesVisible = false;
+let villagesVisible = true; // по умолчанию включены
 let villageLayers = [];
 let nextId = 100;
 let ctxLatLng = null;
+let measureMode = false;
+let measurePoints = [];
+let measureLayers = [];
 
-// ════ ЗАГРУЗКА МАРКЕРОВ ════
+// ════════════════════════════════════════════
+// ЗАГРУЗКА МАРКЕРОВ
+// ════════════════════════════════════════════
 function loadMarkers() {
   if (window._serverMarkersLoaded) return window._serverMarkersLoaded;
   try { const s = localStorage.getItem('shelter_map_markers'); return s ? JSON.parse(s) : DEFAULT_MARKERS; }
   catch(e) { return DEFAULT_MARKERS; }
 }
 
-// ════ ПОПАП ════
+// ════════════════════════════════════════════
+// ПОПАП
+// ════════════════════════════════════════════
 function buildPopupHtml(obj) {
   const cat = CATS[obj.cat] || CATS.danger;
   const delBtn = adminMode
-    ? `<button class="popup-del-btn" onclick="deleteMarker('${obj.id}')">🗑 Удалить точку</button>`
-    : '';
+    ? `<button class="popup-del-btn" onclick="deleteMarker('${obj.id}')">🗑 Удалить точку</button>` : '';
   return `<div>
     <div class="popup-stripe" style="background:linear-gradient(90deg,${cat.color},${cat.color}88,transparent)"></div>
     <div class="popup-body">
@@ -650,20 +712,16 @@ function buildPopupHtml(obj) {
       </div>
       <div class="popup-divider"></div>
       <div class="popup-row">📍 <b>X: ${Math.round(obj.x)}</b> &nbsp;/&nbsp; <b>Z: ${Math.round(obj.z)}</b></div>
-      ${obj.sz && obj.szr > 0
-        ? `<div class="popup-sz-badge">🛡 Сейфзона · ${obj.szr} м</div>`
-        : ''}
+      ${obj.sz && obj.szr > 0 ? `<div class="popup-sz-badge">🛡 Сейфзона · ${obj.szr} м</div>` : ''}
       ${delBtn}
-    </div>
-  </div>`;
+    </div></div>`;
 }
 
-// ════ РЕНДЕР МАРКЕРОВ ════
+// ════════════════════════════════════════════
+// РЕНДЕР МАРКЕРОВ
+// ════════════════════════════════════════════
 function renderAll() {
-  markers.forEach(m => {
-    if (m._marker) map.removeLayer(m._marker);
-    if (m._circle) map.removeLayer(m._circle);
-  });
+  markers.forEach(m => { map.removeLayer(m._marker); if (m._circle) map.removeLayer(m._circle); });
   markers = [];
   loadMarkers().forEach(m => addMarkerToMap(m));
 }
@@ -708,26 +766,56 @@ function deleteMarker(id) {
   toast('🗑 Маркер удалён');
 }
 
-// ════ СЁЛА ════
+// ════════════════════════════════════════════
+// НАЗВАНИЯ НАСЕЛЁННЫХ ПУНКТОВ (динамические)
+// ════════════════════════════════════════════
 function renderVillages() {
   villageLayers.forEach(l => map.removeLayer(l));
   villageLayers = [];
-  VILLAGES.forEach(v => {
+  LOCATIONS.forEach(v => {
     const ll = toLL(v.x, v.z);
+    const cssClass = 'vlbl vlbl-' + v.type;
     const lbl = L.marker(ll, {
       icon: L.divIcon({
-        html: `<span class="village-label ${v.type}">${v.name}</span>`,
+        html: `<span class="${cssClass}">${v.name}</span>`,
         className: '', iconAnchor:[0, 6]
       }),
       interactive: false, zIndexOffset: -100
     });
+    lbl._locData = v;
     villageLayers.push(lbl);
   });
 }
-function showVillages() { villageLayers.forEach(l => l.addTo(map)); }
-function hideVillages() { villageLayers.forEach(l => map.removeLayer(l)); }
 
-// ════ ФИЛЬТРЫ (сайдбар) ════
+// Показать/скрыть сёла с учётом текущего зума
+function updateVillageVisibility() {
+  if (!villagesVisible) return;
+  const z = map.getZoom();
+  villageLayers.forEach(lbl => {
+    const minZ = lbl._locData.minZoom;
+    if (z >= minZ) {
+      if (!map.hasLayer(lbl)) lbl.addTo(map);
+    } else {
+      if (map.hasLayer(lbl)) map.removeLayer(lbl);
+    }
+  });
+}
+
+function showVillages() {
+  villagesVisible = true;
+  updateVillageVisibility();
+}
+function hideVillages() {
+  villagesVisible = false;
+  villageLayers.forEach(l => map.removeLayer(l));
+}
+
+// Обновлять видимость при зуме
+map.on('zoomend', updateVillageVisibility);
+
+// ════════════════════════════════════════════
+// ФИЛЬТРЫ (сайдбар)
+// ════════════════════════════════════════════
 let currentFilter = 'all';
 let safezoneVisible = true;
 
@@ -737,9 +825,10 @@ document.querySelectorAll('.sb-btn[data-cat]').forEach(btn => {
     document.querySelectorAll('.sb-btn[data-cat]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     currentFilter = cat;
-    markers.forEach(({_marker, cat: mcat}) => {
+    markers.forEach(({_marker, _circle, cat: mcat}) => {
       const show = currentFilter === 'all' || currentFilter === mcat;
       show ? _marker.addTo(map) : map.removeLayer(_marker);
+      if (_circle) { show && safezoneVisible ? _circle.addTo(map) : map.removeLayer(_circle); }
     });
   });
 });
@@ -753,10 +842,11 @@ document.getElementById('sz-btn').addEventListener('click', function() {
 });
 
 document.getElementById('village-btn').addEventListener('click', function() {
-  villagesVisible = !villagesVisible;
-  this.classList.toggle('active', villagesVisible);
-  villagesVisible ? showVillages() : hideVillages();
+  this.classList.toggle('active');
+  if (villagesVisible) hideVillages(); else showVillages();
 });
+// Стартовое состояние кнопки
+document.getElementById('village-btn').classList.add('active');
 
 document.getElementById('legend-btn').addEventListener('click', function() {
   this.classList.toggle('active');
@@ -768,27 +858,101 @@ document.getElementById('minimap-btn').addEventListener('click', function() {
   document.getElementById('minimap-wrap').classList.toggle('hidden');
 });
 
-// ════ ПОИСК ════
+// ════════════════════════════════════════════
+// ИЗМЕРЕНИЕ РАССТОЯНИЯ
+// ════════════════════════════════════════════
+document.getElementById('measure-btn').addEventListener('click', function() {
+  measureMode = !measureMode;
+  this.classList.toggle('active', measureMode);
+  if (!measureMode) {
+    clearMeasure();
+    map.getContainer().style.cursor = '';
+  } else {
+    map.getContainer().style.cursor = 'crosshair';
+    toast('📏 Кликай по карте — линия покажет расстояние. Ещё раз на кнопку — выключить.');
+  }
+});
+
+map.on('click', function(e) {
+  if (!measureMode) return;
+  const {x, z} = fromLL(e.latlng);
+  measurePoints.push({ ll: e.latlng, x, z });
+
+  // Добавить точку
+  const dot = L.circleMarker(e.latlng, {
+    radius: 4, color: '#e0a020', fillColor: '#e0a020', fillOpacity: 1, weight: 1
+  }).addTo(map);
+  measureLayers.push(dot);
+
+  if (measurePoints.length > 1) {
+    const prev = measurePoints[measurePoints.length - 2];
+    const curr = measurePoints[measurePoints.length - 1];
+    // Линия
+    const line = L.polyline([prev.ll, curr.ll], {
+      color: '#e0a020', weight: 2, dashArray: '6,4', opacity: 0.8
+    }).addTo(map);
+    measureLayers.push(line);
+
+    // Расстояние между точками
+    const dx = curr.x - prev.x;
+    const dz = curr.z - prev.z;
+    const segDist = Math.sqrt(dx*dx + dz*dz);
+
+    // Общее расстояние
+    let totalDist = 0;
+    for (let i = 1; i < measurePoints.length; i++) {
+      const ddx = measurePoints[i].x - measurePoints[i-1].x;
+      const ddz = measurePoints[i].z - measurePoints[i-1].z;
+      totalDist += Math.sqrt(ddx*ddx + ddz*ddz);
+    }
+
+    // Метка
+    const mid = L.latLng(
+      (prev.ll.lat + curr.ll.lat) / 2,
+      (prev.ll.lng + curr.ll.lng) / 2
+    );
+    const label = L.marker(mid, {
+      icon: L.divIcon({
+        html: `<span class="measure-label">${Math.round(segDist)} м${measurePoints.length > 2 ? ' (всего: '+Math.round(totalDist)+' м)' : ''}</span>`,
+        className: '', iconAnchor: [0, -8]
+      }),
+      interactive: false
+    }).addTo(map);
+    measureLayers.push(label);
+  }
+});
+
+function clearMeasure() {
+  measureLayers.forEach(l => map.removeLayer(l));
+  measureLayers = [];
+  measurePoints = [];
+}
+
+// ════════════════════════════════════════════
+// ПОИСК
+// ════════════════════════════════════════════
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
 
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim().toLowerCase();
   if (!q) { searchResults.classList.remove('show'); return; }
+
   const hits = [
-    ...markers.map(m => ({...m, _src:'marker'})),
-    ...VILLAGES.map(v => ({text:v.name, x:v.x, z:v.z, cat:'village', _src:'village'}))
-  ].filter(m => m.text.toLowerCase().includes(q)).slice(0, 8);
+    ...markers.map(m => ({ text:m.text, x:m.x, z:m.z, cat:m.cat, _src:'marker' })),
+    ...LOCATIONS.map(v => ({ text:v.name, x:v.x, z:v.z, cat:v.type, _src:'location' }))
+  ].filter(m => m.text.toLowerCase().includes(q)).slice(0, 10);
 
   if (!hits.length) {
     searchResults.innerHTML = '<div class="sr-item">Ничего не найдено</div>';
     searchResults.classList.add('show');
     return;
   }
+
   searchResults.innerHTML = hits.map(m => {
     const cat = CATS[m.cat];
-    const color = cat ? cat.color : '#6a6058';
-    const icon  = cat ? cat.icon : '📌';
+    const color = cat ? cat.color : (m.cat === 'military' ? '#cc1f1f' : '#6a6058');
+    const icon  = cat ? cat.icon : (m.cat === 'military' ? '⚔' : '📌');
     return `<div class="sr-item" onclick="flyTo(${m.x},${m.z},'${m.text.replace(/'/g,"\\'")}')">
       <div class="sr-dot" style="background:${color}"></div>
       ${icon} ${m.text}
@@ -796,15 +960,29 @@ searchInput.addEventListener('input', () => {
   }).join('');
   searchResults.classList.add('show');
 });
+
 searchInput.addEventListener('keydown', e => {
   if (e.key === 'Escape') { searchResults.classList.remove('show'); searchInput.blur(); }
+  if (e.key === 'Enter') {
+    const first = searchResults.querySelector('.sr-item');
+    if (first) first.click();
+  }
 });
 document.addEventListener('click', e => {
   if (!e.target.closest('.search-wrap')) searchResults.classList.remove('show');
 });
 
+// Ctrl+F / Cmd+F — фокус на поиск
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+
 function flyTo(x, z, name) {
-  map.flyTo(toLL(x, z), 4, {duration:0.8});
+  map.flyTo(toLL(x, z), 4, { duration: 0.8 });
   searchResults.classList.remove('show');
   searchInput.value = '';
   setTimeout(() => {
@@ -813,35 +991,61 @@ function flyTo(x, z, name) {
   }, 900);
 }
 
-// ════ КООРДИНАТЫ + СТАТУС-БАР ════
+// ════════════════════════════════════════════
+// URL-ХЭШИ (позиция + зум)
+// ════════════════════════════════════════════
+function readHash() {
+  const h = location.hash.replace('#','');
+  if (!h) return null;
+  const parts = h.split(';').map(Number);
+  if (parts.length >= 3 && !parts.some(isNaN)) {
+    return { x: parts[0], z: parts[1], zoom: parts[2] };
+  }
+  return null;
+}
+
+function updateHash() {
+  const center = fromLL(map.getCenter());
+  const z = map.getZoom();
+  history.replaceState(null, '', `#${Math.round(center.x)};${Math.round(center.z)};${z}`);
+}
+
+map.on('moveend', updateHash);
+
+function shareLink() {
+  const url = location.href;
+  navigator.clipboard.writeText(url).then(() => toast('🔗 Ссылка скопирована'));
+}
+
+// ════════════════════════════════════════════
+// КООРДИНАТЫ + СТАТУС-БАР
+// ════════════════════════════════════════════
 map.on('mousemove', e => {
   const {x, z} = fromLL(e.latlng);
-  const el = document.getElementById('coords');
-  el.innerHTML = `X: <span>${x.toFixed(0)}</span> &nbsp;/&nbsp; Z: <span>${z.toFixed(0)}</span>`;
+  document.getElementById('coords').innerHTML =
+    `X: <span>${x.toFixed(0)}</span> &nbsp;/&nbsp; Z: <span>${z.toFixed(0)}</span>`;
 });
 
 map.on('zoomend', () => {
-  document.getElementById('zoom-indicator').textContent = `ZOOM ${map.getZoom().toFixed(2)}`;
+  document.getElementById('zoom-indicator').textContent = `ZOOM ${map.getZoom().toFixed(1)}`;
   updateMinimap();
 });
 map.on('moveend', updateMinimap);
 
-// ════ МИНИ-КАРТА ════
+// ════════════════════════════════════════════
+// МИНИ-КАРТА
+// ════════════════════════════════════════════
 function updateMinimap() {
   const bounds = map.getBounds();
   const scale = MINIMAP_SIZE / MAP_M;
-
   const x1 = bounds.getWest() + HALF;
   const z1 = bounds.getNorth() + HALF;
   const x2 = bounds.getEast() + HALF;
   const z2 = bounds.getSouth() + HALF;
-
-  // В изображении: y_img = (MAP_M - z) * scale  (север = верх)
   const imgLeft   = Math.max(0, x1 * scale);
   const imgTop    = Math.max(0, (MAP_M - z1) * scale);
   const imgWidth  = Math.min((x2 - x1) * scale, MINIMAP_SIZE - imgLeft);
   const imgHeight = Math.min((z1 - z2) * scale, MINIMAP_SIZE - imgTop);
-
   const vp = document.getElementById('minimap-vp');
   vp.style.left   = imgLeft + 'px';
   vp.style.top    = imgTop + 'px';
@@ -849,7 +1053,6 @@ function updateMinimap() {
   vp.style.height = Math.max(4, imgHeight) + 'px';
 }
 
-// Клик по мини-карте — переход на позицию
 document.getElementById('minimap-wrap').addEventListener('click', e => {
   const rect = e.currentTarget.getBoundingClientRect();
   const px = e.clientX - rect.left;
@@ -860,17 +1063,17 @@ document.getElementById('minimap-wrap').addEventListener('click', e => {
   map.panTo(toLL(x, z), { animate: true });
 });
 
-// ════ КОНТЕКСТНОЕ МЕНЮ (ПКМ) ════
+// ════════════════════════════════════════════
+// КОНТЕКСТНОЕ МЕНЮ (ПКМ)
+// ════════════════════════════════════════════
 map.on('contextmenu', e => {
+  if (measureMode) { clearMeasure(); return; }
   ctxLatLng = e.latlng;
   const {x, z} = fromLL(e.latlng);
   document.getElementById('ctx-x').textContent = Math.round(x);
   document.getElementById('ctx-z').textContent = Math.round(z);
-
   const menu = document.getElementById('ctx-menu');
   menu.style.display = 'block';
-
-  // Позиционирование с учётом краёв экрана
   let cx = e.originalEvent.clientX;
   let cy = e.originalEvent.clientY;
   if (cx + 210 > window.innerWidth)  cx = window.innerWidth - 215;
@@ -880,9 +1083,7 @@ map.on('contextmenu', e => {
 });
 
 document.addEventListener('click', e => {
-  if (!e.target.closest('#ctx-menu')) {
-    document.getElementById('ctx-menu').style.display = 'none';
-  }
+  if (!e.target.closest('#ctx-menu')) document.getElementById('ctx-menu').style.display = 'none';
 });
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') document.getElementById('ctx-menu').style.display = 'none';
@@ -890,16 +1091,13 @@ document.addEventListener('keydown', e => {
 
 function ctxCopyCoords() {
   const {x, z} = fromLL(ctxLatLng);
-  const text = `X: ${Math.round(x)}  Z: ${Math.round(z)}`;
-  navigator.clipboard.writeText(text).then(() => toast('⎘ Координаты скопированы'));
+  navigator.clipboard.writeText(`X: ${Math.round(x)}  Z: ${Math.round(z)}`).then(() => toast('⎘ Координаты скопированы'));
   document.getElementById('ctx-menu').style.display = 'none';
 }
-
 function ctxFlyHere() {
   if (ctxLatLng) map.panTo(ctxLatLng, { animate: true });
   document.getElementById('ctx-menu').style.display = 'none';
 }
-
 function ctxAddMarker() {
   if (!ctxLatLng || !adminMode) return;
   const {x, z} = fromLL(ctxLatLng);
@@ -907,10 +1105,12 @@ function ctxAddMarker() {
   document.getElementById('ap-z').value = Math.round(z);
   document.getElementById('ctx-menu').style.display = 'none';
   document.getElementById('ap-name').focus();
-  toast(`📍 Координаты X: ${Math.round(x)}  Z: ${Math.round(z)} — введи название`);
+  toast(`📍 X: ${Math.round(x)}  Z: ${Math.round(z)} — введи название`);
 }
 
-// ════ ADMIN ════
+// ════════════════════════════════════════════
+// ADMIN
+// ════════════════════════════════════════════
 function adminLogin() {
   if (adminMode) { exitAdmin(); return; }
   document.getElementById('login-modal').classList.remove('hidden');
@@ -924,8 +1124,7 @@ async function checkPwd() {
   errEl.textContent = '...';
   try {
     const r = await fetch(API + '/auth', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ password: pwd })
     });
     const d = await r.json();
@@ -988,6 +1187,7 @@ function exitAdmin() {
 }
 
 function onMapClick(e) {
+  if (measureMode) return;
   if (e.originalEvent.target.closest && e.originalEvent.target.closest('.leaflet-marker-icon')) return;
   const {x, z} = fromLL(e.latlng);
   document.getElementById('ap-x').value = Math.round(x);
@@ -1025,7 +1225,7 @@ async function saveMarkers() {
         body: JSON.stringify(data)
       });
       const d = await r.json();
-      if (d.ok) { toast('💾 Сохранено на сервере — карта обновится у всех!'); return; }
+      if (d.ok) { toast('💾 Сохранено на сервере!'); return; }
     } catch(e) {}
   }
   toast('💾 Сохранено локально');
@@ -1048,7 +1248,9 @@ function resetToDefault() {
   toast('↺ Сброшено к дефолту');
 }
 
-// ════ TOAST ════
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -1057,7 +1259,9 @@ function toast(msg) {
   el._t = setTimeout(() => el.classList.remove('show'), 2500);
 }
 
-// ════ АВТООБНОВЛЕНИЕ каждые 60 сек ════
+// ════════════════════════════════════════════
+// АВТООБНОВЛЕНИЕ (60 сек)
+// ════════════════════════════════════════════
 async function autoRefreshMarkers() {
   if (adminMode) return;
   try {
@@ -1073,18 +1277,30 @@ async function autoRefreshMarkers() {
 }
 setInterval(autoRefreshMarkers, 60000);
 
-// ════ ЗАПУСК ════
+// ════════════════════════════════════════════
+// ЗАПУСК
+// ════════════════════════════════════════════
 async function initMap() {
+  // Загрузить маркеры с сервера
   try {
     const serverMarkers = await fetch(API + '/markers').then(r => r.json());
     if (Array.isArray(serverMarkers) && serverMarkers.length) {
       window._serverMarkersLoaded = serverMarkers;
     }
   } catch(e) {}
+
   renderAll();
   renderVillages();
+
+  // Прочитать позицию из URL-хэша
+  const hashPos = readHash();
+  if (hashPos) {
+    map.setView(toLL(hashPos.x, hashPos.z), hashPos.zoom);
+  }
+
+  updateVillageVisibility();
   updateMinimap();
-  document.getElementById('zoom-indicator').textContent = `ZOOM ${map.getZoom().toFixed(2)}`;
+  document.getElementById('zoom-indicator').textContent = `ZOOM ${map.getZoom().toFixed(1)}`;
 }
 initMap();
 </script>
