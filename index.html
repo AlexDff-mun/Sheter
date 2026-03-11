@@ -51,6 +51,17 @@ body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:
 .tl.primary:hover { background:var(--red-dark); }
 .server-addr { font-family:var(--mono); font-size:0.62rem; color:var(--text-dim); padding:0.35rem 0.7rem; border:1px solid rgba(255,255,255,0.05); letter-spacing:0.05em; white-space:nowrap; }
 
+/* ── STEAM AUTH (topbar) ── */
+.steam-auth { display:flex; align-items:center; margin-left:0.3rem; }
+.steam-login-btn { display:flex; align-items:center; gap:0.35rem; font-family:'Oswald',sans-serif; font-size:0.68rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.8rem; text-decoration:none; border:1px solid rgba(91,155,213,0.4); color:#5b9bd5; transition:all 0.25s; clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%); white-space:nowrap; }
+.steam-login-btn:hover { background:rgba(91,155,213,0.1); border-color:#5b9bd5; color:#fff; }
+.steam-login-btn svg { opacity:0.8; }
+.steam-user { display:flex; align-items:center; gap:0.4rem; }
+.steam-avatar { width:28px; height:28px; border-radius:50%; border:1px solid rgba(91,155,213,0.4); }
+.steam-name { font-family:var(--mono); font-size:0.7rem; color:var(--khaki); max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.steam-logout { background:none; border:none; color:var(--khaki-dark); font-size:1rem; cursor:pointer; padding:0 0.2rem; opacity:0.5; transition:opacity 0.2s; }
+.steam-logout:hover { opacity:1; color:var(--red); }
+
 /* HERO */
 .hero { min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; padding-top:60px; }
 .hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(204,31,31,0.15) 0%, transparent 65%), linear-gradient(160deg, #060505 0%, #080707 50%, #0a0808 100%); }
@@ -1244,6 +1255,18 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <a href="https://t.me/ShelterPVE" target="_blank" class="tl">Telegram</a>
     <a href="https://shelter-games.ru/products" target="_blank" class="tl">Магазин</a>
     <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="tl primary">Подключиться</a>
+    <!-- Steam Auth -->
+    <div class="steam-auth" id="steam-auth">
+      <a href="https://shelter-dayz.ru/api/steam/login" class="steam-login-btn" id="steam-login-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-9.96 9.04l5.35 2.21a2.83 2.83 0 0 1 1.6-.49c.05 0 .1 0 .16.01l2.4-3.47v-.05a3.77 3.77 0 1 1 3.77 3.77h-.09l-3.41 2.44c0 .06.01.11.01.17a2.84 2.84 0 0 1-5.66.27L1.2 13.58A10 10 0 1 0 12 2zm-5.87 14.86l-1.72-.71a2.13 2.13 0 0 0 3.88.29 2.13 2.13 0 0 0-1.13-2.79l1.78.74a1.57 1.57 0 1 1-2.81 2.47zm9.09-5.72a2.52 2.52 0 1 0-2.52-2.52 2.52 2.52 0 0 0 2.52 2.52z"/></svg>
+        Войти
+      </a>
+      <div class="steam-user" id="steam-user" style="display:none">
+        <img class="steam-avatar" id="steam-avatar" src="" alt="">
+        <span class="steam-name" id="steam-name"></span>
+        <button class="steam-logout" id="steam-logout" title="Выйти">&times;</button>
+      </div>
+    </div>
   </div>
   <!-- MOBILE BURGER -->
   <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
@@ -1274,6 +1297,15 @@ footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.
     <a href="https://t.me/ShelterPVE" target="_blank" class="mob-link mob-social">✈️ Telegram</a>
     <a href="https://shelter-games.ru/products" target="_blank" class="mob-link mob-social">🛒 Магазин</a>
     <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="mob-connect">⚡ Подключиться</a>
+    <div class="mob-divider"></div>
+    <div class="mob-steam-auth" id="mob-steam-auth">
+      <a href="https://shelter-dayz.ru/api/steam/login" class="mob-link mob-social" id="mob-steam-login">🎮 Войти через Steam</a>
+      <div class="mob-steam-user" id="mob-steam-user" style="display:none">
+        <img class="steam-avatar" id="mob-steam-avatar" src="" alt="" style="width:24px;height:24px;border-radius:50%;margin-right:0.4rem">
+        <span id="mob-steam-name" style="color:var(--khaki);font-size:0.85rem"></span>
+        <button onclick="document.getElementById('steam-logout').click()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-left:0.5rem;font-size:0.85rem">Выйти</button>
+      </div>
+    </div>
   </div>
 </div>
 <div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeNav()"></div>
@@ -1896,6 +1928,94 @@ window.copyHeroIP = function(btn) {
     document.execCommand('copy'); document.body.removeChild(el);
   });
 };
+
+// ── STEAM AUTH ──
+(function() {
+  // Декодирование JWT payload (без проверки подписи — она проверена на сервере)
+  function parseJwt(token) {
+    try {
+      var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch(e) { return null; }
+  }
+
+  function showUser(data) {
+    var loginBtn = document.getElementById('steam-login-btn');
+    var userEl   = document.getElementById('steam-user');
+    var avatarEl = document.getElementById('steam-avatar');
+    var nameEl   = document.getElementById('steam-name');
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userEl)   userEl.style.display = 'flex';
+    if (avatarEl) avatarEl.src = data.steamAvatar || '';
+    if (nameEl)   nameEl.textContent = data.steamName || data.steamId;
+    // Мобильное меню
+    var mobLogin  = document.getElementById('mob-steam-login');
+    var mobUser   = document.getElementById('mob-steam-user');
+    var mobAvatar = document.getElementById('mob-steam-avatar');
+    var mobName   = document.getElementById('mob-steam-name');
+    if (mobLogin) mobLogin.style.display = 'none';
+    if (mobUser)  mobUser.style.display = 'flex';
+    if (mobAvatar) mobAvatar.src = data.steamAvatar || '';
+    if (mobName)  mobName.textContent = data.steamName || data.steamId;
+  }
+
+  function hideUser() {
+    var loginBtn = document.getElementById('steam-login-btn');
+    var userEl   = document.getElementById('steam-user');
+    if (loginBtn) loginBtn.style.display = 'flex';
+    if (userEl)   userEl.style.display = 'none';
+    // Мобильное меню
+    var mobLogin = document.getElementById('mob-steam-login');
+    var mobUser  = document.getElementById('mob-steam-user');
+    if (mobLogin) mobLogin.style.display = '';
+    if (mobUser)  mobUser.style.display = 'none';
+  }
+
+  // Проверяем #token= в URL (после редиректа с Steam)
+  var hash = window.location.hash;
+  if (hash.indexOf('#token=') === 0) {
+    var token = hash.substring(7);
+    var data = parseJwt(token);
+    if (data && data.steamId) {
+      sessionStorage.setItem('shelter_steam_token', token);
+      sessionStorage.setItem('shelter_steam_user', JSON.stringify(data));
+      showUser(data);
+    }
+    // Убираем токен из URL
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  } else if (hash.indexOf('#auth_error=') === 0) {
+    console.warn('[Steam Auth] Error:', hash.substring(12));
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+
+  // Восстанавливаем сессию из sessionStorage
+  var savedUser = sessionStorage.getItem('shelter_steam_user');
+  if (savedUser) {
+    try {
+      var userData = JSON.parse(savedUser);
+      var savedToken = sessionStorage.getItem('shelter_steam_token');
+      var decoded = savedToken ? parseJwt(savedToken) : null;
+      // Проверяем что токен не истёк
+      if (decoded && decoded.exp && decoded.exp * 1000 > Date.now()) {
+        showUser(userData);
+      } else {
+        sessionStorage.removeItem('shelter_steam_token');
+        sessionStorage.removeItem('shelter_steam_user');
+        hideUser();
+      }
+    } catch(e) { hideUser(); }
+  }
+
+  // Кнопка выхода
+  var logoutBtn = document.getElementById('steam-logout');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+      sessionStorage.removeItem('shelter_steam_token');
+      sessionStorage.removeItem('shelter_steam_user');
+      hideUser();
+    });
+  }
+})();
 
 // ── RESTART TIMER (every 3h from 00:00 MSK) ──
 (function() {
