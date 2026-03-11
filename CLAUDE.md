@@ -143,7 +143,8 @@ POST /api/ticket       { name, topic, message, contact } → Discord webhook
 
 ### Auth
 - `Authorization: Bearer <token>` в заголовке
-- Пароль по умолчанию: `shelter2024` (env: ADMIN_PASSWORD)
+- Пароль: через env ADMIN_PASSWORD на VPS
+
 - JWT_SECRET: env JWT_SECRET
 
 ### Хранилище
