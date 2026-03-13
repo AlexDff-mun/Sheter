@@ -4,47 +4,1743 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Личный кабинет — Shelter PVE</title>
-<meta name="description" content="Профиль игрока Shelter PVE — DayZ PVE сервер">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://alexdff-mun.github.io/Shelter/profile.html">
-<meta property="og:title" content="Личный кабинет — Shelter PVE">
-<meta property="og:description" content="Профиль игрока на сервере Shelter PVE">
-<meta property="og:image" content="https://alexdff-mun.github.io/Shelter/images/og-preview.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:locale" content="ru_RU">
-<meta property="og:site_name" content="Shelter PVE">
+<meta name="description" content="Профиль игрока Shelter PVE">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-<link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="images/icon-180.png">
 <style>
 :root {
-  --red:#cc1f1f; --red-dark:#8b1010; --ember:#e05a1a;
-  --khaki:#b7a98d; --khaki-dark:#7a6a53;
-  --bg:#080707; --bg2:#0f0d0d; --bg3:#161212;
-  --text:#d4c9b5; --text-dim:#6a6058; --text-muted:#3a3430;
-  --rad:#7ec8a0; --gold:#e0a020; --blue:#5b9bd5;
-  --mono:'Share Tech Mono',monospace;
-  --head:'Oswald',sans-serif;
-  --body:'Rajdhani',sans-serif;
+  --red:    #cc1f1f;
+  --ember:  #e05a1a;
+  --khaki:  #b7a98d;
+  --bg:     #080707;
+  --bg2:    #0d0c0b;
+  --bg3:    #121110;
+  --text:   #d4c9b5;
+  --text-dim: #7a7060;
+  --rad:    #7ec8a0;
+  --gold:   #e0a020;
+  --blue:   #5b9bd5;
+  --border: rgba(183,169,141,0.12);
+  --border-hot: rgba(204,31,31,0.35);
+  --glow-ember: 0 0 30px rgba(204,31,31,0.2);
+  --glow-red:   0 0 30px rgba(204,31,31,0.25);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh}
-body::before{content:'';position:fixed;inset:0;opacity:0.03;pointer-events:none;z-index:9999;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* grain removed */
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* ============================
+   УТИЛИТЫ
+============================ */
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; }
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--red);
+  display: inline-block;
+}
+.section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.section-title span { color: var(--red); }
+
+.tag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.tag--hot { border-color: var(--red); color: var(--red); }
+.tag--rad { border-color: var(--rad); color: var(--rad); }
+
+/* ============================
+   НАВИГАЦИЯ
+============================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.4s, backdrop-filter 0.4s;
+}
+.nav.scrolled {
+  background: rgba(8,7,7,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  gap: 24px;
+}
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.nav__logo img { width: 36px; height: 36px; object-fit: contain; }
+.nav__logo-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.nav__logo-text em {
+  font-style: normal;
+  color: var(--red);
+}
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+.nav__links a {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 6px 12px;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav__links a:hover { color: var(--text); }
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 12px; right: 12px;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: transform 0.2s;
+}
+.nav__links a:hover::after { transform: scaleX(1); }
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.nav__server {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.nav__server span {
+  color: var(--rad);
+  margin-right: 4px;
+}
+.nav__connect {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  background: var(--red);
+  color: #fff;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: background 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.nav__connect:hover { background: #a01818; transform: translateY(-1px); }
+
+.nav__steam {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: border-color 0.2s, color 0.2s;
+}
+.nav__steam:hover { border-color: var(--khaki); color: var(--text); }
+.nav__steam svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Профиль */
+.nav__profile { display: flex; align-items: center; gap: 8px; }
+.nav__avatar { width: 32px; height: 32px; border-radius: 2px; border: 1px solid var(--border); object-fit: cover; }
+.nav__username {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--khaki);
+}
+.nav__logout {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  cursor: pointer;
+  background: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav__logout:hover { color: #e02020; border-color: #e02020; }
+
+/* Бургер */
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+.nav__burger span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--text);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__burger.open span:nth-child(2) { opacity: 0; }
+.nav__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Мобильное меню */
+.nav__mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,7,7,0.97);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.nav__mobile.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.nav__mobile a {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 24px;
+  transition: color 0.2s;
+}
+.nav__mobile a:hover { color: var(--red); }
+.nav__mobile-divider { width: 40px; height: 1px; background: var(--border); margin: 8px 0; }
+
+/* ============================
+   HERO
+============================ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Сетка фон */
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(183,169,141,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(183,169,141,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Диагональная линия */
+.hero__diag {
+  position: absolute;
+  top: 0; right: 0;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(204,31,31,0.04) 100%);
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* Свечение снизу */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 300px;
+  background: linear-gradient(to top, var(--bg), transparent);
+  pointer-events: none;
+}
+
+/* Большой фоновый текст */
+.hero__bg-text {
+  position: absolute;
+  /* Начинается с правой половины экрана */
+  left: 52.5%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(100px, 18vw, 260px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1;
+  /* Только контур + внешнее свечение */
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(204,31,31,0.5);
+  filter:
+    drop-shadow(0 0 10px rgba(204,31,31,0.6))
+    drop-shadow(0 0 30px rgba(204,31,31,0.3))
+    drop-shadow(0 0 70px rgba(204,31,31,0.15));
+  /* Маска сверху/снизу */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  animation: neonFlicker 6s ease-in-out infinite;
+}
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.6; }
+  94%       { opacity: 1; }
+  96%       { opacity: 0.7; }
+  97%       { opacity: 1; }
+}
+
+.hero__logo-block {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Если логотип не грузится — скрыть весь блок */
+.hero__logo-block:has(img[style*="display: none"]) {
+  display: none;
+}
+.hero__logo-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(204,31,31,0.35) 0%, rgba(204,31,31,0.12) 40%, transparent 70%);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+.hero__logo-img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 20px rgba(204,31,31,0.6));
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  padding-top: 100px;
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.hero__eyebrow-line {
+  width: 40px; height: 1px;
+  background: var(--red);
+}
+.hero__eyebrow-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(52px, 9vw, 110px);
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hero__title-sub {
+  font-size: clamp(24px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--text-dim);
+  display: block;
+}
+.hero__title-accent { color: var(--red); }
+
+.hero__desc {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 480px;
+  margin: 24px 0 40px;
+  line-height: 1.7;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: var(--red);
+  color: #fff;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn-primary:hover { background: #e02020; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(204,31,31,0.35); }
+.btn-primary:hover::before { transform: translateX(100%); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 13px 24px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--khaki); color: var(--text); }
+
+.hero__copy-ip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: none;
+  transition: color 0.2s, border-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero__copy-ip:hover { color: var(--khaki); border-color: var(--khaki); }
+
+/* Плашка онлайна */
+.hero__stats {
+  margin-top: 60px;
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--border);
+  max-width: 100%;
+  overflow: hidden;
+}
+.hero__stat {
+  padding: 16px 28px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.hero__stat:last-child { border-right: none; }
+.hero__stat-val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+  display: block;
+}
+.hero__stat-val.online { color: var(--rad); }
+.hero__stat-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Таймер рестарта */
+.hero__restart {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+}
+.hero__restart-icon {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.hero__restart-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 20px;
+  color: var(--gold);
+}
+.hero__restart-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: block;
+}
+
+/* Скролл индикатор */
+.hero__scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.hero__scroll-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  writing-mode: horizontal-tb;
+}
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(204,31,31,0.4), transparent);
+  animation: scrollLine 2s infinite;
+}
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* Социальные ссылки */
+.hero__socials {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 2;
+}
+.hero__social-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero__social-link:hover { color: var(--red); }
+.hero__socials-line { width: 1px; height: 60px; background: var(--border); }
+
+/* ============================
+   НОВОСТИ
+============================ */
+.news { background: var(--bg); }
+
+.news__tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+  width: 100%;
+}
+.news__tab {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  color: var(--text-dim);
+  cursor: pointer;
+  border: none;
+  background: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.news__tab:hover { color: var(--text); }
+.news__tab.active { color: var(--red); border-bottom-color: var(--red); }
+.news__tab-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.news__tab.active .news__tab-count { border-color: var(--red); color: var(--red); }
+
+.news__panel { display: none; }
+.news__panel.active { display: block; }
+
+.news__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px;
+  background: var(--border);
+}
+.news__empty {
+  grid-column: 1/-1;
+  padding: 60px 24px;
+  text-align: center;
+  background: var(--bg);
+}
+.news__empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+.news__empty-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.news-card {
+  background: var(--bg);
+  padding: 28px;
+  position: relative;
+  transition: background 0.2s;
+  overflow: hidden;
+}
+.news-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--red);
+  transition: height 0.3s;
+}
+.news-card:hover { background: var(--bg2); }
+.news-card:hover::before { height: 100%; }
+
+.news-card__img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.news-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.news-card__type {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--red);
+  color: var(--red);
+}
+.news-card__type--update { border-color: var(--blue); color: var(--blue); }
+.news-card__type--mod { border-color: var(--rad); color: var(--rad); }
+.news-card__date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.news-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.news-card__body {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* mod update */
+.news-card__version {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.news-card__version-from { color: var(--text-dim); text-decoration: line-through; }
+.news-card__version-arrow { color: var(--rad); }
+.news-card__version-to { color: var(--rad); }
+
+/* ============================
+   О СЕРВЕРЕ (features)
+============================ */
+.features { background: var(--bg); position: relative; overflow: hidden; }
+.features__bg {
+  position: absolute;
+  right: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(204,31,31,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.features__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.feature-card {
+  background: var(--bg);
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.feature-card:hover { background: var(--bg2); }
+.feature-card--wide { grid-column: 1 / -1; }
+
+.feature-card__num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.feature-card__icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+.feature-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.feature-card__title span { color: var(--red); }
+.feature-card__desc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.feature-card__corner {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(204,31,31,0.06);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ============================
+   МЕХАНИКИ
+============================ */
+.mechanics { background: var(--bg2); }
+.mechanics__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.mechanic-card {
+  background: var(--bg2);
+  padding: 32px 28px;
+  position: relative;
+  transition: background 0.3s;
+  group: true;
+}
+.mechanic-card:hover { background: var(--bg3); }
+.mechanic-card__icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+.mechanic-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.mechanic-card__desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+.mechanic-card__tag {
+  margin-top: 16px;
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid rgba(204,31,31,0.3);
+}
+
+.mechanics__cta {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ============================
+   СОБЫТИЯ
+============================ */
+.events { background: var(--bg); overflow: hidden; position: relative; }
+.events__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.event-card {
+  padding: 28px 24px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.event-card:hover { border-color: rgba(204,31,31,0.4); transform: translateY(-4px); }
+.event-card__icon { font-size: 28px; margin-bottom: 16px; }
+.event-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.event-card__desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+/* ============================
+   ОПАСНЫЕ ЗОНЫ
+============================ */
+.danger { background: var(--bg2); }
+.danger__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.danger-card {
+  padding: 36px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.danger-card--rad {
+  border-color: rgba(126,200,160,0.2);
+  background: rgba(126,200,160,0.03);
+}
+.danger-card--bot {
+  border-color: rgba(204,31,31,0.2);
+  background: rgba(204,31,31,0.03);
+}
+.danger-card--zombie {
+  grid-column: 1 / -1;
+  border-color: rgba(204,31,31,0.2);
+  background: rgba(204,31,31,0.03);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.danger-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.danger-card--rad .danger-card__title { color: var(--rad); }
+.danger-card--bot .danger-card__title { color: var(--red); }
+.danger-card--zombie .danger-card__title { color: var(--red); }
+.danger-card__icon { font-size: 40px; flex-shrink: 0; }
+.danger-card ul {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.danger-card ul li {
+  font-size: 13px;
+  color: var(--text-dim);
+  padding-left: 16px;
+  position: relative;
+}
+.danger-card ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-size: 10px;
+}
+
+/* ============================
+   КАРТА
+============================ */
+.map-section { background: var(--bg); }
+.map-preview {
+  margin-top: 48px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  background: var(--bg2);
+}
+.map-preview__inner {
+  padding: 48px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.map-preview__stats {
+  display: flex;
+  gap: 48px;
+}
+.map-stat {
+  text-align: center;
+}
+.map-stat__val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  line-height: 1;
+}
+.map-stat__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ============================
+   ГАЛЕРЕЯ
+============================ */
+.gallery { background: var(--bg2); overflow: hidden; }
+.gallery__slider { margin-top: 40px; }
+
+/* Главный слайд */
+.gallery__main {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/7;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--bg3);
+}
+.gallery__main img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+.gallery__main:hover img { transform: scale(1.02); }
+.gallery__main-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 24px;
+  background: linear-gradient(to top, rgba(8,7,7,0.85), transparent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.gallery__fullscreen-btn {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 40px; height: 40px;
+  background: rgba(8,7,7,0.7);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+  z-index: 2;
+}
+.gallery__fullscreen-btn:hover { border-color: var(--red); color: var(--red); }
+.gallery__arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  width: 48px; height: 48px;
+  background: rgba(8,7,7,0.7);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+  z-index: 2;
+}
+.gallery__arrow--left { left: 16px; }
+.gallery__arrow--right { right: 16px; }
+.gallery__arrow:hover { background: var(--red); border-color: var(--red); }
+
+
+
+.gallery__counter-row {
+  margin-top: 12px;
+  text-align: right;
+}
+
+/* Лайтбокс */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.lightbox.open { opacity: 1; pointer-events: all; }
+.lightbox__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4,3,3,0.95);
+  cursor: pointer;
+}
+.lightbox__img-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 92vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lightbox__img-wrap img {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+  border: 1px solid var(--border);
+}
+.lightbox__caption {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+.lightbox__close {
+  position: fixed;
+  top: 20px; right: 24px;
+  z-index: 2;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  width: 40px; height: 40px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.lightbox__close:hover { border-color: var(--red); color: var(--red); }
+.lightbox__arrow {
+  position: fixed;
+  top: 50%; transform: translateY(-50%);
+  z-index: 2;
+  background: rgba(8,7,7,0.8);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 52px; height: 52px;
+  font-size: 28px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+.lightbox__arrow--left { left: 20px; }
+.lightbox__arrow--right { right: 20px; }
+.lightbox__arrow:hover { background: var(--red); border-color: var(--red); }
+.lightbox__counter {
+  position: fixed;
+  bottom: 24px; left: 50%; transform: translateX(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  z-index: 2;
+}
+
+/* ============================
+   ПОЧЕМУ МЫ
+============================ */
+.why { background: var(--bg); }
+.why__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.why-card {
+  background: var(--bg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.why-card:hover { background: var(--bg2); }
+.why-card__num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(204,31,31,0.08);
+  line-height: 1;
+  position: absolute;
+  top: 20px; right: 24px;
+}
+.why-card__icon { font-size: 28px; margin-bottom: 20px; }
+.why-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.why-card__desc { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+/* ============================
+   ПРАВИЛА
+============================ */
+.rules { background: var(--bg2); }
+.rules__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.rule-card {
+  background: var(--bg2);
+  padding: 32px 28px;
+}
+.rule-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rule-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  padding: 3px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.rule-badge--ban { background: rgba(204,31,31,0.15); color: var(--red); border: 1px solid rgba(204,31,31,0.3); }
+.rule-badge--warn { background: rgba(224,160,32,0.1); color: var(--gold); border: 1px solid rgba(224,160,32,0.3); }
+.rule-badge--info { background: rgba(91,155,213,0.1); color: var(--blue); border: 1px solid rgba(91,155,213,0.3); }
+.rule-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+.rules__cta {
+  margin-top: 32px;
+  text-align: center;
+}
+
+/* ============================
+   КОМАНДА
+============================ */
+.team { background: var(--bg); }
+.team__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 48px;
+  justify-content: center;
+}
+.team-card {
+  text-align: center;
+  flex: 0 0 160px;
+  position: relative;
+}
+.team-card__photo-wrap {
+  width: 100px; height: 100px;
+  margin: 0 auto 14px;
+  position: relative;
+  background: #000;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  border: 2px solid var(--border);
+  transition: border-color 0.3s;
+}
+.team-card__photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  /* Тёмный фильтр — фото видно, но кривой фон менее заметен */
+  filter: brightness(0.85) contrast(1.05);
+  transition: filter 0.3s;
+}
+.team-card:hover .team-card__photo-wrap { border-color: var(--red); }
+.team-card:hover .team-card__photo { filter: brightness(0.95) contrast(1.05); }
+.team-card__name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.team-card__role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.team__contact {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.team__contact a { color: var(--red); }
+.team__contact a:hover { text-decoration: underline; }
+
+/* ============================
+   CTA ФИНАЛ
+============================ */
+.cta-final {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.cta-final__bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(204,31,31,0.06) 0%, transparent 70%);
+}
+.cta-final__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  position: relative;
+}
+.cta-final__title span { color: var(--red); }
+.cta-final__sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  position: relative;
+}
+.cta-final__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+}
+
+/* ============================
+   FOOTER
+============================ */
+.footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 48px 0 32px;
+}
+.footer__inner {
+  display: grid;
+  grid-template-columns: 280px 1fr 220px;
+  gap: 48px;
+  align-items: start;
+}
+.footer__brand {}
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.footer__logo img { width: 32px; }
+.footer__logo-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.footer__logo-text em { font-style: normal; color: var(--red); }
+.footer__tagline {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.footer__ip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--khaki);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  display: inline-block;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.footer__ip:hover { border-color: var(--khaki); }
+
+.footer__nav { text-align: center; }
+.footer__nav-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer__nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer__nav-links a {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+.footer__nav-links a:hover { color: var(--red); }
+
+.footer__socials {}
+.footer__socials-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer__social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.footer__social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+.footer__social-link:hover { color: var(--red); }
+.footer__social-icon {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+.footer__social-link:hover .footer__social-icon { border-color: var(--red); color: var(--red); }
+
+.footer__bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer__copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.footer__links {
+  display: flex;
+  gap: 20px;
+}
+.footer__links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer__links a:hover { color: var(--red); }
+
+/* ============================
+   ТОСТ
+============================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  text-transform: uppercase;
+  z-index: 9998;
+  transition: transform 0.3s;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast--success { border-color: var(--rad); color: var(--rad); }
+
+/* ============================
+   МОДАЛКА
+============================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8,7,7,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  width: 90%;
+  max-width: 480px;
+  padding: 40px;
+  position: relative;
+}
+.modal__close {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 20px;
+  color: var(--text-dim);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+.modal__close:hover { color: var(--red); }
+.modal__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+.modal__step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+.modal__step-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red);
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.modal__step-text { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+.modal__step-text code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  background: var(--bg);
+  padding: 2px 6px;
+  color: var(--khaki);
+}
+
+/* ============================
+   АДАПТИВ
+============================ */
+@media (max-width: 1024px) {
+  .mechanics__grid { grid-template-columns: repeat(2, 1fr); }
+  .events__grid { grid-template-columns: repeat(2, 1fr); }
+  .hero__socials { display: none; }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 72px 0; }
+
+  /* Навигация */
+  .nav__links { display: none; }
+  .nav__server { display: none; }
+  .nav__steam { display: none; }
+  .nav__connect { display: none; }
+  .nav__burger { display: flex; }
+
+  /* Hero */
+  .hero__bg-text {
+    left: 0;
+    font-size: clamp(72px, 20vw, 130px);
+    -webkit-text-stroke: 1px rgba(204,31,31,0.4);
+    opacity: 0.7;
+  }
+  .hero__logo-block { width: 130px; height: 130px; }
+  .hero__logo-img { width: 120px; height: 120px; }
+  .hero__title { font-size: clamp(42px, 11vw, 72px); }
+  .hero__stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    width: 100%;
+    max-width: 100%;
+  }
+  .hero__stats::-webkit-scrollbar { display: none; }
+  .hero__stat {
+    flex: 0 0 auto;
+    padding: 12px 16px;
+    text-align: center;
+    min-width: 75px;
+    border-right: 1px solid var(--border);
+  }
+  .hero__stat:last-child { border-right: none; }
+  .hero__stat-val { font-size: 20px; }
+  .hero__stat-label { font-size: 9px; }
+  .hero__restart { flex: 0 0 auto; padding: 12px 16px; }
+  .hero__restart-time { font-size: 16px; }
+
+  /* Секции */
+  .features__grid { grid-template-columns: 1fr; }
+  .feature-card--wide { grid-column: auto; }
+  .mechanics__grid { grid-template-columns: 1fr; }
+  .events__grid { grid-template-columns: 1fr; }
+  .danger__grid { grid-template-columns: 1fr; }
+  .danger-card--zombie { flex-direction: column; gap: 16px; }
+  .why__grid { grid-template-columns: 1fr; }
+  .rules__grid { grid-template-columns: 1fr; }
+  .team__grid { gap: 12px; }
+  .team-card { flex: 0 0 130px; }
+  .news__grid { grid-template-columns: 1fr; }
+
+  /* Карта */
+  .map-preview__inner { flex-direction: column; gap: 24px; align-items: flex-start; }
+  .map-preview__stats { flex-wrap: wrap; gap: 20px; }
+
+  /* Footer */
+  .footer__inner { grid-template-columns: 1fr; text-align: center; gap: 32px; }
+  .footer__social-links { align-items: center; }
+  .footer__bottom { flex-direction: column; gap: 12px; text-align: center; }
+  .footer__ip { display: inline-block; }
+
+  /* Скрыть декоративные элементы */
+  .hero__scroll { display: none; }
+  .hero__socials { display: none; }
+  .hero__bg-text { display: none; }
+}
+
+@media (max-width: 480px) {
+  /* Hero */
+  .hero__bg-text { display: none; }
+  .hero__actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+  /* Новости */
+  .news__tabs { overflow-x: visible; width: 100%; }
+  .news__tab {
+    flex: 1;
+    padding: 10px 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    justify-content: center;
+    text-align: center;
+  }
+  .news__tab-count { display: none; }
+
+  /* CTA */
+  .cta-final__actions { flex-direction: column; align-items: center; }
+}
+.page-hero { padding-top: 100px !important; }
 /* TOPBAR */
-.topbar{position:sticky;top:0;z-index:100;background:rgba(8,7,7,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(204,31,31,0.15);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:56px}
-.topbar-logo{display:flex;align-items:center;gap:0.7rem;text-decoration:none}
-.topbar-logo img{width:36px;height:36px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(204,31,31,0.9))}
-.topbar-logo-text{font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--text)}
-.topbar-logo-text em{color:var(--red);font-style:normal}
-.topbar-back{font-family:var(--mono);font-size:0.7rem;color:var(--khaki-dark);text-decoration:none;letter-spacing:0.1em;transition:color 0.2s}
-.topbar-back:hover{color:var(--text)}
-
 /* HERO */
 .page-hero{padding:4rem 2rem 2rem;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(204,31,31,0.08) 0%,transparent 70%)}
 .hero-label{font-family:var(--mono);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);margin-bottom:0.8rem}
@@ -98,14 +1794,34 @@ body::before{content:'';position:fixed;inset:0;opacity:0.03;pointer-events:none;
 </style>
 </head>
 <body>
+<!-- ============================
+     НАВИГАЦИЯ
+============================ -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <img src="images/craft/c0000.png" alt="Shelter PVE">
+        <span class="nav__logo-text">Shelter <em>PVE</em></span>
+      </a>
 
-<header class="topbar">
-  <a href="index.html" class="topbar-logo">
-    <img src="images/SHL_PVE.png" alt="Shelter PVE">
-    <span class="topbar-logo-text">SHELTER <em>PVE</em></span>
-  </a>
-  <a href="index.html" class="topbar-back">&larr; НА ГЛАВНУЮ</a>
-</header>
+      <ul class="nav__links">
+        <li><a href="map.html">Карта</a></li>
+        <li><a href="mechanics.html">Механики</a></li>
+        <li><a href="#rules">Правила</a></li>
+        <li><a href="#team">Команда</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="https://discord.gg/4EWuqwfBu" target="_blank">Discord</a></li>
+        <li><a href="https://shelter-games.ru/products" target="_blank">Магазин</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <div class="nav__server">
+          <span id="nav-players">–/–</span> онлайн
+        </div>
+
+
+
 
 <div class="page-hero">
   <div class="hero-label">Shelter PVE</div>
@@ -152,6 +1868,172 @@ body::before{content:'';position:fixed;inset:0;opacity:0.03;pointer-events:none;
 </div>
 
 <script>
+(function() {
+  var ROLE_LABELS = { player: 'Игрок', vip: 'VIP', moderator: 'Модератор', admin: 'Администратор' };
+  var ROLE_CLASSES = { player: 'role-player', vip: 'role-vip', moderator: 'role-moderator', admin: 'role-admin' };
+
+  function parseJwt(token) {
+    try {
+      var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch(e) { return null; }
+  }
+
+  function formatDate(iso) {
+    if (!iso) return '—';
+    var d = new Date(iso);
+    return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  }
+
+  // Проверяем токен из URL (редирект после Steam-авторизации)
+  var hash = window.location.hash;
+  if (hash.indexOf('#token=') === 0) {
+    var token = hash.substring(7);
+    var data = parseJwt(token);
+    if (data && data.steamId) {
+      sessionStorage.setItem('shelter_steam_token', token);
+      sessionStorage.setItem('shelter_steam_user', JSON.stringify(data));
+    }
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  var savedToken = sessionStorage.getItem('shelter_steam_token');
+  var decoded = savedToken ? parseJwt(savedToken) : null;
+
+  // Токен истёк?
+  if (decoded && decoded.exp && decoded.exp * 1000 < Date.now()) {
+    sessionStorage.removeItem('shelter_steam_token');
+    sessionStorage.removeItem('shelter_steam_user');
+    decoded = null;
+  }
+
+  if (!decoded || !decoded.steamId) {
+    document.getElementById('auth-required').style.display = '';
+    document.getElementById('profile-content').style.display = 'none';
+    return;
+  }
+
+  // Авторизован — показываем профиль
+  document.getElementById('auth-required').style.display = 'none';
+  document.getElementById('profile-content').style.display = '';
+
+  document.getElementById('p-avatar').src = decoded.steamAvatar || '';
+  document.getElementById('p-name').textContent = decoded.steamName || decoded.steamId;
+  document.getElementById('p-steamid').textContent = decoded.steamId;
+
+  var role = decoded.role || 'player';
+  var roleEl = document.getElementById('p-role');
+  roleEl.textContent = ROLE_LABELS[role] || role;
+  roleEl.className = 'profile-role ' + (ROLE_CLASSES[role] || 'role-player');
+  document.getElementById('p-role-text').textContent = ROLE_LABELS[role] || role;
+
+  // Получаем расширенные данные с API (firstLogin)
+  fetch('https://shelter-dayz.ru/api/player/' + decoded.steamId)
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(player) {
+      if (player && player.firstLogin) {
+        document.getElementById('p-first').textContent = formatDate(player.firstLogin);
+      } else {
+        document.getElementById('p-first').textContent = '—';
+      }
+    })
+    .catch(function() {
+      document.getElementById('p-first').textContent = '—';
+    });
+
+  // Выход
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    sessionStorage.removeItem('shelter_steam_token');
+    sessionStorage.removeItem('shelter_steam_user');
+    window.location.href = 'index.html';
+  });
+})();
+</script>
+
+<script>
+// ---- Навигация прокрутка ----
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ---- Бургер меню ----
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+// Закрыть при клике на ссылку
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ---- Тост ----
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' toast--' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- Копировать IP ----
+function copyIP() {
+  navigator.clipboard.writeText('217.168.247.192:2312').then(() => showToast('IP скопирован ✓', 'success'));
+}
+document.getElementById('copy-ip-btn')?.addEventListener('click', copyIP);
+document.getElementById('footer-copy-ip')?.addEventListener('click', copyIP);
+
+// ---- Модалка ----
+const modalHow = document.getElementById('modal-how');
+document.getElementById('how-to-connect')?.addEventListener('click', () => modalHow.classList.add('open'));
+document.getElementById('modal-close')?.addEventListener('click', () => modalHow.classList.remove('open'));
+modalHow?.addEventListener('click', e => { if (e.target === modalHow) modalHow.classList.remove('open'); });
+
+// ---- Онлайн сервера ----
+async function fetchServer() {
+  try {
+    const r = await fetch(API + '/server');
+    const d = await r.json();
+    const str = d.online ? `${d.players}/${d.maxPlayers}` : '–/–';
+    document.getElementById('players-count').textContent = str;
+    document.getElementById('nav-players').textContent = str;
+  } catch {}
+}
+fetchServer();
+setInterval(fetchServer, 60000);
+// ---- Steam авторизация ----
+function checkAuth() {
+  const token = sessionStorage.getItem('shelter_token');
+  if (!token) return;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.steamName) {
+      document.getElementById('nav-login-btn').style.display = 'none';
+      const profile = document.getElementById('nav-profile');
+      profile.style.display = 'flex';
+      document.getElementById('nav-username').textContent = payload.steamName;
+      if (payload.steamAvatar) document.getElementById('nav-avatar').src = payload.steamAvatar;
+    }
+  } catch {}
+}
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('token')) {
+  sessionStorage.setItem('shelter_token', urlParams.get('token'));
+  history.replaceState({}, '', window.location.pathname);
+}
+checkAuth();
+document.getElementById('nav-logout')?.addEventListener('click', () => {
+  sessionStorage.removeItem('shelter_token');
+  document.getElementById('nav-login-btn').style.display = '';
+  document.getElementById('nav-profile').style.display = 'none';
+});
 (function() {
   var ROLE_LABELS = { player: 'Игрок', vip: 'VIP', moderator: 'Модератор', admin: 'Администратор' };
   var ROLE_CLASSES = { player: 'role-player', vip: 'role-vip', moderator: 'role-moderator', admin: 'role-admin' };
