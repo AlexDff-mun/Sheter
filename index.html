@@ -336,25 +336,39 @@ a { color: inherit; text-decoration: none; }
 /* Большой фоновый текст */
 .hero__bg-text {
   position: absolute;
-  left: 50%;
+  /* Начинается с правой половины экрана */
+  left: 52.5%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
   font-family: 'Oswald', sans-serif;
-  font-size: clamp(140px, 22vw, 320px);
+  font-size: clamp(100px, 18vw, 260px);
   font-weight: 700;
   letter-spacing: -0.03em;
   text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
   line-height: 1;
-  /* Обводка вместо заливки — выглядит более тактично */
-  -webkit-text-stroke: 1px rgba(204,31,31,0.12);
+  /* Только контур + внешнее свечение */
   color: transparent;
-  /* Маска — исчезает сверху и снизу */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%);
+  -webkit-text-stroke: 1.5px rgba(204,31,31,0.5);
+  filter:
+    drop-shadow(0 0 10px rgba(204,31,31,0.6))
+    drop-shadow(0 0 30px rgba(204,31,31,0.3))
+    drop-shadow(0 0 70px rgba(204,31,31,0.15));
+  /* Маска сверху/снизу */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);
   pointer-events: none;
   z-index: 0;
+  animation: neonFlicker 6s ease-in-out infinite;
+}
+@keyframes neonFlicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.6; }
+  94%       { opacity: 1; }
+  96%       { opacity: 0.7; }
+  97%       { opacity: 1; }
 }
 
 .hero__logo-block {
@@ -1099,35 +1113,7 @@ a { color: inherit; text-decoration: none; }
 .gallery__arrow--right { right: 16px; }
 .gallery__arrow:hover { background: var(--red); border-color: var(--red); }
 
-/* Миниатюры */
-.gallery__thumbs {
-  display: flex;
-  gap: 4px;
-  margin-top: 4px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.gallery__thumbs::-webkit-scrollbar { display: none; }
-.gallery__thumb {
-  flex: 0 0 calc(11.11% - 4px);
-  min-width: 80px;
-  aspect-ratio: 16/10;
-  overflow: hidden;
-  cursor: pointer;
-  opacity: 0.45;
-  transition: opacity 0.2s;
-  position: relative;
-}
-.gallery__thumb img { width: 100%; height: 100%; object-fit: cover; }
-.gallery__thumb.active,
-.gallery__thumb:hover { opacity: 1; }
-.gallery__thumb.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--red);
-}
+
 
 .gallery__counter-row {
   margin-top: 12px;
@@ -1655,17 +1641,29 @@ a { color: inherit; text-decoration: none; }
 
 @media (max-width: 768px) {
   .section { padding: 72px 0; }
+
+  /* Навигация */
   .nav__links { display: none; }
   .nav__server { display: none; }
   .nav__steam { display: none; }
   .nav__connect { display: none; }
   .nav__burger { display: flex; }
 
-  .hero__title { font-size: clamp(44px, 11vw, 80px); }
+  /* Hero */
+  .hero__bg-text {
+    left: 0;
+    font-size: clamp(72px, 20vw, 130px);
+    -webkit-text-stroke: 1px rgba(204,31,31,0.4);
+    opacity: 0.7;
+  }
+  .hero__logo-block { width: 130px; height: 130px; }
+  .hero__logo-img { width: 120px; height: 120px; }
+  .hero__title { font-size: clamp(42px, 11vw, 72px); }
   .hero__stats { flex-direction: column; gap: 0; width: 100%; }
-  .hero__stat { padding: 12px 20px; }
-  .hero__restart { padding: 12px 20px; }
+  .hero__stat { padding: 12px 20px; text-align: center; }
+  .hero__restart { padding: 12px 20px; justify-content: center; }
 
+  /* Секции */
   .features__grid { grid-template-columns: 1fr; }
   .feature-card--wide { grid-column: auto; }
   .mechanics__grid { grid-template-columns: 1fr; }
@@ -1676,22 +1674,31 @@ a { color: inherit; text-decoration: none; }
   .rules__grid { grid-template-columns: 1fr; }
   .team__grid { gap: 12px; }
   .team-card { flex: 0 0 130px; }
+  .news__grid { grid-template-columns: 1fr; }
 
+  /* Карта */
+  .map-preview__inner { flex-direction: column; gap: 24px; align-items: flex-start; }
+  .map-preview__stats { flex-wrap: wrap; gap: 20px; }
+
+  /* Footer */
   .footer__inner { grid-template-columns: 1fr; text-align: center; gap: 32px; }
   .footer__social-links { align-items: center; }
   .footer__bottom { flex-direction: column; gap: 12px; text-align: center; }
-
-  .gallery__slide { flex: 0 0 85%; }
-
-  .news__grid { grid-template-columns: 1fr; }
+  .footer__ip { display: inline-block; }
 }
 
 @media (max-width: 480px) {
-  .hero__actions { flex-direction: column; align-items: flex-start; }
-  .cta-final__actions { flex-direction: column; align-items: center; }
-  .map-preview__stats { gap: 16px; }
+  /* Hero */
+  .hero__bg-text { display: none; }
+  .hero__actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .hero__stats { flex-direction: column; }
+
+  /* Новости */
   .news__tabs { overflow-x: auto; }
   .news__tab { padding: 10px 16px; white-space: nowrap; }
+
+  /* CTA */
+  .cta-final__actions { flex-direction: column; align-items: center; }
 }
 </style>
 </head>
@@ -2111,38 +2118,6 @@ a { color: inherit; text-decoration: none; }
         <button class="gallery__arrow gallery__arrow--left" id="gallery-prev">‹</button>
         <button class="gallery__arrow gallery__arrow--right" id="gallery-next">›</button>
       </div>
-
-      <!-- Миниатюры -->
-      <div class="gallery__thumbs" id="gallery-thumbs">
-        <div class="gallery__thumb active" data-idx="0" data-src="images/gallery/01_prostor.jpg" data-caption="Просторы Chernarus">
-          <img src="images/gallery/01_prostor.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="1" data-src="images/gallery/02_rassvet.jpg" data-caption="Рассвет на сервере">
-          <img src="images/gallery/02_rassvet.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="2" data-src="images/gallery/03_nochnoy_patrul.jpg" data-caption="Ночной патруль">
-          <img src="images/gallery/03_nochnoy_patrul.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="3" data-src="images/gallery/04_gorodskie_ruiny.jpg" data-caption="Городские руины">
-          <img src="images/gallery/04_gorodskie_ruiny.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="4" data-src="images/gallery/05_zakat.jpg" data-caption="Закат над лесом">
-          <img src="images/gallery/05_zakat.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="5" data-src="images/gallery/06_ohota.jpg" data-caption="Охотничий лагерь">
-          <img src="images/gallery/06_ohota.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="6" data-src="images/gallery/07_avanpost.jpg" data-caption="Аванпост">
-          <img src="images/gallery/07_avanpost.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="7" data-src="images/gallery/08_lesnye_dali.jpg" data-caption="Лесные дали">
-          <img src="images/gallery/08_lesnye_dali.jpg" alt="" loading="lazy">
-        </div>
-        <div class="gallery__thumb" data-idx="8" data-src="images/gallery/09_snaryazhenie.jpg" data-caption="Снаряжение выживших">
-          <img src="images/gallery/09_snaryazhenie.jpg" alt="" loading="lazy">
-        </div>
-      </div>
-
       <div class="gallery__counter-row">
         <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim)">
           <span id="gallery-current">01</span> / 09
@@ -2403,7 +2378,6 @@ a { color: inherit; text-decoration: none; }
           <li><a href="craft.html">Крафт</a></li>
           <li><a href="rules.html">Правила</a></li>
           <li><a href="faq.html">FAQ</a></li>
-          <li><a href="admin.html">Админ-панель</a></li>
         </ul>
       </nav>
 
@@ -2541,30 +2515,30 @@ fetchServer();
 setInterval(fetchServer, 60000);
 
 // ---- Таймер рестарта ----
-function updateRestartTimer() {
-  const now = new Date();
-  const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
-  const h = msk.getHours(), m = msk.getMinutes(), s = msk.getSeconds();
-  const restarts = [3, 9, 15, 21];
-  let next = null;
-  for (const rh of restarts) {
-    if (rh > h || (rh === h && m > 0) || (rh === h && m === 0 && s > 0)) {
-      next = rh; break;
-    }
-  }
-  if (next === null) next = restarts[0];
-  const nowSec = h * 3600 + m * 60 + s;
-  let nextSec = next * 3600;
-  if (nextSec <= nowSec) nextSec += 24 * 3600;
-  const diff = nextSec - nowSec;
-  const hh = String(Math.floor(diff / 3600)).padStart(2, '0');
-  const mm = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-  const ss = String(diff % 60).padStart(2, '0');
+(function() {
   const el = document.getElementById('restart-timer');
-  if (el) el.textContent = `${hh}:${mm}:${ss}`;
-}
-updateRestartTimer();
-setInterval(updateRestartTimer, 1000);
+  if (!el) return;
+  function tick() {
+    // UTC+3 Moscow time — независимо от часового пояса пользователя
+    const now = new Date();
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const msk = new Date(utc + 3 * 60 * 60000);
+    const h = msk.getHours(), m = msk.getMinutes(), s = msk.getSeconds();
+    const totalSec = h * 3600 + m * 60 + s;
+    const interval = 3 * 3600; // каждые 3 часа
+    const nextRestart = Math.ceil(totalSec / interval) * interval;
+    let diff = nextRestart - totalSec;
+    if (diff === 0) diff = interval; // только что рестарт
+    const rh = Math.floor(diff / 3600);
+    const rm = Math.floor((diff % 3600) / 60);
+    const rs = diff % 60;
+    el.textContent = rh > 0
+      ? rh + ':' + String(rm).padStart(2, '0') + ':' + String(rs).padStart(2, '0')
+      : String(rm).padStart(2, '0') + ':' + String(rs).padStart(2, '0');
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 
 // ---- Steam авторизация ----
 function checkAuth() {
@@ -2662,7 +2636,6 @@ document.querySelectorAll('.news__tab').forEach(tab => {
 
 // ---- Галерея ----
 (function() {
-  const thumbs = document.querySelectorAll('.gallery__thumb');
   const mainImg = document.getElementById('gallery-main-img');
   const mainCaption = document.getElementById('gallery-main-caption');
   const currentEl = document.getElementById('gallery-current');
@@ -2672,10 +2645,17 @@ document.querySelectorAll('.news__tab').forEach(tab => {
   const lbCurrent = document.getElementById('lightbox-current');
   let current = 0;
 
-  const slides = Array.from(thumbs).map(t => ({
-    src: t.dataset.src,
-    caption: t.dataset.caption
-  }));
+  const slides = [
+    { src: 'images/gallery/01_prostor.jpg', caption: 'Просторы Chernarus' },
+    { src: 'images/gallery/02_rassvet.jpg', caption: 'Рассвет на сервере' },
+    { src: 'images/gallery/03_nochnoy_patrul.jpg', caption: 'Ночной патруль' },
+    { src: 'images/gallery/04_gorodskie_ruiny.jpg', caption: 'Городские руины' },
+    { src: 'images/gallery/05_zakat.jpg', caption: 'Закат над лесом' },
+    { src: 'images/gallery/06_ohota.jpg', caption: 'Охотничий лагерь' },
+    { src: 'images/gallery/07_avanpost.jpg', caption: 'Аванпост' },
+    { src: 'images/gallery/08_lesnye_dali.jpg', caption: 'Лесные дали' },
+    { src: 'images/gallery/09_snaryazhenie.jpg', caption: 'Снаряжение выживших' },
+  ];
 
   function goTo(idx) {
     current = (idx + slides.length) % slides.length;
@@ -2685,16 +2665,11 @@ document.querySelectorAll('.news__tab').forEach(tab => {
       mainImg.onload = () => { mainImg.style.opacity = '1'; };
       mainCaption.textContent = slides[current].caption;
       currentEl.textContent = String(current + 1).padStart(2, '0');
-      thumbs.forEach((t, i) => t.classList.toggle('active', i === current));
-      // Прокрутить thumb в видимость
-      thumbs[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
     }, 150);
   }
 
   mainImg.style.transition = 'opacity 0.15s';
-
-  // Клики по миниатюрам
-  thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
 
   // Стрелки слайдера
   document.getElementById('gallery-prev')?.addEventListener('click', () => goTo(current - 1));
