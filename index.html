@@ -1323,18 +1323,19 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   background: #000;
   clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  border: 2px solid var(--border);
+  transition: border-color 0.3s;
 }
 .team-card__photo {
   width: 100%; height: 100%;
   object-fit: cover;
-  border: 2px solid var(--border);
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
-  transition: border-color 0.3s, filter 0.3s;
-  /* mix-blend-mode: multiply убирает светлый фон фото, оставляет чёрный */
-  mix-blend-mode: multiply;
-  filter: brightness(0.95);
+  display: block;
+  /* Тёмный фильтр — фото видно, но кривой фон менее заметен */
+  filter: brightness(0.85) contrast(1.05);
+  transition: filter 0.3s;
 }
-.team-card:hover .team-card__photo { border-color: var(--red); filter: brightness(1.05); }
+.team-card:hover .team-card__photo-wrap { border-color: var(--red); }
+.team-card:hover .team-card__photo { filter: brightness(0.95) contrast(1.05); }
 .team-card__name {
   font-family: 'Rajdhani', sans-serif;
   font-size: 15px;
