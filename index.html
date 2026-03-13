@@ -1,2212 +1,2655 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHELTER PVE — DayZ Server</title>
-  <!-- SEO -->
-  <meta name="description" content="PVE-сервер DayZ с уникальными модами, активными ивентами и дружным сообществом. Выживай, торгуй, исследуй Chernarus+. IP: 217.168.247.192:2312">
-  <meta name="keywords" content="DayZ сервер, PVE сервер DayZ, Chernarus, Shelter PVE, DayZ Russia">
-  <meta name="robots" content="index, follow">
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://alexdff-mun.github.io/Shelter/">
-  <meta property="og:title" content="Shelter PVE — DayZ сервер | Chernarus+">
-  <meta property="og:description" content="PVE-сервер DayZ с уникальными модами, активными ивентами и дружным сообществом. Выживай, торгуй, исследуй Chernarus+. IP: 217.168.247.192:2312">
-  <meta property="og:image" content="https://alexdff-mun.github.io/Shelter/images/og-preview.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="ru_RU">
-  <meta property="og:site_name" content="Shelter PVE">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Shelter PVE — DayZ сервер | Chernarus+">
-  <meta name="twitter:description" content="PVE-сервер DayZ с уникальными модами, активными ивентами и дружным сообществом. Выживай, торгуй, исследуй Chernarus+. IP: 217.168.247.192:2312">
-  <meta name="twitter:image" content="https://alexdff-mun.github.io/Shelter/images/og-preview.jpg">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;1,300&family=Rajdhani:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>Shelter PVE — DayZ сервер | Chernarus+</title>
+<meta name="description" content="Shelter PVE — DayZ PVE сервер на Chernarus+. Трейдеры, крафт, дроны, радиация. IP: 217.168.247.192:2312">
+<link rel="icon" href="images/favicon.ico">
+<link rel="apple-touch-icon" href="images/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
 <style>
+/* ============================
+   ПЕРЕМЕННЫЕ И СБРОС
+============================ */
 :root {
-  --red: #cc1f1f; --red-dark: #8b1010; --ember: #e05a1a;
-  --khaki: #b7a98d; --khaki-dark: #7a6a53;
-  --bg: #080707; --bg2: #0f0d0d; --bg3: #161212;
-  --text: #d4c9b5; --text-dim: #6a6058; --rad: #7ec8a0;
-  --mono: 'Share Tech Mono', monospace;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { background:var(--bg); color:var(--text); font-family:'Exo 2',sans-serif; font-weight:300; overflow-x:hidden; }
-body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:1000; opacity:0.4; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"); }
-body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:999; background:repeating-linear-gradient(to bottom, transparent 0px, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px); }
-
-/* TOPBAR */
-.topbar { position:fixed; top:0; left:0; right:0; z-index:500; background:rgba(8,7,7,0.94); backdrop-filter:blur(12px); border-bottom:1px solid rgba(204,31,31,0.2); display:flex; align-items:center; justify-content:space-between; padding:0.65rem 2rem; height:60px; }
-.topbar-logo { display:flex; align-items:center; gap:0.7rem; text-decoration:none; }
-.topbar-logo img { width:38px; height:38px; object-fit:contain; filter:drop-shadow(0 0 8px rgba(204,31,31,0.9)); }
-.topbar-logo span { font-family:'Oswald',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--text); }
-.topbar-logo span em { color:var(--red); font-style:normal; }
-.topbar-links { display:flex; align-items:center; gap:0.4rem; }
-.tl { font-family:'Oswald',sans-serif; font-size:0.68rem; font-weight:400; letter-spacing:0.12em; text-transform:uppercase; padding:0.35rem 0.8rem; text-decoration:none; border:1px solid rgba(255,255,255,0.07); color:var(--khaki-dark); transition:all 0.25s; clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%); white-space:nowrap; }
-.tl:hover { color:var(--text); border-color:rgba(204,31,31,0.35); background:rgba(204,31,31,0.05); }
-.tl.primary { background:var(--red); color:#fff; border-color:var(--red); }
-.tl.primary:hover { background:var(--red-dark); }
-.server-addr { font-family:var(--mono); font-size:0.62rem; color:var(--text-dim); padding:0.35rem 0.7rem; border:1px solid rgba(255,255,255,0.05); letter-spacing:0.05em; white-space:nowrap; }
-
-/* ── STEAM AUTH (topbar) ── */
-.steam-auth { display:flex; align-items:center; margin-left:0.3rem; }
-.steam-login-btn { display:flex; align-items:center; gap:0.35rem; font-family:'Oswald',sans-serif; font-size:0.68rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.8rem; text-decoration:none; border:1px solid rgba(91,155,213,0.4); color:#5b9bd5; transition:all 0.25s; clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%); white-space:nowrap; }
-.steam-login-btn:hover { background:rgba(91,155,213,0.1); border-color:#5b9bd5; color:#fff; }
-.steam-login-btn svg { opacity:0.8; }
-.steam-user { display:flex; align-items:center; gap:0.4rem; }
-.steam-avatar { width:28px; height:28px; border-radius:50%; border:1px solid rgba(91,155,213,0.4); }
-.steam-name { font-family:var(--mono); font-size:0.7rem; color:var(--khaki); max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.steam-logout { background:none; border:none; color:var(--khaki-dark); font-size:1rem; cursor:pointer; padding:0 0.2rem; opacity:0.5; transition:opacity 0.2s; }
-.steam-logout:hover { opacity:1; color:var(--red); }
-
-/* HERO */
-.hero { min-height:100vh; position:relative; display:flex; align-items:center; justify-content:center; overflow:hidden; padding-top:60px; }
-.hero-bg { position:absolute; inset:0; background: radial-gradient(ellipse 80% 70% at 50% 45%, rgba(204,31,31,0.15) 0%, transparent 65%), linear-gradient(160deg, #060505 0%, #080707 50%, #0a0808 100%); }
-.grid-lines { position:absolute; inset:0; background-image: linear-gradient(rgba(204,31,31,0.05) 1px, transparent 1px), linear-gradient(90deg,rgba(204,31,31,0.05) 1px,transparent 1px); background-size:55px 55px; animation:gridDrift 25s linear infinite; }
-@keyframes gridDrift { from{background-position:0 0} to{background-position:55px 55px} }
-.logo-spotlight { position:absolute; width:520px; height:520px; border-radius:50%; background:radial-gradient(ellipse, rgba(204,31,31,0.13) 0%, transparent 70%); top:50%; left:50%; transform:translate(-50%,-55%); animation:breathe 5s ease-in-out infinite; }
-@keyframes breathe { 0%,100%{transform:translate(-50%,-55%) scale(1);opacity:0.7} 50%{transform:translate(-50%,-55%) scale(1.15);opacity:1} }
-.slash { position:absolute; width:2px; height:200%; background:linear-gradient(to bottom, transparent, var(--red), transparent); transform:rotate(-20deg); animation:slashPulse 6s ease-in-out infinite; }
-.slash:nth-child(1){left:15%;animation-delay:0s;opacity:0.07;}
-.slash:nth-child(2){left:85%;animation-delay:3s;opacity:0.04;}
-@keyframes slashPulse{0%,100%{opacity:0.02}50%{opacity:0.1}}
-.hero-content { position:relative; z-index:10; text-align:center; padding:2rem; display:flex; flex-direction:column; align-items:center; gap:1.8rem; animation:heroIn 1.4s cubic-bezier(0.16,1,0.3,1) both; }
-@keyframes heroIn{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}
-
-/* LOGO */
-/* ══ LOGO WRAP ══ */
-.logo-wrap {
-  position:relative; display:inline-flex;
-  align-items:center; justify-content:center;
-  width:230px; height:230px;
-  cursor:pointer;
+  --red:    #cc1f1f;
+  --ember:  #e05a1a;
+  --khaki:  #b7a98d;
+  --bg:     #080707;
+  --bg2:    #0d0c0b;
+  --bg3:    #121110;
+  --text:   #d4c9b5;
+  --text-dim: #7a7060;
+  --rad:    #7ec8a0;
+  --gold:   #e0a020;
+  --blue:   #5b9bd5;
+  --border: rgba(183,169,141,0.12);
+  --border-hot: rgba(204,31,31,0.35);
+  --glow-ember: 0 0 30px rgba(204,31,31,0.2);
+  --glow-red:   0 0 30px rgba(204,31,31,0.25);
 }
 
-/* ── RING 1: медленно вращается, с точкой ── */
-.logo-ring {
-  position:absolute; inset:-18px;
-  border:1px solid rgba(204,31,31,0.3);
-  border-radius:50%;
-  animation:spin 22s linear infinite;
-}
-.logo-ring::after {
-  content:''; position:absolute;
-  top:-4px; left:50%; transform:translateX(-50%);
-  width:7px; height:7px;
-  background:var(--red); border-radius:50%;
-  box-shadow:0 0 10px var(--red),0 0 22px var(--red),0 0 40px rgba(204,31,31,0.5);
-}
-@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── RING 2: пунктир обратно ── */
-.logo-ring2 {
-  position:absolute; inset:-32px;
-  border:1px dashed rgba(204,31,31,0.12);
-  border-radius:50%;
-  animation:spinRev 40s linear infinite;
-}
-@keyframes spinRev{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
+html { scroll-behavior: smooth; font-size: 16px; }
 
-/* ── RING 3: тактические засечки ── */
-.logo-ring3 {
-  position:absolute; inset:-50px;
-  border-radius:50%;
-  animation:spinRev 28s linear infinite;
-}
-.logo-ring3::before,
-.logo-ring3::after {
-  content:''; position:absolute;
-  border-radius:50%;
-  border:1px solid transparent;
-}
-/* 4 дуговых сегмента через svg-based conic */
-.logo-ring3 {
-  background:
-    conic-gradient(
-      rgba(204,31,31,0.35) 0deg 20deg,
-      transparent 20deg 90deg,
-      rgba(204,31,31,0.35) 90deg 110deg,
-      transparent 110deg 180deg,
-      rgba(204,31,31,0.35) 180deg 200deg,
-      transparent 200deg 270deg,
-      rgba(204,31,31,0.35) 270deg 290deg,
-      transparent 290deg 360deg
-    );
-  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
-  mask:radial-gradient(farthest-side, transparent calc(100% - 1.5px), #fff calc(100% - 1.5px));
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
 
-/* ── CORNER BRACKETS — анимированное появление ── */
-.logo-bracket {
-  position:absolute; width:28px; height:28px;
-  border-color:rgba(204,31,31,0.6); border-style:solid;
-  transition:all 0.4s ease;
-  opacity:0; /* появятся через JS */
-}
-.lb-tl{top:0;left:0;border-width:2px 0 0 2px;}
-.lb-tr{top:0;right:0;border-width:2px 2px 0 0;}
-.lb-bl{bottom:0;left:0;border-width:0 0 2px 2px;}
-.lb-br{bottom:0;right:0;border-width:0 2px 2px 0;}
-.logo-wrap.revealed .logo-bracket { opacity:1; }
-
-/* ── ГЛАВНОЕ ИЗОБРАЖЕНИЕ ── */
-.logo-img {
-  width:200px; height:200px;
-  object-fit:contain; position:relative; z-index:2;
-  filter:
-    drop-shadow(0 0 28px rgba(204,31,31,0.8))
-    drop-shadow(0 0 65px rgba(204,31,31,0.35));
-  animation:logoPulse 4s ease-in-out infinite;
-  transition:filter 0.3s;
-}
-@keyframes logoPulse{
-  0%,100%{filter:drop-shadow(0 0 25px rgba(204,31,31,0.7)) drop-shadow(0 0 55px rgba(204,31,31,0.3))}
-  50%{filter:drop-shadow(0 0 50px rgba(204,31,31,1)) drop-shadow(0 0 100px rgba(204,31,31,0.6)) drop-shadow(0 0 6px rgba(224,90,26,0.8))}
-}
-
-/* ── HOVER: вспышка ── */
-.logo-wrap:hover .logo-img {
-  filter:
-    drop-shadow(0 0 55px rgba(204,31,31,1))
-    drop-shadow(0 0 110px rgba(204,31,31,0.7))
-    drop-shadow(0 0 8px rgba(224,90,26,1))
-    brightness(1.15);
-}
-.logo-wrap:hover .logo-bracket {
-  width:34px; height:34px;
-  border-color:rgba(204,31,31,0.9);
-}
-
-/* ── SCAN LINE ── */
-.logo-scan {
-  position:absolute; left:0; right:0; height:2px;
-  background:linear-gradient(to right, transparent, rgba(204,31,31,0.7), rgba(224,90,26,0.5), transparent);
-  animation:scanLine 3.5s ease-in-out infinite;
-  z-index:3; pointer-events:none;
-}
-@keyframes scanLine{0%{top:5%;opacity:0}10%{opacity:1}90%{opacity:1}100%{top:95%;opacity:0}}
-
-/* ── GLITCH REVEAL (один раз при загрузке) ── */
-.logo-img.glitch {
-  animation:glitchReveal 1.4s ease forwards, logoPulse 4s ease-in-out 1.4s infinite;
-}
-@keyframes glitchReveal{
-  0%  {opacity:0; filter:drop-shadow(0 0 0px transparent); transform:scale(0.85);}
-  8%  {opacity:1; filter:drop-shadow(2px 0 0 rgba(204,31,31,0.9)) drop-shadow(-2px 0 0 rgba(224,90,26,0.9)); transform:scale(1.06) skewX(-3deg);}
-  14% {opacity:0.3; transform:scale(0.97) skewX(2deg);}
-  20% {opacity:1; filter:drop-shadow(-3px 0 0 rgba(204,31,31,1)) drop-shadow(3px 0 0 rgba(126,200,160,0.5)); transform:scale(1.04);}
-  28% {opacity:0.6; transform:scale(0.99) skewX(-1deg);}
-  36% {opacity:1; filter:drop-shadow(0 0 35px rgba(204,31,31,0.9)); transform:scale(1.02);}
-  50% {opacity:1; filter:drop-shadow(0 0 45px rgba(204,31,31,1)) drop-shadow(0 0 80px rgba(204,31,31,0.5)); transform:scale(1);}
-  100%{opacity:1; filter:drop-shadow(0 0 28px rgba(204,31,31,0.8)) drop-shadow(0 0 65px rgba(204,31,31,0.35)); transform:scale(1);}
-}
-
-/* ── ЭНЕРГЕТИЧЕСКОЕ КОЛЬЦО при hover ── */
-.logo-charge {
-  position:absolute; inset:-8px; border-radius:50%;
-  background:conic-gradient(var(--red) 0%, rgba(224,90,26,0.6) 40%, transparent 60%);
-  -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 3px));
-  mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #fff calc(100% - 3px));
-  opacity:0; transform:rotate(-90deg);
-  transition:opacity 0.3s;
-  animation:chargeRotate 2s linear infinite;
-}
-@keyframes chargeRotate{from{transform:rotate(-90deg)}to{transform:rotate(270deg)}}
-.logo-wrap:hover .logo-charge { opacity:1; }
-
-.tag-line { font-family:'Oswald',sans-serif; font-size:0.7rem; font-weight:400; letter-spacing:0.45em; text-transform:uppercase; color:var(--red); display:flex; align-items:center; gap:1rem; }
-.tag-line::before,.tag-line::after{content:'';height:1px;width:50px;background:var(--red);opacity:0.45;}
-.hero-title { font-family:'Oswald',sans-serif; font-size:clamp(3rem,10vw,7.5rem); font-weight:700; line-height:0.88; letter-spacing:-0.02em; text-transform:uppercase; }
-.hero-title .t1{display:block;color:var(--text);text-shadow:0 0 60px rgba(204,31,31,0.25);}
-.hero-title .t2{display:block;color:var(--red);text-shadow:0 0 50px rgba(204,31,31,0.8),0 0 110px rgba(204,31,31,0.4);}
-.hero-sub { font-size:1rem; font-style:italic; color:var(--khaki); letter-spacing:0.04em; }
-.hero-cta { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
-.btn { font-family:'Oswald',sans-serif; font-size:0.85rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; text-decoration:none; padding:0.9rem 2.2rem; position:relative; overflow:hidden; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:all 0.3s; display:inline-block; }
-.btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.1);transform:translateX(-100%);transition:transform 0.4s;}
-.btn:hover::before{transform:translateX(0);}
-.btn-red{background:var(--red);color:#fff;}
-.btn-red:hover{background:var(--red-dark);}
-.btn-outline{background:transparent;color:var(--khaki);border:1px solid rgba(183,169,141,0.22);}
-.btn-outline:hover{border-color:var(--khaki);color:var(--text);}
-.scroll-down { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.4rem; opacity:0.3; font-family:var(--mono); font-size:0.6rem; letter-spacing:0.3em; }
-.scroll-bar{width:1px;height:36px;background:linear-gradient(to bottom,var(--red),transparent);animation:scrollAnim 2s ease-in-out infinite;}
-@keyframes scrollAnim{0%,100%{opacity:0.3;transform:scaleY(0.5)}50%{opacity:1;transform:scaleY(1)}}
-
-/* SOCIALS */
-.socials-bar { background:var(--bg2); border-top:1px solid rgba(204,31,31,0.12); border-bottom:1px solid rgba(204,31,31,0.12); padding:1.1rem 2rem; }
-.socials-inner { max-width:1100px; margin:0 auto; display:flex; flex-wrap:wrap; gap:0.7rem; justify-content:center; align-items:center; }
-.social-link { display:flex; align-items:center; gap:0.55rem; padding:0.6rem 1.2rem; background:var(--bg3); border:1px solid rgba(255,255,255,0.05); text-decoration:none; color:var(--khaki); font-family:'Oswald',sans-serif; font-size:0.75rem; font-weight:400; letter-spacing:0.1em; text-transform:uppercase; clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%); transition:all 0.3s; position:relative; overflow:hidden; }
-.social-link::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--lc,var(--red));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
-.social-link:hover::after{transform:scaleX(1);}
-.social-link:hover{color:var(--text);border-color:rgba(255,255,255,0.08);background:#1a1515;}
-.server-pill { display:flex; align-items:center; gap:0.5rem; padding:0.6rem 1.2rem; background:rgba(204,31,31,0.05); border:1px solid rgba(204,31,31,0.18); font-family:var(--mono); font-size:0.7rem; color:var(--red); letter-spacing:0.05em; }
-.server-pill::before{content:"▸";opacity:0.55;}
-.divider{height:1px;background:linear-gradient(to right,transparent,rgba(204,31,31,0.2),transparent);}
-section{padding:5rem 2rem;position:relative;}
-.container{max-width:1100px;margin:0 auto;}
-.sec-label { font-family:'Oswald',sans-serif; font-size:0.67rem; letter-spacing:0.5em; text-transform:uppercase; color:var(--red); margin-bottom:0.7rem; display:flex; align-items:center; gap:0.8rem; }
-.sec-label::after{content:'';flex:1;max-width:65px;height:1px;background:var(--red);opacity:0.38;}
-.sec-title { font-family:'Oswald',sans-serif; font-size:clamp(1.8rem,4.5vw,3rem); font-weight:700; text-transform:uppercase; line-height:1; margin-bottom:1.3rem; color:var(--text); }
-.sec-title span{color:var(--red);}
-
-/* LOOT */
-.loot-section{background:var(--bg2);}
-.loot-intro{max-width:580px;font-size:0.97rem;line-height:1.8;color:var(--khaki);margin-bottom:2.3rem;}
-.loot-intro strong{color:var(--ember);font-weight:600;}
-.loot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1px;background:rgba(204,31,31,0.07);border:1px solid rgba(204,31,31,0.07);}
-.loot-item{background:var(--bg2);padding:1.5rem 1.3rem;position:relative;overflow:hidden;transition:background 0.3s;}
-.loot-item::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--red);transition:height 0.4s cubic-bezier(0.16,1,0.3,1);}
-.loot-item:hover::before{height:100%;}
-.loot-item:hover{background:var(--bg3);}
-.loot-icon{font-size:1.6rem;margin-bottom:0.6rem;}
-.loot-name{font-family:'Oswald',sans-serif;font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);margin-bottom:0.25rem;}
-.loot-desc{font-size:0.76rem;color:var(--text-dim);line-height:1.5;}
-
-/* EVENTS */
-.events-section{background:var(--bg);}
-.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:1.3rem;margin-top:2.3rem;}
-.event-card{background:var(--bg2);border:1px solid rgba(255,255,255,0.04);padding:1.7rem;position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);transition:transform 0.3s,border-color 0.3s;}
-.event-card:hover{transform:translateY(-4px);border-color:rgba(204,31,31,0.2);}
-.event-card::after{content:'';position:absolute;top:0;right:0;border:solid;border-width:0 18px 18px 0;border-color:transparent var(--red) transparent transparent;opacity:0.42;}
-.event-emoji{font-size:1.8rem;margin-bottom:0.8rem;}
-.event-title{font-family:'Oswald',sans-serif;font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--text);margin-bottom:0.35rem;}
-.event-desc{font-size:0.8rem;color:var(--khaki-dark);line-height:1.6;}
-
-
-/* ── MECHANICS PREVIEW ── */
-.mech-preview-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;
-}
-@media(max-width:900px){.mech-preview-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:550px){.mech-preview-grid{grid-template-columns:1fr;}}
-
-.mp-card{
-  background:rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.05);
-  border-top:2px solid var(--c,rgba(204,31,31,0.35));
-  padding:1.3rem;
-  transition:background 0.2s, border-top-color 0.2s, transform 0.2s;
-}
-.mp-card:hover{
-  background:rgba(255,255,255,0.04);
-  border-top-color:var(--c,var(--red));
-  transform:translateY(-2px);
-}
-.mp-icon{font-size:1.6rem;margin-bottom:0.6rem;}
-.mp-title{
-  font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:700;
-  letter-spacing:0.08em;text-transform:uppercase;color:var(--text);margin-bottom:0.4rem;
-}
-.mp-desc{font-family:'Rajdhani',sans-serif;font-size:0.84rem;color:var(--khaki-dark);line-height:1.6;}
-
-.mp-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-top:1.5rem;padding:1rem 1.2rem;
-  background:rgba(204,31,31,0.03);border:1px solid rgba(204,31,31,0.1);
-  flex-wrap:wrap;gap:1rem;
-}
-.mp-footer-text{font-family:var(--mono);font-size:0.55rem;color:var(--khaki-dark);letter-spacing:0.05em;}
-.mp-footer-btn{
-  font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;
-  padding:0.5rem 1.2rem;text-decoration:none;
-  background:rgba(204,31,31,0.1);color:var(--red);border:1px solid rgba(204,31,31,0.3);
-  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
-  transition:all 0.2s;white-space:nowrap;
-}
-.mp-footer-btn:hover{background:rgba(204,31,31,0.2);}
-
-/* CRAFT SECTION */
-.craft-section{background:var(--bg2);position:relative;overflow:hidden;}
-.craft-section::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent 0,transparent 40px,rgba(204,31,31,0.01) 40px,rgba(204,31,31,0.01) 41px),repeating-linear-gradient(-45deg,transparent 0,transparent 40px,rgba(204,31,31,0.01) 40px,rgba(204,31,31,0.01) 41px);pointer-events:none;}
-.craft-header-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.8rem;}
-.craft-embed-box{border:1px solid rgba(204,31,31,0.2);overflow:hidden;position:relative;}
-.craft-embed-label{background:rgba(204,31,31,0.07);border-bottom:1px solid rgba(204,31,31,0.15);padding:0.5rem 1rem;font-family:var(--mono);font-size:0.6rem;letter-spacing:0.2em;color:var(--red);display:flex;align-items:center;gap:0.5rem;}
-.craft-embed-label::before{content:'■';font-size:0.38rem;animation:blink 1.5s step-end infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* ═══ CRAFT INNER ═══ */
-
-  :root {
-    --bg: #080707; --panel: #0f0d0d; --panel2: #161212;
-    --accent: #cc1f1f; --accent2: #b7a98d; --accent3: #e05a1a;
-    --text: #d4c9b5; --text-dim: #6a6058; --border: #1e1818;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-.tabs { display:flex; flex-wrap:wrap; gap:2px; background:var(--panel); padding:14px 48px 0; border-bottom:1px solid var(--border); position:sticky; top:60px; z-index:90; }
-  .tab { padding:10px 18px; font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); cursor:pointer; border-bottom:2px solid transparent; transition:all .2s; white-space:nowrap; }
-  .tab:hover { color:var(--text); }
-  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
-  main { padding:36px 48px; max-width:1400px; margin:0 auto; }
-  .section { display:none; }
-  .section.active { display:block; }
-  .sec-title { font-family:'Oswald',sans-serif; font-size:26px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:20px; padding-bottom:10px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
-  .sec-title::before { content:''; display:inline-block; width:4px; height:26px; background:var(--accent); }
-  .sub-title { font-family:'Oswald',sans-serif; font-size:18px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin:24px 0 14px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:18px; }
-  .card { background:var(--panel); border:1px solid var(--border); border-top:3px solid var(--accent); padding:18px; transition:box-shadow .2s; }
-  .card:hover { box-shadow:0 4px 30px rgba(204,31,31,0.1); }
-  .card.g { border-top-color:var(--accent2); }
-  .card.g:hover { box-shadow:0 4px 30px rgba(183,169,141,0.1); }
-  .card.r { border-top-color:var(--accent3); }
-  .card.r:hover { box-shadow:0 4px 30px rgba(224,90,26,0.1); }
-  .cname { font-family:'Oswald',sans-serif; font-size:17px; font-weight:600; color:#fff; margin-bottom:14px; }
-  .meta { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
-  .badge { padding:3px 10px; font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:1px; border:1px solid; }
-  .bt { color:#cc6060; border-color:rgba(204,96,96,0.4); background:rgba(204,96,96,0.08); }
-  .be { color:#c8bb9a; border-color:rgba(200,187,154,0.4); background:rgba(200,187,154,0.08); }
-  .bp { color:#a89070; border-color:rgba(168,144,112,0.4); background:rgba(168,144,112,0.08); }
-  .br { color:#e87040; border-color:rgba(224,90,26,0.4); background:rgba(224,90,26,0.08); }
-  .lbl { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); margin-bottom:5px; font-family:'Share Tech Mono',monospace; }
-  .tools { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
-  .tool { padding:3px 10px; background:rgba(204,31,31,0.1); border:1px solid rgba(204,31,31,0.3); color:var(--accent); font-family:'Rajdhani',sans-serif; font-size:13px; font-weight:600; }
-  .ings { display:flex; flex-direction:column; gap:5px; }
-  .ing { display:flex; align-items:center; justify-content:space-between; padding:7px 10px; background:var(--panel2); border-left:2px solid var(--border); }
-  .ing.d { border-left-color:var(--accent3); }
-  .ing.k { border-left-color:var(--accent2); }
-  .iname { font-family:'Rajdhani',sans-serif; font-size:14px; font-weight:600; color:var(--text); }
-  .iamt { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--text-dim); display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex-shrink:0; margin-left:8px; }
-  .id { color:var(--accent3); font-size:9px; }
-  .ik { color:var(--accent2); font-size:9px; }
-  .idmg { color:#e87040; font-size:9px; }
-  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:24px; padding:12px 16px; background:var(--panel); border:1px solid var(--border); font-size:11px; font-family:'Share Tech Mono',monospace; }
-  .li { display:flex; align-items:center; gap:7px; color:var(--text-dim); }
-  .ld { width:10px; height:10px; border-left:3px solid; flex-shrink:0; }
-  .chain { background:var(--panel); border:1px solid var(--border); padding:20px; margin-bottom:20px; }
-  .chain-title { font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:16px; }
-  .steps { display:flex; align-items:center; flex-wrap:wrap; gap:6px; }
-  .step { padding:8px 14px; border:1px solid var(--border); background:var(--panel2); text-align:center; }
-  .step .sn { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:1px; display:block; margin-bottom:2px; }
-  .step .sv { font-family:'Oswald',sans-serif; font-size:13px; color:#fff; }
-  .sarr { color:var(--accent2); font-size:18px; flex-shrink:0; }
-  .note { padding:12px 16px; background:rgba(204,31,31,0.05); border:1px solid rgba(204,31,31,0.2); border-left:3px solid var(--accent); color:var(--text-dim); font-size:13px; margin-bottom:20px; }
-  .note strong { color:var(--accent); }
-  .warn { padding:12px 16px; background:rgba(224,90,26,0.05); border:1px solid rgba(232,75,106,.2); border-left:3px solid var(--accent3); color:var(--text-dim); font-size:13px; margin-bottom:20px; }
-  .warn strong { color:var(--accent3); }
-  @media(max-width:768px){ main,.tabs{padding-left:16px;padding-right:16px;} .grid{grid-template-columns:1fr;}
-}
-
-/* ── TOOLTIP ── */
-.tt {
-  position:fixed; z-index:9999; pointer-events:none;
-  background:#0a0f1a; border:1px solid rgba(204,31,31,0.55);
-  border-radius:8px; padding:10px 12px;
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  box-shadow:0 0 20px rgba(204,31,31,0.3);
-  min-width:210px; max-width:220px;
-  transition:opacity .15s;
-}
-.tt img { width:192px; height:192px; object-fit:contain; image-rendering:pixelated; }
-.tt span { font-size:10px; color:#8899aa; text-align:center; font-family:'Share Tech Mono',monospace; word-break:break-word; }
-[data-cls] { cursor:help; }
-
-
-
-/* DANGER */
-.danger-section{background:linear-gradient(to bottom,var(--bg),#080b0a);position:relative;overflow:hidden;}
-.danger-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 75% 50%,rgba(74,124,89,0.06),transparent);}
-.danger-layout{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;margin-top:2.3rem;}
-@media(max-width:680px){.danger-layout{grid-template-columns:1fr;gap:2rem;}}
-.zone-box{padding:2rem;position:relative;}
-.zone-box.rad{border:1px solid rgba(126,200,160,0.14);background:rgba(126,200,160,0.02);}
-.zone-box.bot{border:1px solid rgba(204,31,31,0.14);background:rgba(204,31,31,0.02);}
-.zone-icon{position:absolute;top:-1.1rem;left:1.6rem;background:var(--bg);padding:0 0.5rem;font-size:1.05rem;opacity:0.7;}
-.zone-title{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.9rem;}
-.zone-title.rad{color:var(--rad);}
-.zone-title.bot{color:var(--red);}
-.zone-list{list-style:none;display:flex;flex-direction:column;gap:0.5rem;}
-.zone-list li{font-size:0.85rem;color:var(--khaki);display:flex;align-items:flex-start;gap:0.7rem;line-height:1.5;}
-.zone-list li::before{content:'—';color:var(--text-dim);flex-shrink:0;}
-.infected-banner{margin-top:2.3rem;padding:1.3rem 1.7rem;background:rgba(204,31,31,0.05);border-left:3px solid var(--red);display:flex;align-items:center;gap:1.1rem;}
-.infected-icon{font-size:1.7rem;flex-shrink:0;}
-.infected-text{font-size:0.85rem;color:var(--khaki);line-height:1.6;}
-.infected-text strong{font-weight:600;color:var(--text);}
-.pillars-section{background:var(--bg2);}
-.pillars-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:rgba(255,255,255,0.03);margin-top:2.3rem;}
-@media(max-width:480px){.pillars-grid{grid-template-columns:1fr;}}
-.pillar{background:var(--bg2);padding:2rem 1.7rem;position:relative;overflow:hidden;transition:background 0.3s;}
-.pillar:hover{background:var(--bg3);}
-.pillar-num{font-family:'Oswald',sans-serif;font-size:4.5rem;font-weight:700;color:rgba(204,31,31,0.055);position:absolute;top:-0.4rem;right:0.8rem;line-height:1;pointer-events:none;transition:color 0.3s;}
-.pillar:hover .pillar-num{color:rgba(204,31,31,0.1);}
-.pillar-title{font-family:'Oswald',sans-serif;font-size:1.15rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--text);margin-bottom:0.35rem;}
-.pillar-desc{font-size:0.8rem;color:var(--khaki-dark);line-height:1.6;}
-.cta-section{background:var(--bg);text-align:center;padding:7rem 2rem;position:relative;overflow:hidden;}
-.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(204,31,31,0.08),transparent 70%);}
-.cta-title{font-family:'Oswald',sans-serif;font-size:clamp(2.2rem,6vw,4.5rem);font-weight:700;text-transform:uppercase;line-height:1;position:relative;z-index:2;margin-bottom:1rem;}
-.cta-sub{font-size:0.93rem;color:var(--khaki-dark);margin-bottom:2.3rem;position:relative;z-index:2;letter-spacing:0.05em;}
-.cta-links{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;margin-bottom:1.8rem;}
-.addr-box{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.73rem;color:var(--text-dim);padding:0.5rem 1.2rem;border:1px solid rgba(255,255,255,0.05);position:relative;z-index:2;}
-.addr-box::before{content:"IP:";color:var(--red);margin-right:0.3rem;opacity:0.6;}
-footer{background:var(--bg2);border-top:1px solid rgba(204,31,31,0.1);padding:1.4rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
-.footer-logo{display:flex;align-items:center;gap:0.55rem;}
-.footer-logo img{width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(204,31,31,0.6));}
-.footer-logo span{font-family:'Oswald',sans-serif;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-dim);}
-.footer-copy{font-family:var(--mono);font-size:0.62rem;color:var(--text-dim);letter-spacing:0.1em;}
-.fu{
-  opacity:0; transform:translateY(32px);
-  transition:opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
-  will-change:transform,opacity;
-}
-.fu.vis{ opacity:1; transform:translateY(0); }
-@media(max-width:600px){section{padding:3.5rem 1.2rem;} .events-grid,.pillars-grid{grid-template-columns:1fr;}}
-
-/* ══════════════════════════════════════
-   MOBILE NAV — BURGER + DRAWER
-══════════════════════════════════════ */
-/* ── BURGER — всегда виден ── */
-.burger {
-  display:flex;
-  flex-direction:column; justify-content:center; align-items:center;
-  gap:5px; width:40px; height:40px;
-  background:rgba(204,31,31,0.08);
-  border:1px solid rgba(204,31,31,0.25);
-  cursor:pointer; padding:0; flex-shrink:0;
-  clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);
-  transition:background 0.2s;
-}
-.burger span {
-  display:block; width:20px; height:2px;
-  background:var(--khaki);
-  transition:transform 0.3s, opacity 0.3s, width 0.3s;
-  transform-origin:center;
-}
-.burger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
-.burger.open span:nth-child(2) { opacity:0; width:0; }
-.burger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
-.burger:hover { background:rgba(204,31,31,0.15); }
-
-/* ── OVERLAY ── */
-.mobile-nav-overlay {
-  position:fixed; inset:0; z-index:498;
-  background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(4px);
-  opacity:0; pointer-events:none;
-  transition:opacity 0.35s;
-}
-.mobile-nav-overlay.show { opacity:1; pointer-events:all; }
-
-/* ── SIDE DRAWER (справа налево) ── */
-.mobile-nav {
-  position:fixed; top:60px; right:0; bottom:0; z-index:499;
-  width:280px; max-width:85vw;
-  background:rgba(8,7,7,0.99);
-  border-left:1px solid rgba(204,31,31,0.2);
-  border-top:1px solid rgba(204,31,31,0.1);
-  transform:translateX(100%);
-  opacity:0; pointer-events:none;
-  transition:transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
-  overflow-y:auto;
-  box-shadow:-20px 0 60px rgba(0,0,0,0.7);
-}
-.mobile-nav.show {
-  transform:translateX(0);
-  opacity:1; pointer-events:all;
-}
-.mobile-nav-inner {
-  padding:1.5rem 1.2rem 2rem;
-  display:flex; flex-direction:column; gap:2px;
-  min-height:100%;
-}
-.mobile-nav-status {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0.6rem 0.8rem 1rem;
-  border-bottom:1px solid rgba(204,31,31,0.1);
-  margin-bottom:0.5rem;
-}
-.mobile-ip {
-  font-family:var(--mono); font-size:0.6rem;
-  color:var(--text-dim); letter-spacing:0.05em;
-}
-.mob-link {
-  display:block; padding:0.85rem 0.8rem;
-  font-family:'Oswald',sans-serif; font-size:0.95rem;
-  font-weight:400; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--khaki-dark); text-decoration:none;
-  border-bottom:1px solid rgba(255,255,255,0.03);
-  transition:color 0.2s, padding-left 0.2s, border-color 0.2s;
-}
-.mob-link:hover { color:var(--text); padding-left:1.2rem; border-color:rgba(204,31,31,0.15); }
-.mob-faq { color:var(--rad) !important; }
-.mob-social { font-size:0.82rem; color:var(--text-dim); }
-.mob-divider { height:1px; background:rgba(204,31,31,0.1); margin:0.4rem 0; }
-.mob-connect {
-  display:block; margin-top:1rem; padding:0.9rem;
-  background:var(--red); color:#fff; text-align:center;
-  font-family:'Oswald',sans-serif; font-size:0.9rem;
-  font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
-  text-decoration:none;
-  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
-  transition:background 0.2s;
-}
-.mob-connect:hover { background:var(--red-dark); }
-
-
-
-
-/* ── скрыть старые desktop ссылки, оставить только статус и кнопку подключиться ── */
-/* На мобиле: скрыть ссылки и Steam auth из topbar */
-@media(max-width:900px) {
-  .topbar-links .tl:not(.primary),
-  .topbar-links .server-addr { display:none !important; }
-  .topbar-links .steam-auth { display:none !important; }
-}
-/* На десктопе: показать ссылки, скрыть Steam из бургера */
-@media(min-width:901px) {
-  .topbar-links .tl:not(.primary),
-  .topbar-links .server-addr { display:none !important; }
-  .mob-steam-auth { display:none !important; }
-}
-
-/* ══════════════════════════════════════
-   MOBILE LAYOUT FIXES
-══════════════════════════════════════ */
-@media(max-width:600px) {
-  /* HERO */
-  .hero { min-height:90vh; padding-top:60px; }
-  .hero-content { padding:0 1.2rem; text-align:center; }
-  .hero-cta { flex-direction:column; align-items:center; gap:0.8rem; }
-  .hero-cta .btn { width:100%; max-width:280px; justify-content:center; }
-
-  /* SOCIALS BAR */
-  .socials-bar { padding:0.8rem 1rem; }
-  .socials-inner { gap:0.5rem; }
-  .social-link { padding:0.5rem 0.8rem; font-size:0.7rem; }
-  .copy-ip-btn, .restart-timer { font-size:0.65rem; padding:0.45rem 0.8rem; }
-
-  /* TEAM — 2 колонки на мобиле */
-  .team-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap:1rem;
-  }
-  .team-card { padding:1.2rem 0.8rem 1rem; }
-  .team-avatar { width:56px; height:56px; font-size:1.4rem; }
-  .team-name { font-size:0.82rem; }
-  .team-role { font-size:0.55rem; }
-  .team-discord { font-size:0.58rem; }
-
-  /* RULES TABS — скролл по горизонтали */
-  .rules-tabs {
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    overflow-y:hidden;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
-    padding-bottom:0;
-    gap:0;
-  }
-  .rules-tabs::-webkit-scrollbar { display:none; }
-  .rules-tab { flex-shrink:0; font-size:0.65rem; padding:0.55rem 0.8rem; }
-
-  /* MAP */
-  #map { height:320px; }
-  .map-overlay-btn { font-size:0.6rem; padding:0.4rem 0.8rem; }
-
-  /* GALLERY */
-  .gallery-slide img { max-height:220px; object-fit:cover; }
-
-  /* CRAFT TABS */
-  .tabs { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; }
-  .tabs::-webkit-scrollbar { display:none; }
-
-  /* SECTION TITLES */
-  .section-title { font-size:clamp(1.8rem,8vw,3rem); }
-
-  /* LOOT / FEATURES */
-  .features-grid { grid-template-columns:1fr; }
-
-  /* DANGER */
-  .danger-layout { grid-template-columns:1fr; }
-}
-
-@media(max-width:380px) {
-  /* Очень маленькие экраны — 1 колонка для команды */
-  .team-grid { grid-template-columns:1fr; max-width:220px; margin-left:auto; margin-right:auto; }
-}
-
-/* ── PLAYER COUNTER ── */
-.player-counter {
-  display: inline-flex; align-items: center; gap: 0.9rem;
-  padding: 0.7rem 1.4rem;
-  background: rgba(204,31,31,0.06);
-  border: 1px solid rgba(204,31,31,0.2);
-  position: relative; overflow: hidden;
-}
-.player-counter::before {
+/* Зернистая текстура поверх всего */
+body::before {
   content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(204,31,31,0.04), transparent);
-  animation: counterShimmer 3s ease-in-out infinite;
-}
-@keyframes counterShimmer {
-  0%,100%{transform:translateX(-100%)} 50%{transform:translateX(100%)}
-}
-.pc-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--red); flex-shrink: 0;
-  box-shadow: 0 0 8px var(--red), 0 0 16px rgba(204,31,31,0.5);
-  animation: dotPulse 2s ease-in-out infinite;
-}
-@keyframes dotPulse {
-  0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)}
-}
-.pc-dot.online { background: #4adb6a; box-shadow: 0 0 8px #4adb6a, 0 0 16px rgba(74,219,106,0.5); animation: dotPulseGreen 2s ease-in-out infinite; }
-.pc-dot.offline { background: #666; box-shadow: none; animation: none; }
-@keyframes dotPulseGreen {
-  0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(0.75)}
-}
-.pc-info { display: flex; flex-direction: column; gap: 0.1rem; }
-.pc-count {
-  font-family: 'Share Tech Mono', monospace; font-size: 1.1rem; font-weight: 700;
-  color: var(--text); line-height: 1; letter-spacing: 0.05em;
-}
-.pc-count span { color: var(--red); }
-.pc-label {
-  font-family: 'Oswald', sans-serif; font-size: 0.58rem; font-weight: 400;
-  letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-dim);
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
 }
 
-/* Hero counter variant — bigger */
-.pc-hero {
-  padding: 1rem 2rem; gap: 1.2rem;
-}
-.pc-hero .pc-dot { width: 10px; height: 10px; }
-.pc-hero .pc-count { font-size: 1.5rem; }
-.pc-hero .pc-label { font-size: 0.65rem; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
 
-/* Topbar counter variant — small */
-.pc-topbar {
-  padding: 0.3rem 0.9rem; gap: 0.6rem;
-  border-color: rgba(204,31,31,0.15);
+/* ============================
+   УТИЛИТЫ
+============================ */
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 100px 0; }
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-.pc-topbar .pc-dot { width: 6px; height: 6px; }
-.pc-topbar .pc-count { font-size: 0.78rem; }
-.pc-topbar .pc-label { font-size: 0.5rem; }
+.section-label::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--red);
+  display: inline-block;
+}
+.section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.section-title span { color: var(--red); }
 
-/* ══════════════════════════════════════════
-   PARALLAX HERO LAYERS
-══════════════════════════════════════════ */
-.hero-parallax {
-  position:absolute; inset:0; overflow:hidden;
+.tag {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  text-transform: uppercase;
 }
-.px-layer {
-  position:absolute; inset:-8%; width:116%; height:116%;
-  background-size:cover; background-position:center;
-  will-change:transform;
-}
-.px-fog {
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 120% 60% at 50% 0%,   rgba(204,31,31,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse 80%  80% at 20% 100%,  rgba(0,0,0,0.6)     0%, transparent 60%),
-    radial-gradient(ellipse 80%  80% at 80% 100%,  rgba(0,0,0,0.5)     0%, transparent 60%);
-  pointer-events:none;
-}
-/* floating ember particles */
-.embers {
-  position:absolute; inset:0; pointer-events:none; overflow:hidden;
-}
-.ember {
-  position:absolute; bottom:-10px;
-  width:3px; height:3px; border-radius:50%;
-  background:var(--red); opacity:0;
-  animation:emberRise var(--d,8s) var(--delay,0s) ease-in infinite;
-}
-@keyframes emberRise {
-  0%  { transform:translateX(0)   translateY(0)   scale(1);   opacity:0;   }
-  10% { opacity:0.8; }
-  50% { transform:translateX(var(--dx,20px)) translateY(-45vh) scale(0.8); opacity:0.5; }
-  100%{ transform:translateX(var(--dx2,40px)) translateY(-100vh) scale(0); opacity:0; }
-}
+.tag--hot { border-color: var(--red); color: var(--red); }
+.tag--rad { border-color: var(--rad); color: var(--rad); }
 
-/* ══════════════════════════════════════════
-   MAP SECTION
-══════════════════════════════════════════ */
-.map-section { background:var(--bg); position:relative; overflow:hidden; }
-.map-section::before {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse 70% 50% at 50% 50%, rgba(74,124,89,0.07), transparent);
+/* ============================
+   НАВИГАЦИЯ
+============================ */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  transition: background 0.4s, backdrop-filter 0.4s;
 }
-.map-wrapper {
-  position:relative; border:1px solid rgba(204,31,31,0.2);
-  overflow:hidden; margin-top:2rem;
+.nav.scrolled {
+  background: rgba(8,7,7,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
 }
-.map-wrapper::before {
-  content:'CHERNARUS // SHELTER PVE'; position:absolute; top:0; left:0; right:0; z-index:10;
-  background:rgba(8,7,7,0.85); border-bottom:1px solid rgba(204,31,31,0.2);
-  padding:0.5rem 1rem; font-family:var(--mono); font-size:0.6rem;
-  letter-spacing:0.2em; color:var(--red);
-  display:flex; align-items:center; gap:0.5rem;
+.nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 68px;
+  gap: 24px;
 }
-#map { height:520px; width:100%; }
-
-/* Custom Leaflet overrides */
-.leaflet-container { background:#0a0c08 !important; font-family:'Oswald',sans-serif; }
-.leaflet-tile { filter:saturate(0.3) brightness(0.6) hue-rotate(10deg); }
-.leaflet-control-zoom a {
-  background:var(--bg2) !important; color:var(--text) !important;
-  border-color:rgba(204,31,31,0.3) !important;
+.nav__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
-.leaflet-control-zoom a:hover { background:var(--bg3) !important; color:var(--red) !important; }
-.leaflet-popup-content-wrapper {
-  background:var(--bg2) !important; border:1px solid rgba(204,31,31,0.3) !important;
-  border-radius:0 !important; box-shadow:0 0 20px rgba(204,31,31,0.2) !important;
-  color:var(--text) !important;
+.nav__logo img { width: 36px; height: 36px; object-fit: contain; }
+.nav__logo-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
-.leaflet-popup-tip { background:var(--bg2) !important; }
-.leaflet-popup-content { font-family:'Exo 2',sans-serif; font-size:13px; }
-.leaflet-popup-content b { font-family:'Oswald',sans-serif; color:var(--red); font-size:14px; letter-spacing:0.05em; }
-.map-legend {
-  display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:1rem;
-  padding:0.8rem 1rem; background:var(--bg2); border:1px solid rgba(255,255,255,0.04);
+.nav__logo-text em {
+  font-style: normal;
+  color: var(--red);
 }
-.ml-item { display:flex; align-items:center; gap:0.5rem; font-family:var(--mono); font-size:0.65rem; color:var(--text-dim); }
-.ml-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-
-/* ══════════════════════════════════════════
-   GALLERY
-══════════════════════════════════════════ */
-
-/* ── CAROUSEL ── */
-.carousel {
-  position:relative; margin-top:2rem; overflow:hidden;
-  border:1px solid rgba(204,31,31,0.15);
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
 }
-.carousel-track {
-  display:flex;
-  transition:transform 0.55s cubic-bezier(0.16,1,0.3,1);
-}
-.carousel-slide {
-  flex:0 0 100%; position:relative;
-  aspect-ratio:16/7; background:var(--bg3);
-}
-.carousel-slide img {
-  width:100%; height:100%; object-fit:cover; display:block;
-  filter:saturate(0.75) brightness(0.88);
-  transition:filter 0.4s;
-}
-.carousel-slide.active img { filter:saturate(1) brightness(1); }
-.carousel-caption {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:1.5rem 2rem 1.2rem;
-  background:linear-gradient(to top, rgba(8,7,7,0.85) 0%, transparent 100%);
-  font-family:'Oswald',sans-serif; font-size:1rem; letter-spacing:0.08em;
-  text-transform:uppercase; color:var(--text); z-index:2;
-}
-.carousel-caption span { color:var(--red); margin-right:0.7rem; font-size:0.7rem; }
-.carousel-btn {
-  position:absolute; top:50%; transform:translateY(-50%);
-  width:48px; height:48px; z-index:10;
-  background:rgba(8,7,7,0.7); border:1px solid rgba(204,31,31,0.3);
-  color:var(--text); font-size:1.8rem; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  transition:all 0.25s; user-select:none; backdrop-filter:blur(4px);
-  line-height:1;
-}
-.carousel-btn:hover { background:rgba(204,31,31,0.2); border-color:var(--red); color:#fff; }
-.carousel-btn.prev { left:1rem; }
-.carousel-btn.next { right:1rem; }
-.carousel-dots {
-  display:flex; justify-content:center; gap:0.5rem; padding:0.8rem 0 0;
-}
-.c-dot {
-  width:24px; height:3px; background:rgba(255,255,255,0.15); cursor:pointer;
-  transition:all 0.3s;
-}
-.c-dot.active { background:var(--red); width:36px; }
-.carousel-counter {
-  position:absolute; top:1rem; right:1rem; z-index:10;
-  font-family:var(--mono); font-size:0.65rem; color:rgba(255,255,255,0.4);
-  background:rgba(8,7,7,0.6); padding:0.3rem 0.7rem; letter-spacing:0.1em;
-}
-
-.gallery-section { background:var(--bg2); position:relative; overflow:hidden; }
-
-
-
-
-
-
-
-
-
-
-
-.g-item:hover 
-
-/* Lightbox */
-
-
-
-
-
-
-
-
-
-
-
-/* ══════════════════════════════════════════
-   RULES
-══════════════════════════════════════════ */
-.rules-section { background:var(--bg); position:relative; overflow:hidden; }
-/* ── RULES PREVIEW ── */
-.rules-preview-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;
-}
-@media(max-width:900px){.rules-preview-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:550px){.rules-preview-grid{grid-template-columns:1fr;}}
-.rp-card{
-  background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);
-  border-top:2px solid rgba(204,31,31,0.4);padding:1rem;
-  transition:border-color 0.2s,background 0.2s;
-}
-.rp-card:hover{background:rgba(255,255,255,0.035);border-top-color:var(--red);}
-.rp-card-head{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(255,255,255,0.05);}
-.rp-icon{font-size:1rem;}
-.rp-name{font-family:var(--head);font-size:0.75rem;font-weight:600;letter-spacing:0.12em;color:var(--text);text-transform:uppercase;}
-.rp-item{font-family:'Rajdhani',sans-serif;font-size:0.82rem;color:var(--khaki);padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.03);line-height:1.4;display:flex;align-items:center;flex-wrap:wrap;gap:0.35rem;}
-.rp-item:last-child{border-bottom:none;}
-.rp-item strong{color:var(--text);}
-.rp-item.rp-critical{color:rgba(212,201,181,0.7);}
-.rp-tag{display:inline-block;font-family:var(--mono);font-size:0.44rem;letter-spacing:0.08em;padding:0.1rem 0.4rem;flex-shrink:0;}
-.rules-preview-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-top:1.5rem;padding:1rem 1.2rem;
-  background:rgba(204,31,31,0.04);border:1px solid rgba(204,31,31,0.12);
-  flex-wrap:wrap;gap:1rem;
-}
-.rpf-text{font-family:var(--mono);font-size:0.58rem;color:var(--text-dim);letter-spacing:0.05em;}
-.rpf-btn{
-  font-family:var(--mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;
-  padding:0.5rem 1.2rem;text-decoration:none;
-  background:rgba(204,31,31,0.1);color:var(--red);border:1px solid rgba(204,31,31,0.3);
-  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
-  transition:all 0.2s;white-space:nowrap;
-}
-.rpf-btn:hover{background:rgba(204,31,31,0.2);}
-
-.rules-section::before {
-  content:''; position:absolute; top:0; right:0; bottom:0; width:40%;
-  background:linear-gradient(to left, rgba(204,31,31,0.04), transparent);
-  pointer-events:none;
-}
-.rules-layout {
-  display:grid; grid-template-columns:1fr 1fr; gap:4rem; margin-top:2rem;
-}
-@media(max-width:750px){ .rules-layout{ grid-template-columns:1fr; gap:2rem; } }
-.rules-col-title {
-  font-family:'Oswald',sans-serif; font-size:0.8rem; font-weight:600;
-  letter-spacing:0.3em; text-transform:uppercase; color:var(--red);
-  margin-bottom:1.2rem; padding-bottom:0.6rem;
-  border-bottom:1px solid rgba(204,31,31,0.2);
-}
-.rule-item {
-  display:flex; gap:1rem; align-items:flex-start;
-  padding:0.8rem 0; border-bottom:1px solid rgba(255,255,255,0.03);
-  transition:background 0.2s;
-}
-.rule-item:last-child { border-bottom:none; }
-.rule-num {
-  font-family:var(--mono); font-size:0.7rem; color:var(--red);
-  opacity:0.6; flex-shrink:0; margin-top:0.15rem; min-width:1.8rem;
-}
-.rule-text { font-size:0.88rem; color:var(--khaki); line-height:1.6; }
-.rule-text strong { color:var(--text); font-weight:600; }
-.rule-tag {
-  display:inline-block; margin-left:0.4rem;
-  padding:0.1rem 0.5rem; font-family:var(--mono); font-size:0.6rem;
-  border:1px solid; vertical-align:middle;
-}
-.rt-ban { color:#e05a1a; border-color:rgba(224,90,26,0.4); background:rgba(224,90,26,0.07); }
-.rt-warn { color:#c8bb9a; border-color:rgba(200,187,154,0.3); background:rgba(200,187,154,0.05); }
-
-/* ══════════════════════════════════════════
-   TEAM
-══════════════════════════════════════════ */
-.team-section { background:var(--bg2); }
-.team-grid {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
-  gap:1.5rem; margin-top:2rem;
-}
-.team-card {
-  background:var(--bg3); border:1px solid rgba(255,255,255,0.04);
-  padding:1.8rem 1.4rem 1.4rem;
-  position:relative; overflow:hidden;
-  clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
-  transition:border-color 0.3s, transform 0.3s;
-  text-align:center;
-}
-.team-card::after {
-  content:''; position:absolute; top:0; right:0;
-  border:solid; border-width:0 16px 16px 0;
-  border-color:transparent rgba(204,31,31,0.5) transparent transparent;
-}
-.team-card:hover { border-color:rgba(204,31,31,0.25); transform:translateY(-3px); }
-.team-avatar {
-  width:72px; height:72px; border-radius:50%; margin:0 auto 1rem;
-  border:2px solid rgba(204,31,31,0.3);
-  display:flex; align-items:center; justify-content:center;
-  font-size:1.8rem; background:var(--bg2);
-  position:relative; overflow:hidden;
-}
-.team-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-.team-avatar-glow {
-  position:absolute; inset:-4px; border-radius:50%;
-  border:2px solid transparent;
-  background:linear-gradient(135deg, var(--red), transparent) border-box;
-  opacity:0; transition:opacity 0.3s;
-}
-.team-card:hover .team-avatar-glow { opacity:1; }
-.team-name {
-  font-family:'Oswald',sans-serif; font-size:1rem; font-weight:600;
-  text-transform:uppercase; letter-spacing:0.08em; color:var(--text); margin-bottom:0.3rem;
-}
-.team-role {
-  font-family:var(--mono); font-size:0.62rem; letter-spacing:0.2em;
-  text-transform:uppercase; color:var(--red); margin-bottom:0.8rem;
-}
-.team-discord {
-  font-family:var(--mono); font-size:0.65rem; color:var(--text-dim);
-  display:flex; align-items:center; justify-content:center; gap:0.4rem;
-}
-.team-discord::before { content:'#'; color:rgba(88,101,242,0.7); }
-
-@media(max-width:600px){
-  
-  
-}
-
-/* ── RULES CAROUSEL ── */
-.rules-carousel { position:relative; margin-top:2rem; }
-.rules-tabs {
-  display:flex; flex-wrap:wrap; gap:4px; margin-bottom:0;
-  border-bottom:1px solid rgba(204,31,31,0.15);
-}
-.rules-tab {
-  font-family:'Oswald',sans-serif; font-size:0.72rem; font-weight:400;
-  letter-spacing:0.12em; text-transform:uppercase;
-  padding:0.6rem 1.1rem; cursor:pointer;
-  color:var(--text-dim); background:transparent;
-  border:none; border-bottom:2px solid transparent;
-  transition:all 0.25s; white-space:nowrap;
-}
-.rules-tab:hover { color:var(--text); }
-.rules-tab.active { color:var(--red); border-bottom-color:var(--red); }
-.rules-panels { overflow:hidden; }
-.rules-panel {
-  display:none;
-  padding:1.5rem 0;
-  animation:panelIn 0.3s ease;
-}
-.rules-panel.active { display:block; }
-@keyframes panelIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-.rules-panel-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:0 3rem;
-}
-@media(max-width:680px){ .rules-panel-grid{ grid-template-columns:1fr; } }
-
-/* ── COPY IP ── */
-.copy-ip-btn {
-  display:inline-flex; align-items:center; gap:0.5rem;
-  padding:0.5rem 1.1rem;
-  background:rgba(204,31,31,0.08); border:1px solid rgba(204,31,31,0.25);
-  color:var(--red); font-family:var(--mono); font-size:0.7rem;
-  letter-spacing:0.08em; cursor:pointer; transition:all 0.25s;
-  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
-  user-select:none; white-space:nowrap;
-}
-.copy-ip-btn:hover { background:rgba(204,31,31,0.15); border-color:var(--red); color:#fff; }
-.copy-ip-btn.copied { background:rgba(74,219,106,0.1); border-color:#4adb6a; color:#4adb6a; }
-.copy-ip-btn svg { width:12px; height:12px; flex-shrink:0; }
-
-/* Toast */
-.ip-toast {
-  position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px);
-  background:var(--bg2); border:1px solid #4adb6a; color:#4adb6a;
-  font-family:var(--mono); font-size:0.72rem; letter-spacing:0.12em;
-  padding:0.7rem 1.4rem; z-index:3000; pointer-events:none;
-  opacity:0; transition:all 0.3s cubic-bezier(0.16,1,0.3,1);
-  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
-}
-.ip-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-/* ── RESTART TIMER ── */
-.restart-timer {
-  display:inline-flex; align-items:center; gap:0.7rem;
-  padding:0.5rem 1.1rem;
-  background:rgba(224,90,26,0.06); border:1px solid rgba(224,90,26,0.2);
-  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.05em;
-  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
-}
-.rt-icon { font-size:0.8rem; opacity:0.7; }
-.rt-label { color:var(--text-dim); font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; }
-.rt-time { color:var(--ember); font-size:0.85rem; font-weight:700; letter-spacing:0.06em; }
-.rt-time.urgent { color:#e05a1a; animation:urgentPulse 1s ease-in-out infinite; }
-@keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-/* ── MAP IFRAME CLIP ── */
-.map-clip-outer {
+.nav__links a {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 6px 12px;
+  transition: color 0.2s;
   position: relative;
-  height: 520px;
-  overflow: hidden;
-  border: 1px solid rgba(204,31,31,0.2);
 }
-.map-clip-inner {
+.nav__links a:hover { color: var(--text); }
+.nav__links a::after {
+  content: '';
   position: absolute;
-  top: -110px;   /* hide iZurvive top toolbar fully */
-  left: -1px;
-  right: -210px; /* hide right sidebar */
-  bottom: -40px; /* hide bottom bar */
+  bottom: 0; left: 12px; right: 12px;
+  height: 1px;
+  background: var(--red);
+  transform: scaleX(0);
+  transition: transform 0.2s;
 }
-.map-iframe {
-  width: 100%;
-  height: calc(100% + 110px + 40px);
+.nav__links a:hover::after { transform: scaleX(1); }
+
+.nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.nav__server {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.nav__server span {
+  color: var(--rad);
+  margin-right: 4px;
+}
+.nav__connect {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  background: var(--red);
+  color: #fff;
+  clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+  transition: background 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.nav__connect:hover { background: #a01818; transform: translateY(-1px); }
+
+.nav__steam {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: border-color 0.2s, color 0.2s;
+}
+.nav__steam:hover { border-color: var(--khaki); color: var(--text); }
+.nav__steam svg { width: 16px; height: 16px; fill: currentColor; }
+
+/* Профиль */
+.nav__profile { display: flex; align-items: center; gap: 8px; }
+.nav__avatar { width: 32px; height: 32px; border-radius: 2px; border: 1px solid var(--border); object-fit: cover; }
+.nav__username {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--khaki);
+}
+.nav__logout {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  cursor: pointer;
+  background: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav__logout:hover { color: #e02020; border-color: #e02020; }
+
+/* Бургер */
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
   border: none;
-  display: block;
 }
-/* Mask top toolbar */
-.map-mask {
+.nav__burger span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--text);
+  transition: transform 0.3s, opacity 0.3s;
+}
+.nav__burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav__burger.open span:nth-child(2) { opacity: 0; }
+.nav__burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Мобильное меню */
+.nav__mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(8,7,7,0.97);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.nav__mobile.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+.nav__mobile a {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 24px;
+  transition: color 0.2s;
+}
+.nav__mobile a:hover { color: var(--red); }
+.nav__mobile-divider { width: 40px; height: 1px; background: var(--border); margin: 8px 0; }
+
+/* ============================
+   HERO
+============================ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Сетка фон */
+.hero__grid {
   position: absolute;
-  z-index: 10;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(183,169,141,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(183,169,141,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Диагональная линия */
+.hero__diag {
+  position: absolute;
+  top: 0; right: 0;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(204,31,31,0.04) 100%);
+  clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+/* Свечение снизу */
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 300px;
+  background: linear-gradient(to top, var(--bg), transparent);
   pointer-events: none;
 }
-.map-mask-top {
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
-}
-.map-mask-right {
-  top: 0; right: 0; bottom: 0;
-  width: 6px;
-  background: linear-gradient(to left, var(--bg) 0%, transparent 100%);
-}
-/* Open full map button */
-.map-open-btn {
+
+/* Большой фоновый текст */
+.hero__bg-text {
   position: absolute;
-  bottom: 14px;
-  right: 14px;
-  z-index: 20;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(100px, 15vw, 200px);
+  font-weight: 700;
+  color: rgba(204,31,31,0.04);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+  line-height: 1;
 }
-.map-open-btn a {
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  padding-top: 100px;
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.hero__eyebrow-line {
+  width: 40px; height: 1px;
+  background: var(--red);
+}
+.hero__eyebrow-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+
+.hero__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(52px, 9vw, 110px);
+  font-weight: 700;
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.hero__title-sub {
+  font-size: clamp(24px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--text-dim);
+  display: block;
+}
+.hero__title-accent { color: var(--red); }
+
+.hero__desc {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 16px;
+  color: var(--text-dim);
+  max-width: 480px;
+  margin: 24px 0 40px;
+  line-height: 1.7;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 1rem;
-  background: rgba(8,7,7,0.85);
-  border: 1px solid rgba(204,31,31,0.4);
-  color: var(--red);
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-decoration: none;
-  clip-path: polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
-  transition: all 0.2s;
-}
-.map-open-btn a:hover {
-  background: rgba(204,31,31,0.15);
-  border-color: var(--red);
+  gap: 10px;
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  background: var(--red);
   color: #fff;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+.btn-primary:hover { background: #e02020; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(204,31,31,0.35); }
+.btn-primary:hover::before { transform: translateX(100%); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 13px 24px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover { border-color: var(--khaki); color: var(--text); }
+
+.hero__copy-ip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  background: none;
+  transition: color 0.2s, border-color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero__copy-ip:hover { color: var(--khaki); border-color: var(--khaki); }
+
+/* Плашка онлайна */
+.hero__stats {
+  margin-top: 60px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--border);
+  width: fit-content;
+  overflow: hidden;
+}
+.hero__stat {
+  padding: 16px 28px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.hero__stat:last-child { border-right: none; }
+.hero__stat-val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text);
+  display: block;
+}
+.hero__stat-val.online { color: var(--rad); }
+.hero__stat-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: block;
+  margin-top: 4px;
 }
 
-/* ── NEWS & UPDATES SECTION ── */
-.news-section{background:var(--bg);padding:5rem 0;position:relative;}
-.news-section::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(204,31,31,0.2),transparent);}
-.news-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
-.news-col{background:var(--bg2);border:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden;}
-.news-col::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--col,var(--red)),transparent);}
-.news-col-header{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.04);}
-.news-col-title{font-family:'Oswald',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.2em;color:var(--text);text-transform:uppercase;display:flex;align-items:center;gap:0.5rem;}
-.news-col-count{font-family:var(--mono);font-size:0.5rem;background:rgba(204,31,31,0.15);color:var(--red);padding:0.15rem 0.5rem;letter-spacing:0.05em;}
-.news-col-body{padding:0.5rem 0;}
-.news-entry{padding:0.9rem 1.4rem;border-bottom:1px solid rgba(255,255,255,0.03);transition:background 0.15s;cursor:default;}
-.news-entry:last-child{border-bottom:none;}
-.news-entry:hover{background:rgba(255,255,255,0.02);}
-.news-entry-top{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.35rem;}
-.news-entry-type{font-family:var(--mono);font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.12rem 0.45rem;}
-.news-entry-date{font-family:var(--mono);font-size:0.5rem;color:var(--text-dim);margin-left:auto;}
-.news-entry-title{font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:600;color:var(--text);margin-bottom:0.25rem;letter-spacing:0.03em;}
-.news-entry-text{font-family:'Rajdhani',sans-serif;font-size:0.85rem;color:var(--text-dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.news-empty{padding:2.5rem 1.4rem;text-align:center;font-family:var(--mono);font-size:0.6rem;color:var(--text-muted);letter-spacing:0.08em;line-height:1.8;}
-.news-col-footer{padding:0.8rem 1.4rem;border-top:1px solid rgba(255,255,255,0.04);text-align:center;}
-.news-all-btn{font-family:var(--mono);font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);background:none;border:1px solid rgba(255,255,255,0.06);padding:0.35rem 1rem;cursor:pointer;clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);transition:all 0.2s;text-decoration:none;display:inline-block;}
-.news-all-btn:hover{border-color:rgba(204,31,31,0.3);color:var(--red);}
-@media(max-width:750px){.news-grid{grid-template-columns:1fr;}}
-.news-tabs{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,0.06);margin-top:2rem;overflow-x:auto;scrollbar-width:none;}
-.news-tabs::-webkit-scrollbar{display:none;}
-.news-tab{font-family:'Oswald',sans-serif;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-dim);background:none;border:none;border-bottom:2px solid transparent;padding:0.75rem 1.4rem;cursor:pointer;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:0.5rem;}
-.news-tab:hover{color:var(--text);}
-.news-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.ntab-cnt{font-family:var(--mono);font-size:0.5rem;background:rgba(204,31,31,0.15);color:var(--red);padding:0.1rem 0.4rem;border-radius:2px;min-width:1.2rem;text-align:center;}
-.news-tab.active .ntab-cnt{background:rgba(204,31,31,0.25);}
-#panel-novosti,#panel-izmeneniya,#panel-mody{margin-top:0;border-top:none;border-radius:0;}
-
-
-/* ── HERO SECONDARY BUTTONS ── */
-.hero-main-btn { font-size:1rem !important; padding:0.9rem 2.4rem !important; letter-spacing:0.15em; }
-.hero-secondary-btns { display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; justify-content:center; }
-.hero-btn-sep { width:1px; height:20px; background:rgba(255,255,255,0.1); }
-@media(max-width:600px){ .hero-btn-sep{display:none;} .hero-secondary-btns{gap:0.4rem;} }
-
-/* ── COMBO CONNECT BUTTON ── */
-.connect-combo { display:flex; flex-direction:column; align-items:center; gap:0.4rem; }
-.connect-sub-row { display:flex; align-items:center; gap:0.5rem; }
-.connect-copy-btn { background:none; border:1px solid rgba(183,169,141,0.3); color:var(--khaki); font-family:var(--mono); font-size:0.72rem; padding:0.3rem 0.7rem; cursor:pointer; transition:all 0.2s; border-radius:3px; display:flex; align-items:center; gap:0.3rem; }
-.connect-copy-btn:hover { border-color:var(--khaki); color:#fff; }
-.connect-copy-btn.copied { border-color:var(--rad); color:var(--rad); }
-.connect-copy-btn svg { width:12px; height:12px; }
-.connect-help-btn { background:none; border:1px solid rgba(183,169,141,0.3); color:var(--khaki); width:24px; height:24px; border-radius:50%; cursor:pointer; font-size:0.7rem; font-family:var(--body); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-.connect-help-btn:hover { border-color:var(--khaki); color:#fff; }
-
-/* ── CONNECT HELP MODAL ── */
-.connect-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; display:none; align-items:center; justify-content:center; }
-.connect-modal-overlay.active { display:flex; }
-.connect-modal { background:#151312; border:1px solid rgba(204,31,31,0.3); border-radius:8px; padding:1.8rem 2rem; max-width:440px; width:90%; position:relative; }
-.connect-modal h3 { font-family:var(--head); color:var(--red); font-size:1.1rem; margin:0 0 1rem; text-transform:uppercase; letter-spacing:0.08em; }
-.connect-modal ol { margin:0; padding-left:1.2rem; }
-.connect-modal li { color:var(--khaki); font-size:0.85rem; line-height:1.7; margin-bottom:0.5rem; font-family:var(--body); }
-.connect-modal li code { background:rgba(255,255,255,0.06); padding:0.1rem 0.4rem; border-radius:3px; font-family:var(--mono); font-size:0.78rem; color:var(--text); }
-.connect-modal-close { position:absolute; top:0.8rem; right:0.8rem; background:none; border:none; color:var(--khaki); font-size:1.2rem; cursor:pointer; opacity:0.6; transition:opacity 0.2s; }
-.connect-modal-close:hover { opacity:1; }
-
-/* ── PILLARS REDESIGN ── */
-.pillar-icon { font-size:1.8rem; margin-bottom:0.6rem; display:block; filter:drop-shadow(0 0 8px rgba(204,31,31,0.3)); transition:transform 0.3s; }
-.pillar:hover .pillar-icon { transform:scale(1.15); }
-.pillar-desc { font-size:0.85rem; color:var(--khaki-dark); line-height:1.7; margin-top:0.4rem; }
-.pillar { transition:background 0.3s, transform 0.3s; }
-.pillar:hover { transform:translateY(-2px); }
-.pillar-title { font-size:1.1rem; margin-bottom:0.2rem; }
-
-/* ── MAP SECTION REDESIGN ── */
-.map-section {
-  position:relative; overflow:hidden;
-  padding:5rem 0;
-  border-top:1px solid rgba(204,31,31,0.08);
-  border-bottom:1px solid rgba(204,31,31,0.08);
-  background:var(--bg2);
+/* Таймер рестарта */
+.hero__restart {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
 }
-.map-section-bg {
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 50% 80% at 80% 50%, rgba(204,31,31,0.06), transparent),
-    radial-gradient(ellipse 30% 60% at 20% 50%, rgba(126,200,160,0.03), transparent);
+.hero__restart-icon {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
 }
-.map-section-overlay {
-  position:absolute; inset:0;
-  background-image:
-    linear-gradient(rgba(204,31,31,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(204,31,31,0.04) 1px, transparent 1px);
-  background-size:60px 60px;
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
 }
-.map-section-inner {
-  position:relative; z-index:1;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:3rem; flex-wrap:wrap;
+.hero__restart-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 20px;
+  color: var(--gold);
 }
-.map-section-text { flex:1; min-width:280px; }
-.map-section-stats {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:1px; background:rgba(255,255,255,0.05);
-  flex-shrink:0;
+.hero__restart-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: block;
+}
+
+/* Скролл индикатор */
+.hero__scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+.hero__scroll-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  writing-mode: horizontal-tb;
+}
+.hero__scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(204,31,31,0.4), transparent);
+  animation: scrollLine 2s infinite;
+}
+@keyframes scrollLine {
+  0% { transform: scaleY(0); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+/* Социальные ссылки */
+.hero__socials {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  z-index: 2;
+}
+.hero__social-link {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero__social-link:hover { color: var(--red); }
+.hero__socials-line { width: 1px; height: 60px; background: var(--border); }
+
+/* ============================
+   НОВОСТИ
+============================ */
+.news { background: var(--bg); }
+
+.news__tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+}
+.news__tab {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  color: var(--text-dim);
+  cursor: pointer;
+  border: none;
+  background: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.news__tab:hover { color: var(--text); }
+.news__tab.active { color: var(--red); border-bottom-color: var(--red); }
+.news__tab-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  padding: 2px 6px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+.news__tab.active .news__tab-count { border-color: var(--red); color: var(--red); }
+
+.news__panel { display: none; }
+.news__panel.active { display: block; }
+
+.news__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1px;
+  background: var(--border);
+}
+.news__empty {
+  grid-column: 1/-1;
+  padding: 60px 24px;
+  text-align: center;
+  background: var(--bg);
+}
+.news__empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+.news__empty-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.news-card {
+  background: var(--bg);
+  padding: 28px;
+  position: relative;
+  transition: background 0.2s;
+  overflow: hidden;
+}
+.news-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--red);
+  transition: height 0.3s;
+}
+.news-card:hover { background: var(--bg2); }
+.news-card:hover::before { height: 100%; }
+
+.news-card__img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.news-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.news-card__type {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--red);
+  color: var(--red);
+}
+.news-card__type--update { border-color: var(--blue); color: var(--blue); }
+.news-card__type--mod { border-color: var(--rad); color: var(--rad); }
+.news-card__date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.news-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.news-card__body {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* mod update */
+.news-card__version {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+}
+.news-card__version-from { color: var(--text-dim); text-decoration: line-through; }
+.news-card__version-arrow { color: var(--rad); }
+.news-card__version-to { color: var(--rad); }
+
+/* ============================
+   О СЕРВЕРЕ (features)
+============================ */
+.features { background: var(--bg); position: relative; overflow: hidden; }
+.features__bg {
+  position: absolute;
+  right: -200px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(204,31,31,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.features__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.feature-card {
+  background: var(--bg);
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.feature-card:hover { background: var(--bg2); }
+.feature-card--wide { grid-column: 1 / -1; }
+
+.feature-card__num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+.feature-card__icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+.feature-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.feature-card__title span { color: var(--red); }
+.feature-card__desc {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.feature-card__corner {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 48px;
+  font-weight: 700;
+  color: rgba(204,31,31,0.06);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ============================
+   МЕХАНИКИ
+============================ */
+.mechanics { background: var(--bg2); }
+.mechanics__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.mechanic-card {
+  background: var(--bg2);
+  padding: 32px 28px;
+  position: relative;
+  transition: background 0.3s;
+  group: true;
+}
+.mechanic-card:hover { background: var(--bg3); }
+.mechanic-card__icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+.mechanic-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+.mechanic-card__desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.65;
+}
+.mechanic-card__tag {
+  margin-top: 16px;
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid rgba(204,31,31,0.3);
+}
+
+.mechanics__cta {
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ============================
+   СОБЫТИЯ
+============================ */
+.events { background: var(--bg); overflow: hidden; position: relative; }
+.events::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(to bottom, var(--red) 0, var(--red) 8px, transparent 8px, transparent 16px);
+  opacity: 0.4;
+}
+.events__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.event-card {
+  padding: 28px 24px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.event-card:hover { border-color: rgba(204,31,31,0.4); transform: translateY(-4px); }
+.event-card__icon { font-size: 28px; margin-bottom: 16px; }
+.event-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.event-card__desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+/* ============================
+   ОПАСНЫЕ ЗОНЫ
+============================ */
+.danger { background: var(--bg2); }
+.danger__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 48px;
+}
+.danger-card {
+  padding: 36px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.danger-card--rad {
+  border-color: rgba(126,200,160,0.2);
+  background: rgba(126,200,160,0.03);
+}
+.danger-card--bot {
+  border-color: rgba(204,31,31,0.2);
+  background: rgba(204,31,31,0.03);
+}
+.danger-card--zombie {
+  grid-column: 1 / -1;
+  border-color: rgba(204,31,31,0.2);
+  background: rgba(204,31,31,0.03);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.danger-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.danger-card--rad .danger-card__title { color: var(--rad); }
+.danger-card--bot .danger-card__title { color: var(--red); }
+.danger-card--zombie .danger-card__title { color: var(--red); }
+.danger-card__icon { font-size: 40px; flex-shrink: 0; }
+.danger-card ul {
+  list-style: none;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.danger-card ul li {
+  font-size: 13px;
+  color: var(--text-dim);
+  padding-left: 16px;
+  position: relative;
+}
+.danger-card ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-size: 10px;
+}
+
+/* ============================
+   КАРТА
+============================ */
+.map-section { background: var(--bg); }
+.map-preview {
+  margin-top: 48px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.map-preview__img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  opacity: 0.6;
+  filter: sepia(0.3) brightness(0.8);
+  display: block;
+}
+.map-preview__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(8,7,7,0.6) 0%, transparent 50%, rgba(8,7,7,0.8) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+}
+.map-preview__content { flex: 1; }
+.map-preview__stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
 }
 .map-stat {
-  background:var(--bg2); padding:1.5rem 2rem;
-  text-align:center; transition:background 0.2s;
+  text-align: center;
 }
-.map-stat:hover { background:var(--bg3); }
-.map-stat-val {
-  font-family:'Oswald',sans-serif; font-size:2.2rem;
-  font-weight:700; color:var(--red);
-  text-shadow:0 0 20px rgba(204,31,31,0.4);
+.map-stat__val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  line-height: 1;
 }
-.map-stat-label {
-  font-family:var(--mono); font-size:0.52rem;
-  letter-spacing:0.15em; color:var(--text-dim);
-  text-transform:uppercase; margin-top:0.2rem;
-}
-@media(max-width:750px){
-  .map-section-inner { flex-direction:column; }
-  .map-section-stats { width:100%; grid-template-columns:repeat(4,1fr); }
-  .map-stat { padding:1rem; }
-  .map-stat-val { font-size:1.6rem; }
-}
-@media(max-width:480px){
-  .map-section-stats { grid-template-columns:repeat(2,1fr); }
+.map-stat__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-top: 4px;
 }
 
+/* ============================
+   ГАЛЕРЕЯ
+============================ */
+.gallery { background: var(--bg2); overflow: hidden; }
+.gallery__slider {
+  margin-top: 48px;
+  position: relative;
+}
+.gallery__track {
+  display: flex;
+  gap: 2px;
+  overflow: hidden;
+}
+.gallery__slide {
+  flex: 0 0 calc(33.333% - 2px);
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.gallery__slide img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s, filter 0.3s;
+  filter: brightness(0.7) saturate(0.8);
+}
+.gallery__slide:hover img { transform: scale(1.05); filter: brightness(0.9) saturate(1); }
+.gallery__slide-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, rgba(8,7,7,0.9), transparent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.gallery__slide:hover .gallery__slide-caption { opacity: 1; }
+.gallery__counter {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  background: rgba(8,7,7,0.8);
+  padding: 4px 10px;
+}
+
+.gallery__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.gallery__nav {
+  display: flex;
+  gap: 8px;
+}
+.gallery__btn {
+  width: 40px; height: 40px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.gallery__btn:hover { border-color: var(--red); color: var(--red); }
+.gallery__dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.gallery__dot {
+  width: 20px; height: 2px;
+  background: var(--border);
+  cursor: pointer;
+  transition: background 0.2s, width 0.2s;
+}
+.gallery__dot.active { background: var(--red); width: 40px; }
+
+/* ============================
+   ПОЧЕМУ МЫ
+============================ */
+.why { background: var(--bg); }
+.why__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.why-card {
+  background: var(--bg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s;
+}
+.why-card:hover { background: var(--bg2); }
+.why-card__num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 64px;
+  font-weight: 700;
+  color: rgba(204,31,31,0.08);
+  line-height: 1;
+  position: absolute;
+  top: 20px; right: 24px;
+}
+.why-card__icon { font-size: 28px; margin-bottom: 20px; }
+.why-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.why-card__desc { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+
+/* ============================
+   ПРАВИЛА
+============================ */
+.rules { background: var(--bg2); }
+.rules__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 48px;
+}
+.rule-card {
+  background: var(--bg2);
+  padding: 32px 28px;
+}
+.rule-card__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rule-badge {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  padding: 3px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.rule-badge--ban { background: rgba(204,31,31,0.15); color: var(--red); border: 1px solid rgba(204,31,31,0.3); }
+.rule-badge--warn { background: rgba(224,160,32,0.1); color: var(--gold); border: 1px solid rgba(224,160,32,0.3); }
+.rule-badge--info { background: rgba(91,155,213,0.1); color: var(--blue); border: 1px solid rgba(91,155,213,0.3); }
+.rule-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+.rules__cta {
+  margin-top: 32px;
+  text-align: center;
+}
+
+/* ============================
+   КОМАНДА
+============================ */
+.team { background: var(--bg); }
+.team__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 48px;
+  justify-content: center;
+}
+.team-card {
+  text-align: center;
+  flex: 0 0 160px;
+  position: relative;
+}
+.team-card__photo-wrap {
+  width: 100px; height: 100px;
+  margin: 0 auto 14px;
+  position: relative;
+}
+.team-card__photo {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  transition: border-color 0.3s, filter 0.3s;
+  filter: grayscale(0.3);
+}
+.team-card:hover .team-card__photo { border-color: var(--red); filter: grayscale(0); }
+.team-card__name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.team-card__role {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.team__contact {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.team__contact a { color: var(--red); }
+.team__contact a:hover { text-decoration: underline; }
+
+/* ============================
+   CTA ФИНАЛ
+============================ */
+.cta-final {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.cta-final__bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(204,31,31,0.06) 0%, transparent 70%);
+}
+.cta-final__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  position: relative;
+}
+.cta-final__title span { color: var(--red); }
+.cta-final__sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 480px;
+  margin: 0 auto 40px;
+  position: relative;
+}
+.cta-final__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+}
+
+/* ============================
+   FOOTER
+============================ */
+.footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 48px 0 32px;
+}
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.footer__brand {}
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.footer__logo img { width: 32px; }
+.footer__logo-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.footer__logo-text em { font-style: normal; color: var(--red); }
+.footer__tagline {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.footer__ip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--khaki);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  display: inline-block;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.footer__ip:hover { border-color: var(--khaki); }
+
+.footer__nav { text-align: center; }
+.footer__nav-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer__nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer__nav-links a {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.2s;
+}
+.footer__nav-links a:hover { color: var(--red); }
+
+.footer__socials { text-align: right; }
+.footer__socials-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer__social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+.footer__social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.2s;
+  flex-direction: row-reverse;
+}
+.footer__social-link:hover { color: var(--red); }
+.footer__social-icon {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+.footer__social-link:hover .footer__social-icon { border-color: var(--red); }
+
+.footer__bottom {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer__copy {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.footer__links {
+  display: flex;
+  gap: 20px;
+}
+.footer__links a {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.footer__links a:hover { color: var(--red); }
+
+/* ============================
+   ТОСТ
+============================ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--text);
+  text-transform: uppercase;
+  z-index: 9998;
+  transition: transform 0.3s;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast--success { border-color: var(--rad); color: var(--rad); }
+
+/* ============================
+   МОДАЛКА
+============================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8,7,7,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  width: 90%;
+  max-width: 480px;
+  padding: 40px;
+  position: relative;
+}
+.modal__close {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-size: 20px;
+  color: var(--text-dim);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+.modal__close:hover { color: var(--red); }
+.modal__title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+.modal__step {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+.modal__step-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red);
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.modal__step-text { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
+.modal__step-text code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  background: var(--bg);
+  padding: 2px 6px;
+  color: var(--khaki);
+}
+
+/* ============================
+   АДАПТИВ
+============================ */
+@media (max-width: 1024px) {
+  .mechanics__grid { grid-template-columns: repeat(2, 1fr); }
+  .events__grid { grid-template-columns: repeat(2, 1fr); }
+  .hero__socials { display: none; }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 72px 0; }
+  .nav__links { display: none; }
+  .nav__server { display: none; }
+  .nav__steam { display: none; }
+  .nav__connect { display: none; }
+  .nav__burger { display: flex; }
+
+  .hero__title { font-size: clamp(44px, 11vw, 80px); }
+  .hero__stats { flex-direction: column; gap: 0; width: 100%; }
+  .hero__stat { padding: 12px 20px; }
+  .hero__restart { padding: 12px 20px; }
+
+  .features__grid { grid-template-columns: 1fr; }
+  .feature-card--wide { grid-column: auto; }
+  .mechanics__grid { grid-template-columns: 1fr; }
+  .events__grid { grid-template-columns: 1fr; }
+  .danger__grid { grid-template-columns: 1fr; }
+  .danger-card--zombie { flex-direction: column; gap: 16px; }
+  .why__grid { grid-template-columns: 1fr; }
+  .rules__grid { grid-template-columns: 1fr; }
+  .team__grid { gap: 12px; }
+  .team-card { flex: 0 0 130px; }
+
+  .footer__inner { grid-template-columns: 1fr; text-align: center; gap: 32px; }
+  .footer__socials { text-align: center; }
+  .footer__social-links { align-items: center; }
+  .footer__social-link { flex-direction: row; }
+  .footer__bottom { flex-direction: column; gap: 12px; text-align: center; }
+
+  .gallery__slide { flex: 0 0 85%; }
+
+  .news__grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .hero__actions { flex-direction: column; align-items: flex-start; }
+  .cta-final__actions { flex-direction: column; align-items: center; }
+  .map-preview__stats { gap: 16px; }
+  .news__tabs { overflow-x: auto; }
+  .news__tab { padding: 10px 16px; white-space: nowrap; }
+}
 </style>
-  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-  <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="images/icon-180.png">
+
 </head>
 <body>
 
-<nav class="topbar">
-  <a href="#" class="topbar-logo">
-    <img src="images/craft/c0000.png" alt="Shelter PVE">
-    <span>Shelter <em>PVE</em></span>
-  </a>
-  <div class="topbar-links">
-    <span class="server-addr">217.168.247.192:2312</span>
-    <div class="player-counter pc-topbar" id="counter-topbar">
-      <div class="pc-dot" id="dot-topbar"></div>
-      <div class="pc-info">
-        <div class="pc-count" id="count-topbar">–/–</div>
-        <div class="pc-label">Онлайн</div>
-      </div>
-    </div>
-    <a href="map.html" class="tl">Карта</a>
-    <a href="mechanics.html" class="tl">Механики</a>
-    <a href="#rules" class="tl">Правила</a>
-    <a href="#team" class="tl">Команда</a>
-    <a href="faq.html" class="tl" style="color:var(--rad)">FAQ</a>
-    <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="tl">Discord</a>
-    <a href="https://t.me/ShelterPVE" target="_blank" class="tl">Telegram</a>
-    <a href="https://shelter-games.ru/products" target="_blank" class="tl">Магазин</a>
-    <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="tl primary">Подключиться</a>
-    <!-- Steam Auth -->
-    <div class="steam-auth" id="steam-auth">
-      <a href="https://shelter-dayz.ru/api/steam/login" class="steam-login-btn" id="steam-login-btn">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2a10 10 0 0 0-9.96 9.04l5.35 2.21a2.83 2.83 0 0 1 1.6-.49c.05 0 .1 0 .16.01l2.4-3.47v-.05a3.77 3.77 0 1 1 3.77 3.77h-.09l-3.41 2.44c0 .06.01.11.01.17a2.84 2.84 0 0 1-5.66.27L1.2 13.58A10 10 0 1 0 12 2zm-5.87 14.86l-1.72-.71a2.13 2.13 0 0 0 3.88.29 2.13 2.13 0 0 0-1.13-2.79l1.78.74a1.57 1.57 0 1 1-2.81 2.47zm9.09-5.72a2.52 2.52 0 1 0-2.52-2.52 2.52 2.52 0 0 0 2.52 2.52z"/></svg>
-        Войти
+<!-- ============================
+     НАВИГАЦИЯ
+============================ -->
+
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo">
+        <img src="images/craft/c0000.png" alt="Shelter PVE">
+        <span class="nav__logo-text">Shelter <em>PVE</em></span>
       </a>
-      <div class="steam-user" id="steam-user" style="display:none">
-        <img class="steam-avatar" id="steam-avatar" src="" alt="">
-        <a href="profile.html" class="steam-name" id="steam-name" style="text-decoration:none"></a>
-        <button class="steam-logout" id="steam-logout" title="Выйти">&times;</button>
-      </div>
+
+```
+  <ul class="nav__links">
+    <li><a href="map.html">Карта</a></li>
+    <li><a href="mechanics.html">Механики</a></li>
+    <li><a href="#rules">Правила</a></li>
+    <li><a href="#team">Команда</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="https://discord.gg/4EWuqwfBu" target="_blank">Discord</a></li>
+    <li><a href="https://shelter-games.ru/products" target="_blank">Магазин</a></li>
+  </ul>
+
+  <div class="nav__actions">
+    <div class="nav__server">
+      <span id="nav-players">–/–</span> онлайн
     </div>
+
+    <!-- Не авторизован -->
+    <a href="https://shelter-dayz.ru/api/steam/login" class="nav__steam" id="nav-login-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38l2.96-6.1A3.5 3.5 0 0115.5 12a3.5 3.5 0 01-3.5 3.5 3.5 3.5 0 01-3.5-3.5H4.5C4.5 16.64 7.86 20 12 20s7.5-3.36 7.5-7.5S16.14 5 12 5a7.47 7.47 0 00-5.3 2.2l-4.38-1.8A12 12 0 0112 0z"/></svg>
+      Войти
+    </a>
+
+    <!-- Авторизован (скрыто по умолчанию) -->
+    <div class="nav__profile" id="nav-profile" style="display:none">
+      <img src="" alt="" class="nav__avatar" id="nav-avatar">
+      <span class="nav__username" id="nav-username"></span>
+      <button class="nav__logout" id="nav-logout">Выйти</button>
+    </div>
+
+    <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="nav__connect">⚡ Играть</a>
+
+    <button class="nav__burger" id="burger" aria-label="Меню">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-  <!-- MOBILE BURGER -->
-  <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+</div>
+```
+
+  </div>
 </nav>
 
-<!-- MOBILE NAV DRAWER -->
-<div class="mobile-nav" id="mobile-nav">
-  <div class="mobile-nav-inner">
-    <div class="mobile-nav-status">
-      <div class="player-counter pc-topbar" id="counter-mobile">
-        <div class="pc-dot" id="dot-mobile"></div>
-        <div class="pc-info">
-          <div class="pc-count" id="count-mobile">–/–</div>
-          <div class="pc-label">Онлайн</div>
-        </div>
-      </div>
-      <span class="mobile-ip">217.168.247.192:2312</span>
+<!-- Мобильное меню -->
+
+<div class="nav__mobile" id="mobile-menu">
+  <a href="map.html">Карта</a>
+  <a href="mechanics.html">Механики</a>
+  <a href="#rules" id="mobile-rules">Правила</a>
+  <a href="#team" id="mobile-team">Команда</a>
+  <a href="faq.html">FAQ</a>
+  <div class="nav__mobile-divider"></div>
+  <a href="https://discord.gg/4EWuqwfBu" target="_blank">Discord</a>
+  <a href="https://t.me/ShelterPVE" target="_blank">Telegram</a>
+  <a href="https://shelter-games.ru/products" target="_blank">Магазин</a>
+  <div class="nav__mobile-divider"></div>
+  <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" style="color:var(--ember)">⚡ Подключиться</a>
+</div>
+
+<!-- ============================
+     HERO
+============================ -->
+
+<section class="hero" id="hero">
+  <div class="hero__grid"></div>
+  <div class="hero__diag"></div>
+  <div class="hero__bg-text">SURVIVE</div>
+
+  <div class="container hero__content">
+    <div class="hero__eyebrow">
+      <span class="hero__eyebrow-line"></span>
+      <span class="hero__eyebrow-text">DayZ · PVE · Chernarus+</span>
     </div>
-    <a href="map.html" class="mob-link">Карта</a>
-    <a href="mechanics.html" class="mob-link">Механики</a>
-    <a href="#rules" class="mob-link" onclick="closeNav()">Правила</a>
-    <a href="#team" class="mob-link" onclick="closeNav()">Команда</a>
-    <a href="faq.html" class="mob-link mob-faq">FAQ</a>
-    <div class="mob-divider"></div>
-    <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="mob-link mob-social">💬 Discord</a>
-    <a href="https://t.me/ShelterPVE" target="_blank" class="mob-link mob-social">✈️ Telegram</a>
-    <a href="https://shelter-games.ru/products" target="_blank" class="mob-link mob-social">🛒 Магазин</a>
-    <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="mob-connect">⚡ Подключиться</a>
-    <div class="mob-divider"></div>
-    <div class="mob-steam-auth" id="mob-steam-auth">
-      <a href="https://shelter-dayz.ru/api/steam/login" class="mob-link mob-social" id="mob-steam-login">🎮 Войти через Steam</a>
-      <div class="mob-steam-user" id="mob-steam-user" style="display:none">
-        <img class="steam-avatar" id="mob-steam-avatar" src="" alt="" style="width:24px;height:24px;border-radius:50%;margin-right:0.4rem">
-        <a href="profile.html" id="mob-steam-name" style="color:var(--khaki);font-size:0.85rem;text-decoration:none"></a>
-        <button onclick="document.getElementById('steam-logout').click()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-left:0.5rem;font-size:0.85rem">Выйти</button>
-      </div>
+
+```
+<h1 class="hero__title">
+  Shelter<br>
+  <span class="hero__title-accent">PVE</span>
+  <span class="hero__title-sub">Выживание без правил войны</span>
+</h1>
+
+<p class="hero__desc">Кастомный DayZ сервер с трейдерами, крафтом, радиацией и боевыми дронами. Исследуй Chernarus+ без угрозы от других игроков.</p>
+
+<div class="hero__actions">
+  <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn-primary" id="connect-btn">
+    ⚡ Подключиться
+  </a>
+  <a href="mechanics.html" class="btn-secondary">Механики</a>
+  <button class="hero__copy-ip" id="copy-ip-btn" title="Скопировать IP">
+    📋 217.168.247.192:2312
+  </button>
+  <button class="btn-secondary" id="how-to-connect" style="padding: 13px 14px;">?</button>
+</div>
+
+<div class="hero__stats">
+  <div class="hero__stat">
+    <span class="hero__stat-val online" id="players-count">–/–</span>
+    <span class="hero__stat-label">Игроков онлайн</span>
+  </div>
+  <div class="hero__stat">
+    <span class="hero__stat-val">50</span>
+    <span class="hero__stat-label">Слотов</span>
+  </div>
+  <div class="hero__stat">
+    <span class="hero__stat-val">PVE</span>
+    <span class="hero__stat-label">Режим</span>
+  </div>
+  <div class="hero__restart">
+    <div class="hero__restart-icon"></div>
+    <div>
+      <span class="hero__restart-time" id="restart-timer">--:--</span>
+      <span class="hero__restart-label">до рестарта</span>
     </div>
   </div>
 </div>
-<div class="mobile-nav-overlay" id="mobile-nav-overlay" onclick="closeNav()"></div>
+```
 
-<section class="hero">
-  <div class="hero-parallax">
-    <div class="px-layer" style="background:radial-gradient(ellipse 100% 80% at 50% 40%, rgba(204,31,31,0.18) 0%, transparent 60%), linear-gradient(160deg,#060505 0%,#080707 50%,#0a0808 100%)"></div>
-    <div class="px-layer" style="background-image:radial-gradient(rgba(204,31,31,0.06) 1px,transparent 1px),radial-gradient(rgba(204,31,31,0.03) 1px,transparent 1px);background-size:55px 55px,27px 27px;animation:gridDrift 25s linear infinite"></div>
-    <div class="px-fog"></div>
   </div>
-  <div class="logo-spotlight"></div>
-  <div class="slash"></div>
-  <div class="slash"></div>
-  <div class="embers">
-    <div class="ember" style="left:10%;--d:9s;--delay:0s;--dx:30px;--dx2:60px"></div>
-    <div class="ember" style="left:25%;--d:12s;--delay:2s;--dx:-20px;--dx2:-40px;width:2px;height:2px"></div>
-    <div class="ember" style="left:40%;--d:8s;--delay:1s;--dx:15px;--dx2:35px;background:#e05a1a"></div>
-    <div class="ember" style="left:55%;--d:14s;--delay:3s;--dx:-30px;--dx2:-50px;width:2px;height:2px"></div>
-    <div class="ember" style="left:70%;--d:10s;--delay:0.5s;--dx:25px;--dx2:50px"></div>
-    <div class="ember" style="left:82%;--d:11s;--delay:4s;--dx:-15px;--dx2:-30px;background:#e05a1a;width:2px;height:2px"></div>
-    <div class="ember" style="left:90%;--d:7s;--delay:1.5s;--dx:20px;--dx2:45px"></div>
-    <div class="ember" style="left:5%;--d:13s;--delay:5s;--dx:-25px;--dx2:-55px;width:2px;height:2px"></div>
+
+  <div class="hero__socials">
+    <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="hero__social-link">Discord</a>
+    <div class="hero__socials-line"></div>
+    <a href="https://t.me/ShelterPVE" target="_blank" class="hero__social-link">Telegram</a>
+    <div class="hero__socials-line"></div>
+    <a href="https://wargm.ru/server/66288" target="_blank" class="hero__social-link">WARGM</a>
   </div>
-  <div class="hero-content">
-    <div class="tag-line">DayZ · PVE · Russia</div>
-    <div class="player-counter pc-hero fu" id="counter-hero">
-      <div class="pc-dot" id="dot-hero"></div>
-      <div class="pc-info">
-        <div class="pc-count" id="count-hero"><span>–</span> / –</div>
-        <div class="pc-label">Игроков онлайн прямо сейчас</div>
-      </div>
-    </div>
-    <div class="logo-wrap" id="logo-wrap">
-      <div class="logo-ring3"></div>
-      <div class="logo-ring2"></div>
-      <div class="logo-ring"></div>
-      <div class="logo-charge"></div>
-      <div class="logo-bracket lb-tl"></div>
-      <div class="logo-bracket lb-tr"></div>
-      <div class="logo-bracket lb-bl"></div>
-      <div class="logo-bracket lb-br"></div>
-      <img class="logo-img" id="logo-img" src="images/SHL_PVE.png" alt="Shelter PVE">
-      <div class="logo-scan"></div>
-    </div>
-    <h1 class="hero-title"><span class="t1">Shelter</span><span class="t2">PVE</span></h1>
-    <p class="hero-sub">Выживание требует не только оружия,<br>но и смекалки, ресурсов и верных союзников</p>
-    <div class="hero-cta">
-      <div class="connect-combo">
-        <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn btn-red hero-main-btn">⚡ Подключиться</a>
-        <div class="connect-sub-row">
-          <button class="connect-copy-btn" onclick="copyHeroIP(this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Скопировать IP
-          </button>
-          <button class="connect-help-btn" onclick="document.getElementById('connect-modal').classList.add('active')">?</button>
-        </div>
-      </div>
-      <div class="hero-secondary-btns">
-        <a href="mechanics.html" class="btn btn-outline">Механики</a>
-        <span class="hero-btn-sep"></span>
-        <a href="#features" class="btn btn-outline">О сервере</a>
-      </div>
-      <div class="hero-hint">⚙ крафт — часть механик сервера &nbsp;·&nbsp; гайды скоро</div>
-    </div>
+
+  <div class="hero__scroll">
+    <span class="hero__scroll-text">Scroll</span>
+    <div class="hero__scroll-line"></div>
   </div>
-  <div class="scroll-down"><span>scroll</span><div class="scroll-bar"></div></div>
 </section>
 
-<div class="socials-bar">
-  <div class="socials-inner">
-    <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="social-link" style="--lc:#5865f2"><span>💬</span> Discord</a>
-    <a href="https://t.me/ShelterPVE" target="_blank" class="social-link" style="--lc:#2AABEE"><span>✈️</span> Telegram</a>
-    <a href="https://shelter-games.ru/products" target="_blank" class="social-link" style="--lc:#e0a020"><span>🛒</span> Магазин</a>
-    <a href="https://wargm.ru/server/66288" target="_blank" class="social-link" style="--lc:#cc1f1f"><span>🎮</span> WARGM</a>
-    <div class="server-pill">217.168.247.192:2312</div>
-    <button class="copy-ip-btn" onclick="copyIP()" id="copy-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-      Скопировать IP
-    </button>
-    <div class="restart-timer" id="restart-timer">
-      <span class="rt-icon">⏱</span>
-      <div>
-        <div class="rt-label">Рестарт через</div>
-        <div class="rt-time" id="rt-time">--:--</div>
-      </div>
+<!-- ============================
+     НОВОСТИ
+============================ -->
+
+<section class="news section" id="news">
+  <div class="container">
+    <div class="section-label">Жизнь сервера</div>
+    <h2 class="section-title">Новости & <span>Обновления</span></h2>
+
+```
+<div class="news__tabs">
+  <button class="news__tab active" data-tab="news">
+    📰 Новости
+    <span class="news__tab-count" id="count-news">0</span>
+  </button>
+  <button class="news__tab" data-tab="server_update">
+    📋 Изменения
+    <span class="news__tab-count" id="count-update">0</span>
+  </button>
+  <button class="news__tab" data-tab="mod_update">
+    🔧 Обновления модов
+    <span class="news__tab-count" id="count-mods">0</span>
+  </button>
+</div>
+
+<div class="news__panel active" id="panel-news">
+  <div class="news__grid" id="grid-news">
+    <div class="news__empty">
+      <div class="news__empty-icon">📰</div>
+      <div class="news__empty-text">Новостей пока нет</div>
     </div>
   </div>
 </div>
-<div class="divider"></div>
-
-<section class="loot-section" id="features">
-  <div class="container">
-    <div class="sec-label fu">Исследование мира</div>
-    <h2 class="sec-title fu">Мир, который <span>вознаграждает</span></h2>
-    <p class="loot-intro fu">Забудь о случайном луте на земле. На Shelter PVE всё ценное <strong>спрятано и ждёт своего исследователя</strong>. Внимательность — твоя главная валюта.</p>
-    <div class="loot-grid fu">
-      <div class="loot-item"><div class="loot-icon">👕</div><div class="loot-name">Одежда</div><div class="loot-desc">Шкафы, комоды, гардеробы — одежда там, где ей место</div></div>
-      <div class="loot-item"><div class="loot-icon">🧰</div><div class="loot-name">Снаряжение</div><div class="loot-desc">Контейнеры, ящики, тайники — инструменты спрятаны</div></div>
-      <div class="loot-item"><div class="loot-icon">🥫</div><div class="loot-name">Провизия</div><div class="loot-desc">Холодильники и продуктовые хранилища — источник питания</div></div>
-      <div class="loot-item"><div class="loot-icon">📦</div><div class="loot-name">Тайники</div><div class="loot-desc">Сундуки, рюкзаки, схроны — для тех, кто ищет</div></div>
+<div class="news__panel" id="panel-server_update">
+  <div class="news__grid" id="grid-update">
+    <div class="news__empty">
+      <div class="news__empty-icon">📋</div>
+      <div class="news__empty-text">Изменений пока нет</div>
     </div>
   </div>
-</section>
-<div class="divider"></div>
-
-
-<section class="news-section" id="news">
-  <div class="container">
-    <div class="sec-label fu">Жизнь сервера</div>
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem">
-      <h2 class="sec-title fu">Новости &amp; <span>Обновления</span></h2>
+</div>
+<div class="news__panel" id="panel-mod_update">
+  <div class="news__grid" id="grid-mods">
+    <div class="news__empty">
+      <div class="news__empty-icon">🔧</div>
+      <div class="news__empty-text">Обновлений модов пока нет</div>
     </div>
-
-    <!-- Вкладки -->
-    <div class="news-tabs" id="news-tabs">
-      <button class="news-tab active" data-tab="novosti"   onclick="switchNewsTab('novosti')">📰 Новости <span class="ntab-cnt" id="cnt-novosti">0</span></button>
-      <button class="news-tab"        data-tab="izmeneniya" onclick="switchNewsTab('izmeneniya')">📋 Изменения <span class="ntab-cnt" id="cnt-izmeneniya">0</span></button>
-      <button class="news-tab"        data-tab="mody"       onclick="switchNewsTab('mody')">🔧 Обновления модов <span class="ntab-cnt" id="cnt-mody">0</span></button>
-    </div>
-
-    <!-- Панели -->
-    <div class="news-col" id="panel-novosti">
-      <div class="news-col-body" id="list-novosti"></div>
-    </div>
-    <div class="news-col" id="panel-izmeneniya" style="display:none">
-      <div class="news-col-body" id="list-izmeneniya"></div>
-    </div>
-    <div class="news-col" id="panel-mody" style="display:none">
-      <div class="news-col-body" id="list-mody"></div>
-    </div>
+  </div>
+</div>
+```
 
   </div>
 </section>
-<div class="divider"></div>
 
-<section class="craft-section" id="craft">
+<!-- ============================
+     О СЕРВЕРЕ
+============================ -->
+
+<section class="features section" id="features">
+  <div class="features__bg"></div>
   <div class="container">
-    <div class="sec-label fu">Производство</div>
-    <h2 class="sec-title fu">Механики <span>и крафт</span></h2>
-    <p class="fu" style="font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;color:var(--khaki-dark);margin-bottom:0.5rem;text-transform:uppercase;">⚙ дроны &nbsp;·&nbsp; трейдеры &nbsp;·&nbsp; верстак &nbsp;·&nbsp; крафт рецепты &nbsp;·&nbsp; аванпосты &nbsp;·&nbsp; и многое другое</p>
+    <div class="section-label">Исследование мира</div>
+    <h2 class="section-title">Мир, который <span>вознаграждает</span></h2>
 
-    <div class="mech-preview-grid fu">
-
-      <div class="mp-card" style="--c:var(--red)">
-        <div class="mp-icon">🚁</div>
-        <div class="mp-title">Боевые дроны</div>
-        <div class="mp-desc">На военках патрулируют автономные дроны — засекают и преследуют. Зачистка требует тактики.</div>
-      </div>
-
-      <div class="mp-card" style="--c:var(--rad)">
-        <div class="mp-icon">☢️</div>
-        <div class="mp-title">Радиационные зоны</div>
-        <div class="mp-desc">Вместо хим-зон — радиация. Лучший лут только внутри. Дозиметр и антирад обязательны.</div>
-      </div>
-
-      <div class="mp-card" style="--c:var(--gold,#e0a020)">
-        <div class="mp-icon">🛒</div>
-        <div class="mp-title">Три трейдера</div>
-        <div class="mp-desc">Лагерь выживших, Терминал, Егерь — каждый со своим ассортиментом и атмосферой.</div>
-      </div>
-
-      <div class="mp-card" style="--c:var(--blue,#5b9bd5)">
-        <div class="mp-icon">🔧</div>
-        <div class="mp-title">Верстак и крафт</div>
-        <div class="mp-desc">Инженерный пост с верстаком — создавай предметы которых нет в луте. Рецепты, компоненты, уникальный результат.</div>
-      </div>
-
-      <div class="mp-card" style="--c:var(--ember)">
-        <div class="mp-icon">🏚️</div>
-        <div class="mp-title">Укреплённые аванпосты</div>
-        <div class="mp-desc">Уникальные точки с AI-охраной по всей карте. Высокий риск — высокая награда.</div>
-      </div>
-
-      <div class="mp-card" style="--c:#6a9e6a">
-        <div class="mp-icon">🌿</div>
-        <div class="mp-title">Фермерство и ресурсы</div>
-        <div class="mp-desc">Выращивай урожай, добывай руду. Пассивный доход и ресурсная база для крафта.</div>
-      </div>
-
-    </div>
-
-    <div class="mp-footer fu">
-      <span class="mp-footer-text">Это лишь часть механик — полный список с подробным описанием каждой</span>
-      <a href="mechanics.html" class="mp-footer-btn">⚙ Все механики сервера →</a>
-    </div>
+```
+<div class="features__grid">
+  <div class="feature-card">
+    <div class="feature-card__num">// 01</div>
+    <span class="feature-card__icon">👕</span>
+    <h3 class="feature-card__title">Одежда</h3>
+    <p class="feature-card__desc">Шкафы, комоды, гардеробы — одежда там, где ей место. Никакого лута на земле.</p>
+    <div class="feature-card__corner">01</div>
   </div>
-</section>
-<div class="divider"></div>
-
-<section class="events-section">
-  <div class="container">
-    <div class="sec-label fu">Динамический контент</div>
-    <h2 class="sec-title fu"><span>Живые события</span> — адреналин и добыча</h2>
-    <div class="events-grid">
-      <div class="event-card fu"><div class="event-emoji">🚁</div><div class="event-title">Хеликраши</div><div class="event-desc">Смотри, как падает сбитый вертолёт — и будь первым у обломков</div></div>
-      <div class="event-card fu"><div class="event-emoji">🛸</div><div class="event-title">Дроны</div><div class="event-desc">Враждебные или союзные? Идентифицируй угрозу и действуй первым</div></div>
-      <div class="event-card fu"><div class="event-emoji">⛺</div><div class="event-title">Охотничьи лагеря</div><div class="event-desc">Заброшенные стоянки с неожиданным лутом — всегда есть шанс</div></div>
-      <div class="event-card fu"><div class="event-emoji">🏴</div><div class="event-title">Аванпосты</div><div class="event-desc">Точки интереса, которые нужно зачистить. Тактика решает всё</div></div>
-      <div class="event-card fu"><div class="event-emoji">🌾</div><div class="event-title">Фермерство</div><div class="event-desc">Выращивай еду — обеспечь базу продовольствием надолго</div></div>
-      <div class="event-card fu"><div class="event-emoji">⛏️</div><div class="event-title">Добыча руды</div><div class="event-desc">Карьеры и металл — ресурсная база для системы крафта</div></div>
-    </div>
+  <div class="feature-card">
+    <div class="feature-card__num">// 02</div>
+    <span class="feature-card__icon">🧰</span>
+    <h3 class="feature-card__title">Снаряжение</h3>
+    <p class="feature-card__desc">Контейнеры, ящики, тайники — инструменты спрятаны. Внимательность вознаграждается.</p>
+    <div class="feature-card__corner">02</div>
   </div>
-</section>
-<div class="divider"></div>
+  <div class="feature-card">
+    <div class="feature-card__num">// 03</div>
+    <span class="feature-card__icon">🥫</span>
+    <h3 class="feature-card__title">Провизия</h3>
+    <p class="feature-card__desc">Холодильники и продуктовые хранилища — источник питания для настоящего выживальщика.</p>
+    <div class="feature-card__corner">03</div>
+  </div>
+  <div class="feature-card">
+    <div class="feature-card__num">// 04</div>
+    <span class="feature-card__icon">📦</span>
+    <h3 class="feature-card__title">Тайники</h3>
+    <p class="feature-card__desc">Сундуки, рюкзаки, схроны — для тех, кто ищет. Лучшее не лежит на виду.</p>
+    <div class="feature-card__corner">04</div>
+  </div>
+</div>
+```
 
-<section class="danger-section">
-  <div class="container">
-    <div class="sec-label fu">Зоны повышенного риска</div>
-    <h2 class="sec-title fu">Опасность — <span>это возможность</span></h2>
-    <div class="danger-layout">
-      <div class="fu"><div class="zone-box rad"><div class="zone-icon">☢️</div><div class="zone-title rad">Радиационные зоны</div><ul class="zone-list"><li>Редкие ресурсы, которых нет нигде больше</li><li>Секреты только для подготовленных</li><li>Дозиметр и противогаз — обязательны</li></ul></div></div>
-      <div class="fu"><div class="zone-box bot"><div class="zone-icon">⚠️</div><div class="zone-title bot">Зоны с ботами</div><ul class="zone-list"><li>Территории повышенного риска</li><li>Интенсивные перестрелки — будь готов</li><li>Ценная добыча достаётся победителю</li></ul></div></div>
-    </div>
-    <div class="infected-banner fu"><div class="infected-icon">🧟</div><div class="infected-text"><strong>Заражённые — всегда рядом.</strong> Используй перчатки при обыске, чтобы избежать заражения и порезов. Небрежность стоит жизни.</div></div>
   </div>
 </section>
 
+<!-- ============================
+     МЕХАНИКИ
+============================ -->
 
-
-<section class="pillars-section">
+<section class="mechanics section" id="mechanics">
   <div class="container">
-    <div class="sec-label fu">Для кого этот сервер</div>
-    <h2 class="sec-title fu">Почему <span>Shelter PVE</span></h2>
-    <div class="pillars-grid">
-      <div class="pillar fu">
-        <div class="pillar-num">01</div>
-        <div class="pillar-icon">⚙️</div>
-        <div class="pillar-title">Глубокий геймплей</div>
-        <div class="pillar-desc">Кастомный крафт, уникальные трейдеры, дроны, радиация — каждая сессия непохожа на предыдущую. Здесь есть чем заняться и через 100 часов.</div>
-      </div>
-      <div class="pillar fu">
-        <div class="pillar-num">02</div>
-        <div class="pillar-icon">🤝</div>
-        <div class="pillar-title">Без токсичности</div>
-        <div class="pillar-desc">PVE формат — никто не убьёт тебя при выходе из базы. Мы строим сообщество где помогают, а не грифят. Это другой DayZ.</div>
-      </div>
-      <div class="pillar fu">
-        <div class="pillar-num">03</div>
-        <div class="pillar-icon">🗺️</div>
-        <div class="pillar-title">Живой мир</div>
-        <div class="pillar-desc">Аванпосты, охотничьи лагеря, крашсайты вертолётов, радиационные зоны — карта Chernarus+ постоянно удивляет. Ищи, исследуй, находи.</div>
-      </div>
-      <div class="pillar fu">
-        <div class="pillar-num">04</div>
-        <div class="pillar-icon">🛡️</div>
-        <div class="pillar-title">Активная администрация</div>
-        <div class="pillar-desc">Тикеты обрабатываются быстро, ивенты проводятся регулярно, сервер развивается. Мы здесь не только для того чтобы запустить — а чтобы поддерживать.</div>
-      </div>
-    </div>
+    <div class="section-label">Производство</div>
+    <h2 class="section-title">Механики <span>и крафт</span></h2>
+
+```
+<div class="mechanics__grid">
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">🚁</div>
+    <h3 class="mechanic-card__title">Боевые дроны</h3>
+    <p class="mechanic-card__desc">На военках патрулируют автономные дроны — засекают и преследуют. Зачистка требует тактики.</p>
+    <span class="mechanic-card__tag">Высокий риск</span>
+  </div>
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">☢️</div>
+    <h3 class="mechanic-card__title">Радиационные зоны</h3>
+    <p class="mechanic-card__desc">Вместо хим-зон — радиация. Лучший лут только внутри. Дозиметр и антирад обязательны.</p>
+    <span class="mechanic-card__tag">Дозиметр must</span>
+  </div>
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">🛒</div>
+    <h3 class="mechanic-card__title">Три трейдера</h3>
+    <p class="mechanic-card__desc">Лагерь выживших, Терминал, Егерь — каждый со своим ассортиментом и атмосферой.</p>
+    <span class="mechanic-card__tag">Торговля</span>
+  </div>
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">🔧</div>
+    <h3 class="mechanic-card__title">Верстак и крафт</h3>
+    <p class="mechanic-card__desc">Инженерный пост с верстаком — создавай предметы которых нет в луте. Рецепты, компоненты, уникальный результат.</p>
+    <span class="mechanic-card__tag">Уникальные предметы</span>
+  </div>
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">🏚️</div>
+    <h3 class="mechanic-card__title">Аванпосты</h3>
+    <p class="mechanic-card__desc">Укреплённые точки с AI-охраной по всей карте. Высокий риск — высокая награда.</p>
+    <span class="mechanic-card__tag">AI охрана</span>
+  </div>
+  <div class="mechanic-card">
+    <div class="mechanic-card__icon">🌿</div>
+    <h3 class="mechanic-card__title">Фермерство</h3>
+    <p class="mechanic-card__desc">Выращивай урожай, добывай руду. Пассивный доход и ресурсная база для крафта.</p>
+    <span class="mechanic-card__tag">Пассивный ресурс</span>
+  </div>
+</div>
+
+<div class="mechanics__cta">
+  <a href="mechanics.html" class="btn-secondary">⚙ Все механики сервера →</a>
+</div>
+```
+
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============================
+     СОБЫТИЯ
+============================ -->
 
-<!-- ════════════ MAP ════════════ -->
-<section class="map-section" id="map-section">
-  <div class="map-section-bg"></div>
-  <div class="map-section-overlay"></div>
-  <div class="container map-section-inner">
-    <div class="map-section-text fu">
-      <div class="sec-label">Навигация</div>
-      <h2 class="sec-title">Карта <span>сервера</span></h2>
-      <p style="color:var(--khaki-dark);font-size:0.92rem;max-width:420px;line-height:1.8;margin-bottom:1.8rem;">
-        Интерактивная карта Chernarus+ — трейдеры, сейфзоны, радиационные зоны и точки интереса. Планируй маршрут до выхода на сервер.
-      </p>
-      <a href="map.html" class="btn btn-red" style="display:inline-flex;align-items:center;gap:0.5rem;">
-          🗺 Открыть карту
-        </a>
-    </div>
-    <div class="map-section-stats fu">
-      <div class="map-stat"><div class="map-stat-val">3</div><div class="map-stat-label">Трейдера</div></div>
-      <div class="map-stat"><div class="map-stat-val">2</div><div class="map-stat-label">Рад. зоны</div></div>
-      <div class="map-stat"><div class="map-stat-val">4</div><div class="map-stat-label">Аванпоста</div></div>
-      <div class="map-stat"><div class="map-stat-val">∞</div><div class="map-stat-label">Крашсайты</div></div>
-    </div>
+<section class="events section">
+  <div class="container">
+    <div class="section-label">Динамический контент</div>
+    <h2 class="section-title">Живые события — <span>адреналин и добыча</span></h2>
+
+```
+<div class="events__grid">
+  <div class="event-card">
+    <div class="event-card__icon">🚁</div>
+    <h3 class="event-card__title">Хеликраши</h3>
+    <p class="event-card__desc">Смотри, как падает сбитый вертолёт — и будь первым у обломков.</p>
+  </div>
+  <div class="event-card">
+    <div class="event-card__icon">🛸</div>
+    <h3 class="event-card__title">Дроны</h3>
+    <p class="event-card__desc">Враждебные или союзные? Идентифицируй угрозу и действуй первым.</p>
+  </div>
+  <div class="event-card">
+    <div class="event-card__icon">⛺</div>
+    <h3 class="event-card__title">Охотничьи лагеря</h3>
+    <p class="event-card__desc">Заброшенные стоянки с неожиданным лутом — всегда есть шанс.</p>
+  </div>
+  <div class="event-card">
+    <div class="event-card__icon">🏴</div>
+    <h3 class="event-card__title">Аванпосты</h3>
+    <p class="event-card__desc">Точки интереса, которые нужно зачистить. Тактика решает всё.</p>
+  </div>
+  <div class="event-card">
+    <div class="event-card__icon">🌾</div>
+    <h3 class="event-card__title">Фермерство</h3>
+    <p class="event-card__desc">Выращивай еду — обеспечь базу продовольствием надолго.</p>
+  </div>
+  <div class="event-card">
+    <div class="event-card__icon">⛏️</div>
+    <h3 class="event-card__title">Добыча руды</h3>
+    <p class="event-card__desc">Карьеры и металл — ресурсная база для системы крафта.</p>
+  </div>
+</div>
+```
+
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============================
+     ОПАСНЫЕ ЗОНЫ
+============================ -->
 
-<!-- ════════════ GALLERY ════════════ -->
-<section class="gallery-section" id="gallery">
+<section class="danger section">
   <div class="container">
-    <div class="sec-label fu">Атмосфера</div>
-    <h2 class="sec-title fu">Скриншоты <span>сервера</span></h2>
-        <div class="carousel fu">
-      <div class="carousel-counter" id="car-counter">01 / 09</div>
-      <div class="carousel-track" id="car-track">
-      <div class="carousel-slide active">
-        <img src="images/gallery/01_prostor.jpg" alt="Просторы Chernarus" loading="eager">
-        <div class="carousel-caption"><span>01 / 09</span>Просторы Chernarus</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/02_rassvet.jpg" alt="Рассвет на сервере" loading="lazy">
-        <div class="carousel-caption"><span>02 / 09</span>Рассвет на сервере</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/03_nochnoy_patrul.jpg" alt="Ночной патруль" loading="lazy">
-        <div class="carousel-caption"><span>03 / 09</span>Ночной патруль</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/04_gorodskie_ruiny.jpg" alt="Городские руины" loading="lazy">
-        <div class="carousel-caption"><span>04 / 09</span>Городские руины</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/05_zakat.jpg" alt="Закат над лесом" loading="lazy">
-        <div class="carousel-caption"><span>05 / 09</span>Закат над лесом</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/06_ohota.jpg" alt="Охотничий лагерь" loading="lazy">
-        <div class="carousel-caption"><span>06 / 09</span>Охотничий лагерь</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/07_avanpost.jpg" alt="Аванпост" loading="lazy">
-        <div class="carousel-caption"><span>07 / 09</span>Аванпост</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/08_lesnye_dali.jpg" alt="Лесные дали" loading="lazy">
-        <div class="carousel-caption"><span>08 / 09</span>Лесные дали</div>
-      </div>
-      <div class="carousel-slide">
-        <img src="images/gallery/09_snaryazhenie.jpg" alt="Снаряжение выживших" loading="lazy">
-        <div class="carousel-caption"><span>09 / 09</span>Снаряжение выживших</div>
-      </div>
-      </div>
-      <button class="carousel-btn prev" onclick="carouselPrev()">&#8249;</button>
-      <button class="carousel-btn next" onclick="carouselNext()">&#8250;</button>
+    <div class="section-label">Зоны повышенного риска</div>
+    <h2 class="section-title">Опасность — <span>это возможность</span></h2>
+
+```
+<div class="danger__grid">
+  <div class="danger-card danger-card--rad">
+    <h3 class="danger-card__title">☢️ Радиационные зоны</h3>
+    <ul>
+      <li>Редкие ресурсы, которых нет нигде больше</li>
+      <li>Секреты только для подготовленных</li>
+      <li>Дозиметр и противогаз — обязательны</li>
+    </ul>
+  </div>
+  <div class="danger-card danger-card--bot">
+    <h3 class="danger-card__title">⚠️ Зоны с ботами</h3>
+    <ul>
+      <li>Территории повышенного риска</li>
+      <li>Интенсивные перестрелки — будь готов</li>
+      <li>Ценная добыча достаётся победителю</li>
+    </ul>
+  </div>
+  <div class="danger-card danger-card--zombie">
+    <div class="danger-card__icon">🧟</div>
+    <div>
+      <h3 class="danger-card__title">Заражённые — всегда рядом</h3>
+      <p style="font-size:14px; color:var(--text-dim); line-height:1.6">Используй перчатки при обыске, чтобы избежать заражения и порезов. Небрежность стоит жизни.</p>
     </div>
-    <div class="carousel-dots"><div class="c-dot active" onclick="carouselGo(0)"></div><div class="c-dot" onclick="carouselGo(1)"></div><div class="c-dot" onclick="carouselGo(2)"></div><div class="c-dot" onclick="carouselGo(3)"></div><div class="c-dot" onclick="carouselGo(4)"></div><div class="c-dot" onclick="carouselGo(5)"></div><div class="c-dot" onclick="carouselGo(6)"></div><div class="c-dot" onclick="carouselGo(7)"></div><div class="c-dot" onclick="carouselGo(8)"></div></div><div class="c-dot" onclick="carouselGo(1)"></div><div class="c-dot" onclick="carouselGo(2)"></div><div class="c-dot" onclick="carouselGo(3)"></div><div class="c-dot" onclick="carouselGo(4)"></div><div class="c-dot" onclick="carouselGo(5)"></div><div class="c-dot" onclick="carouselGo(6)"></div><div class="c-dot" onclick="carouselGo(7)"></div><div class="c-dot" onclick="carouselGo(8)"></div></div><div class="c-dot" onclick="carouselGo(1)"></div><div class="c-dot" onclick="carouselGo(2)"></div><div class="c-dot" onclick="carouselGo(3)"></div><div class="c-dot" onclick="carouselGo(4)"></div><div class="c-dot" onclick="carouselGo(5)"></div><div class="c-dot" onclick="carouselGo(6)"></div><div class="c-dot" onclick="carouselGo(7)"></div><div class="c-dot" onclick="carouselGo(8)"></div></div>
+  </div>
+</div>
+```
+
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============================
+     КАРТА
+============================ -->
 
-<!-- ════════════ RULES ════════════ -->
-<section class="rules-section" id="rules">
+<section class="map-section section">
   <div class="container">
-    <div class="sec-label fu">Кодекс выживших</div>
-    <h2 class="sec-title fu">Правила <span>сервера</span></h2>
+    <div class="section-label">Навигация</div>
+    <h2 class="section-title">Карта <span>сервера</span></h2>
 
-    <div class="rules-preview-grid fu">
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">⚔</span><span class="rp-name">PVE — Главное</span></div>
-        <div class="rp-item rp-critical"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Убийство, грабёж, рейды баз</div>
-        <div class="rp-item rp-critical"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Порча чужого имущества</div>
-        <div class="rp-item"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Связывание и гриф в любой форме</div>
-      </div>
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">🖥</span><span class="rp-name">Читы и баги</span></div>
-        <div class="rp-item rp-critical"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Читы, макросы, сторонние программы</div>
-        <div class="rp-item rp-critical"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Использование багов и эксплойтов</div>
-        <div class="rp-item"><span class="rp-tag rt-ban">ПЕРМ БАН</span>Намеренная перегрузка сервера</div>
-      </div>
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">🗣</span><span class="rp-name">Поведение</span></div>
-        <div class="rp-item"><span class="rp-tag rt-warn">ВАРН</span>Оскорбления, хамство, троллинг</div>
-        <div class="rp-item"><span class="rp-tag rt-ban">БАН</span>Дискриминация и пропаганда</div>
-        <div class="rp-item"><span class="rp-tag rt-ban">БАН</span>Реклама и распространение лжи</div>
-      </div>
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">🎫</span><span class="rp-name">Тикеты</span></div>
-        <div class="rp-item">Тикет из игры — <strong>Ctrl+9</strong></div>
-        <div class="rp-item">Жалобы — только с видеозаписью</div>
-        <div class="rp-item">Восстановление — только в день потери</div>
-      </div>
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">🚗</span><span class="rp-name">Транспорт</span></div>
-        <div class="rp-item">Брошенный ТС эвакуируется через <strong>4 ч</strong></div>
-        <div class="rp-item"><span class="rp-tag rt-warn">ВАРН</span>Транспорт на дорогах и проездах</div>
-        <div class="rp-item">Незапертый ТС — ответственность игрока</div>
-      </div>
-      <div class="rp-card">
-        <div class="rp-card-head"><span class="rp-icon">📋</span><span class="rp-name">Общее</span></div>
-        <div class="rp-item">Вход = согласие с правилами</div>
-        <div class="rp-item">Решения администрации <strong>окончательны</strong></div>
-        <div class="rp-item">Правила могут меняться без уведомления</div>
-      </div>
-    </div>
-
-    <div class="rules-preview-footer fu">
-      <span class="rpf-text">Это краткая версия — полные правила со всеми пунктами и якорями</span>
-      <a href="rules.html" class="rpf-btn">📄 Читать полные правила →</a>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ════════════ TEAM ════════════ -->
-<section class="team-section" id="team">
-  <div class="container">
-    <div class="sec-label fu">Команда</div>
-    <h2 class="sec-title fu">Администрация <span>сервера</span></h2>
-    <p class="fu" style="color:var(--khaki-dark);font-size:0.88rem;line-height:1.7;margin-bottom:0;max-width:500px">
-      Есть вопрос или проблема? Пиши в <a href="https://discord.gg/4EWuqwfBu" target="_blank" style="color:var(--red);text-decoration:none">Discord</a> — команда всегда на связи
-    </p>
-    <div class="team-grid">
-      <div class="team-card fu">
-        <div class="team-avatar" style="border-color:#e0c04055">
-          <img src="images/admins/Bad_Johnny.jpg" alt="Bad_Johnny">
+```
+<div class="map-preview">
+  <img src="images/gallery/01_prostor.jpg" alt="Карта Chernarus" class="map-preview__img" id="map-bg">
+  <div class="map-preview__overlay">
+    <div class="map-preview__content">
+      <div class="map-preview__stats">
+        <div class="map-stat">
+          <span class="map-stat__val">3</span>
+          <span class="map-stat__label">Трейдера</span>
         </div>
-        <div class="team-avatar-glow"></div>
-        <div class="team-name">Bad_Johnny</div>
-        <div class="team-role" style="color:#e0c040">Владелец</div>
-        <div class="team-discord">Bad_Johnny</div>
-      </div>
-      <div class="team-card fu">
-        <div class="team-avatar" style="border-color:#e0c04055">
-          <img src="images/admins/Gyrza.jpg" alt="Gyrza">
+        <div class="map-stat">
+          <span class="map-stat__val">2</span>
+          <span class="map-stat__label">Рад. зоны</span>
         </div>
-        <div class="team-avatar-glow"></div>
-        <div class="team-name">Gyrza</div>
-        <div class="team-role" style="color:#e0c040">Владелец</div>
-        <div class="team-discord">Gyrza</div>
-      </div>
-      <div class="team-card fu">
-        <div class="team-avatar" style="border-color:#e0c04055">
-          <img src="images/admins/Molchan.jpg" alt="Molchan">
+        <div class="map-stat">
+          <span class="map-stat__val">4</span>
+          <span class="map-stat__label">Аванпоста</span>
         </div>
-        <div class="team-avatar-glow"></div>
-        <div class="team-name">Molchan</div>
-        <div class="team-role" style="color:#e0c040">Владелец</div>
-        <div class="team-discord">Molchan</div>
-      </div>
-      <div class="team-card fu">
-        <div class="team-avatar" style="border-color:#cc1f1f55">
-          <img src="images/admins/Gambit.jpg" alt="Gambit">
+        <div class="map-stat">
+          <span class="map-stat__val">∞</span>
+          <span class="map-stat__label">Крашсайты</span>
         </div>
-        <div class="team-avatar-glow"></div>
-        <div class="team-name">Gambit</div>
-        <div class="team-role" style="color:#cc1f1f">Мод / Администратор</div>
-        <div class="team-discord">Gambit</div>
       </div>
-      <div class="team-card fu">
-        <div class="team-avatar" style="border-color:#cc1f1f55">
-          <img src="images/admins/42Pensa.jpg" alt="_42Pensa_">
+      <a href="map.html" class="btn-primary">🗺 Открыть интерактивную карту</a>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ============================
+     ГАЛЕРЕЯ
+============================ -->
+
+<section class="gallery section">
+  <div class="container">
+    <div class="section-label">Атмосфера</div>
+    <h2 class="section-title">Скриншоты <span>сервера</span></h2>
+  </div>
+
+  <div class="container">
+    <div class="gallery__slider">
+      <div class="gallery__track" id="gallery-track">
+        <div class="gallery__slide">
+          <img src="images/gallery/01_prostor.jpg" alt="Просторы Chernarus" loading="lazy">
+          <div class="gallery__slide-caption">Просторы Chernarus</div>
         </div>
-        <div class="team-avatar-glow"></div>
-        <div class="team-name">_42Pensa_</div>
-        <div class="team-role" style="color:#cc1f1f">Мод / Администратор</div>
-        <div class="team-discord">_42Pensa_</div>
+        <div class="gallery__slide">
+          <img src="images/gallery/02_rassvet.jpg" alt="Рассвет" loading="lazy">
+          <div class="gallery__slide-caption">Рассвет на сервере</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/03_nochnoy_patrul.jpg" alt="Ночной патруль" loading="lazy">
+          <div class="gallery__slide-caption">Ночной патруль</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/04_gorodskie_ruiny.jpg" alt="Городские руины" loading="lazy">
+          <div class="gallery__slide-caption">Городские руины</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/05_zakat.jpg" alt="Закат" loading="lazy">
+          <div class="gallery__slide-caption">Закат над лесом</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/06_ohota.jpg" alt="Охота" loading="lazy">
+          <div class="gallery__slide-caption">Охотничий лагерь</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/07_avanpost.jpg" alt="Аванпост" loading="lazy">
+          <div class="gallery__slide-caption">Аванпост</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/08_lesnye_dali.jpg" alt="Лес" loading="lazy">
+          <div class="gallery__slide-caption">Лесные дали</div>
+        </div>
+        <div class="gallery__slide">
+          <img src="images/gallery/09_snaryazhenie.jpg" alt="Снаряжение" loading="lazy">
+          <div class="gallery__slide-caption">Снаряжение выживших</div>
+        </div>
       </div>
+
+```
+  <div class="gallery__controls">
+    <div class="gallery__nav">
+      <button class="gallery__btn" id="gallery-prev">‹</button>
+      <button class="gallery__btn" id="gallery-next">›</button>
+    </div>
+    <div class="gallery__dots" id="gallery-dots"></div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-dim)">
+      <span id="gallery-current">01</span> / <span id="gallery-total">09</span>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ============================
+     ПОЧЕМУ МЫ
+============================ -->
+
+<section class="why section">
+  <div class="container">
+    <div class="section-label">Для кого этот сервер</div>
+    <h2 class="section-title">Почему <span>Shelter PVE</span></h2>
+
+```
+<div class="why__grid">
+  <div class="why-card">
+    <div class="why-card__num">01</div>
+    <div class="why-card__icon">⚙️</div>
+    <h3 class="why-card__title">Глубокий геймплей</h3>
+    <p class="why-card__desc">Кастомный крафт, уникальные трейдеры, дроны, радиация — каждая сессия непохожа на предыдущую. Здесь есть чем заняться и через 100 часов.</p>
+  </div>
+  <div class="why-card">
+    <div class="why-card__num">02</div>
+    <div class="why-card__icon">🤝</div>
+    <h3 class="why-card__title">Без токсичности</h3>
+    <p class="why-card__desc">PVE формат — никто не убьёт тебя при выходе из базы. Мы строим сообщество где помогают, а не грифят. Это другой DayZ.</p>
+  </div>
+  <div class="why-card">
+    <div class="why-card__num">03</div>
+    <div class="why-card__icon">🗺️</div>
+    <h3 class="why-card__title">Живой мир</h3>
+    <p class="why-card__desc">Аванпосты, охотничьи лагеря, крашсайты вертолётов, радиационные зоны — карта Chernarus+ постоянно удивляет. Ищи, исследуй, находи.</p>
+  </div>
+  <div class="why-card">
+    <div class="why-card__num">04</div>
+    <div class="why-card__icon">🛡️</div>
+    <h3 class="why-card__title">Активная администрация</h3>
+    <p class="why-card__desc">Тикеты обрабатываются быстро, ивенты проводятся регулярно, сервер развивается. Мы здесь не только чтобы запустить — а чтобы поддерживать.</p>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ============================
+     ПРАВИЛА
+============================ -->
+
+<section class="rules section" id="rules">
+  <div class="container">
+    <div class="section-label">Кодекс выживших</div>
+    <h2 class="section-title">Правила <span>сервера</span></h2>
+
+```
+<div class="rules__grid">
+  <div class="rule-card">
+    <h3 class="rule-card__title">⚔ PVE — Главное</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Убийство, грабёж, рейды баз</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Порча чужого имущества</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Связывание и гриф в любой форме</span>
+    </div>
+  </div>
+  <div class="rule-card">
+    <h3 class="rule-card__title">🖥 Читы и баги</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Читы, макросы, сторонние программы</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Использование багов и эксплойтов</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">ПЕРМ БАН</span>
+      <span class="rule-text">Намеренная перегрузка сервера</span>
+    </div>
+  </div>
+  <div class="rule-card">
+    <h3 class="rule-card__title">🗣 Поведение</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--warn">ВАРН</span>
+      <span class="rule-text">Оскорбления, хамство, троллинг</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">БАН</span>
+      <span class="rule-text">Дискриминация и пропаганда</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--ban">БАН</span>
+      <span class="rule-text">Реклама и распространение лжи</span>
+    </div>
+  </div>
+  <div class="rule-card">
+    <h3 class="rule-card__title">🎫 Тикеты</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Тикет из игры — <strong>Ctrl+9</strong></span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Жалобы — только с видеозаписью</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Восстановление — только в день потери</span>
+    </div>
+  </div>
+  <div class="rule-card">
+    <h3 class="rule-card__title">🚗 Транспорт</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Брошенный ТС эвакуируется через <strong>4 ч</strong></span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--warn">ВАРН</span>
+      <span class="rule-text">Транспорт на дорогах и проездах</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Незапертый ТС — ответственность игрока</span>
+    </div>
+  </div>
+  <div class="rule-card">
+    <h3 class="rule-card__title">📋 Общее</h3>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Вход = согласие с правилами</span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Решения администрации <strong>окончательны</strong></span>
+    </div>
+    <div class="rule-item">
+      <span class="rule-badge rule-badge--info">INFO</span>
+      <span class="rule-text">Правила могут меняться без уведомления</span>
+    </div>
+  </div>
+</div>
+
+<div class="rules__cta">
+  <a href="rules.html" class="btn-secondary">📄 Читать полные правила →</a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ============================
+     КОМАНДА
+============================ -->
+
+<section class="team section" id="team">
+  <div class="container">
+    <div class="section-label">Команда</div>
+    <h2 class="section-title">Администрация <span>сервера</span></h2>
+
+```
+<div class="team__grid">
+  <div class="team-card">
+    <div class="team-card__photo-wrap">
+      <img src="images/admins/Bad_Johnny.jpg" alt="Bad_Johnny" class="team-card__photo">
+    </div>
+    <div class="team-card__name">Bad_Johnny</div>
+    <div class="team-card__role">Владелец</div>
+  </div>
+  <div class="team-card">
+    <div class="team-card__photo-wrap">
+      <img src="images/admins/Gyrza.jpg" alt="Gyrza" class="team-card__photo">
+    </div>
+    <div class="team-card__name">Gyrza</div>
+    <div class="team-card__role">Владелец</div>
+  </div>
+  <div class="team-card">
+    <div class="team-card__photo-wrap">
+      <img src="images/admins/Molchan.jpg" alt="Molchan" class="team-card__photo">
+    </div>
+    <div class="team-card__name">Molchan</div>
+    <div class="team-card__role">Владелец</div>
+  </div>
+  <div class="team-card">
+    <div class="team-card__photo-wrap">
+      <img src="images/admins/Gambit.jpg" alt="Gambit" class="team-card__photo">
+    </div>
+    <div class="team-card__name">Gambit</div>
+    <div class="team-card__role">Мод / Администратор</div>
+  </div>
+  <div class="team-card">
+    <div class="team-card__photo-wrap">
+      <img src="images/admins/42Pensa.jpg" alt="_42Pensa_" class="team-card__photo">
+    </div>
+    <div class="team-card__name">_42Pensa_</div>
+    <div class="team-card__role">Мод / Администратор</div>
+  </div>
+</div>
+
+<p class="team__contact">
+  Есть вопрос или проблема? Пиши в <a href="https://discord.gg/4EWuqwfBu" target="_blank">Discord</a> — команда всегда на связи
+</p>
+```
+
+  </div>
+</section>
+
+<!-- ============================
+     CTA ФИНАЛ
+============================ -->
+
+<section class="cta-final section">
+  <div class="cta-final__bg"></div>
+  <div class="container">
+    <h2 class="cta-final__title">Готов <span>выживать?</span></h2>
+    <p class="cta-final__sub">Присоединяйся к Shelter PVE — сервер ждёт тебя</p>
+    <div class="cta-final__actions">
+      <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn-primary">⚡ Зайти на сервер</a>
+      <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="btn-secondary">💬 Discord</a>
+      <a href="https://shelter-games.ru/products" target="_blank" class="btn-secondary">🛒 Магазин</a>
+      <a href="https://t.me/ShelterPVE" target="_blank" class="btn-secondary">✈️ Telegram</a>
     </div>
   </div>
 </section>
 
-<div class="divider"></div>
+<!-- ============================
+     FOOTER
+============================ -->
 
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <div class="footer__logo">
+          <img src="images/craft/c0000.png" alt="Shelter PVE">
+          <span class="footer__logo-text">Shelter <em>PVE</em></span>
+        </div>
+        <div class="footer__tagline">DayZ · PVE · Chernarus+</div>
+        <button class="footer__ip" id="footer-copy-ip">📋 217.168.247.192:2312</button>
+      </div>
 
-<section class="cta-section">
-  <h2 class="cta-title fu">Готов <span style="color:var(--red)">выживать?</span></h2>
-  <p class="cta-sub fu">Присоединяйся к Shelter PVE — сервер ждёт тебя</p>
-  <div class="cta-links fu">
-    <a href="steam://run/221100/en/+connect 217.168.247.192:2312/" class="btn btn-red" style="font-size:1rem;padding:1.1rem 2.8rem">Зайти на сервер</a>
-    <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="btn btn-outline">Discord</a>
-    <a href="https://shelter-games.ru/products" target="_blank" class="btn btn-outline">Магазин</a>
-    <a href="https://t.me/ShelterPVE" target="_blank" class="btn btn-outline">Telegram</a>
+```
+  <nav class="footer__nav">
+    <div class="footer__nav-title">Навигация</div>
+    <ul class="footer__nav-links">
+      <li><a href="map.html">Карта</a></li>
+      <li><a href="mechanics.html">Механики</a></li>
+      <li><a href="craft.html">Крафт</a></li>
+      <li><a href="rules.html">Правила</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="admin.html">Админ-панель</a></li>
+    </ul>
+  </nav>
+
+  <div class="footer__socials">
+    <div class="footer__socials-title">Сообщество</div>
+    <div class="footer__social-links">
+      <a href="https://discord.gg/4EWuqwfBu" target="_blank" class="footer__social-link">
+        Discord
+        <span class="footer__social-icon">💬</span>
+      </a>
+      <a href="https://t.me/ShelterPVE" target="_blank" class="footer__social-link">
+        Telegram
+        <span class="footer__social-icon">✈️</span>
+      </a>
+      <a href="https://shelter-games.ru/products" target="_blank" class="footer__social-link">
+        Магазин
+        <span class="footer__social-icon">🛒</span>
+      </a>
+      <a href="https://wargm.ru/server/66288" target="_blank" class="footer__social-link">
+        WARGM
+        <span class="footer__social-icon">🎮</span>
+      </a>
+      <a href="https://www.battlemetrics.com/servers/dayz/37659741" target="_blank" class="footer__social-link">
+        BattleMetrics
+        <span class="footer__social-icon">📊</span>
+      </a>
+    </div>
   </div>
-  <div class="addr-box fu">217.168.247.192:2312</div>
-</section>
+</div>
 
-<footer>
-  <div class="footer-logo">
-    <img src="images/craft/c0000.png" alt="Shelter PVE">
-    <span>Shelter PVE</span>
+<div class="footer__bottom">
+  <div class="footer__copy">© 2025 Shelter PVE. Все права защищены.</div>
+  <div class="footer__links">
+    <a href="rules.html">Правила</a>
+    <a href="faq.html">FAQ</a>
+    <a href="https://discord.gg/4EWuqwfBu" target="_blank">Поддержка</a>
   </div>
-  <div class="footer-copy">DayZ · PVE · 217.168.247.192:2312</div>
+</div>
+```
+
+  </div>
 </footer>
 
-<script>
+<!-- ============================
+     ТОСТ
+============================ -->
 
-function craftShow(name, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  el.classList.add('active');
-}
+<div class="toast" id="toast"></div>
 
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    const siblings = Array.from(el.parentElement?.children || []);
-    const fuSiblings = siblings.filter(s => s.classList.contains('fu'));
-    const idx = fuSiblings.indexOf(el);
-    // Stagger: first element instant, siblings spaced 90ms
-    const delay = idx * 90;
-    setTimeout(() => el.classList.add('vis'), delay);
-    obs.unobserve(el);
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.fu').forEach(el => obs.observe(el));
+<!-- ============================
+     МОДАЛКА "Как подключиться"
+============================ -->
 
-
-// ── PLAYER COUNTER via BattleMetrics ──
-const API_URL = 'https://shelter-dayz.ru/api/server';
-const MAX_PLAYERS = 50;
-
-function setCounterUI(players, max, online) {
-  const dot1 = document.getElementById('dot-hero');
-  const dot2 = document.getElementById('dot-topbar');
-  const dot3 = document.getElementById('dot-mobile');
-  const c1   = document.getElementById('count-hero');
-  const c2   = document.getElementById('count-topbar');
-  const c3   = document.getElementById('count-mobile');
-
-  const cls = online ? 'pc-dot online' : 'pc-dot offline';
-  if (dot1) dot1.className = cls;
-  if (dot2) dot2.className = cls;
-  if (dot3) dot3.className = cls;
-
-  if (c1) c1.innerHTML = online
-    ? '<span>' + players + '</span> / ' + max
-    : '<span style="color:var(--text-dim)">Офлайн</span>';
-  if (c2) c2.textContent = online ? players + '/' + max : '—';
-  if (c3) c3.textContent = online ? players + '/' + max : '—';
-}
-
-async function fetchPlayerCount() {
-  try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    const max = data.maxPlayers || MAX_PLAYERS;
-    setCounterUI(data.players || 0, max, data.online);
-  } catch(e) {
-    console.warn('[API] Ошибка:', e);
-    const dots = document.querySelectorAll('[id^="dot-"]');
-    dots.forEach(d => d.className = 'pc-dot offline');
-    const c1 = document.getElementById('count-hero');
-    const c2 = document.getElementById('count-topbar');
-    if (c1) c1.innerHTML = '<span style="color:var(--text-dim)">—</span> / ' + MAX_PLAYERS;
-    if (c2) c2.textContent = '—/' + MAX_PLAYERS;
-  }
-}
-
-fetchPlayerCount();
-setInterval(fetchPlayerCount, 60000);
-
-
-
-// ── CAROUSEL ──
-(function(){
-  let cur = 0;
-  const slides = document.querySelectorAll('.carousel-slide');
-  const dots   = document.querySelectorAll('.c-dot');
-  const track  = document.getElementById('car-track');
-  const counter= document.getElementById('car-counter');
-  if(!track || !slides.length) return;
-  const total = slides.length;
-
-  window.carouselGo = function(n) {
-    slides[cur].classList.remove('active');
-    dots[cur] && dots[cur].classList.remove('active');
-    cur = (n + total) % total;
-    slides[cur].classList.add('active');
-    dots[cur] && dots[cur].classList.add('active');
-    track.style.transform = `translateX(-${cur * 100}%)`;
-    if(counter) counter.textContent = String(cur+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-  };
-  window.carouselPrev = () => carouselGo(cur - 1);
-  window.carouselNext = () => carouselGo(cur + 1);
-
-  // Auto-advance every 5s
-  let timer = setInterval(() => carouselNext(), 5000);
-  track.closest('.carousel').addEventListener('mouseenter', () => clearInterval(timer));
-  track.closest('.carousel').addEventListener('mouseleave', () => { timer = setInterval(() => carouselNext(), 5000); });
-
-  // Touch/swipe support
-  let startX = 0;
-  track.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
-  track.addEventListener('touchend',   e => {
-    const dx = e.changedTouches[0].clientX - startX;
-    if(Math.abs(dx) > 50) dx < 0 ? carouselNext() : carouselPrev();
-  });
-})();
-
-
-// ── RULES TABS ──
-window.rulesTab = function(idx) {
-  document.querySelectorAll('.rules-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
-  document.querySelectorAll('.rules-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
-};
-
-
-// ── COPY IP ──
-window.copyIP = function() {
-  const ip = '217.168.247.192:2312';
-  navigator.clipboard.writeText(ip).then(() => {
-    const btn = document.getElementById('copy-btn');
-    if(btn) { btn.classList.add('copied'); btn.innerHTML = btn.innerHTML.replace('Скопировать IP','Скопировано!'); }
-    const toast = document.getElementById('ip-toast');
-    if(toast) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
-    setTimeout(() => {
-      if(btn) { btn.classList.remove('copied'); btn.innerHTML = btn.innerHTML.replace('Скопировано!','Скопировать IP'); }
-    }, 2500);
-  }).catch(() => {
-    // Fallback for older browsers
-    const el = document.createElement('textarea');
-    el.value = ip; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-  });
-};
-
-// ── COPY IP (hero combo button) ──
-window.copyHeroIP = function(btn) {
-  const ip = '217.168.247.192:2312';
-  navigator.clipboard.writeText(ip).then(() => {
-    btn.classList.add('copied');
-    btn.innerHTML = btn.innerHTML.replace('Скопировать IP','Скопировано!');
-    const toast = document.getElementById('ip-toast');
-    if(toast) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 2500); }
-    setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.innerHTML = btn.innerHTML.replace('Скопировано!','Скопировать IP');
-    }, 2500);
-  }).catch(() => {
-    const el = document.createElement('textarea');
-    el.value = ip; document.body.appendChild(el); el.select();
-    document.execCommand('copy'); document.body.removeChild(el);
-  });
-};
-
-// ── STEAM AUTH ──
-(function() {
-  // Декодирование JWT payload (без проверки подписи — она проверена на сервере)
-  function parseJwt(token) {
-    try {
-      var base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(atob(base64));
-    } catch(e) { return null; }
-  }
-
-  function showUser(data) {
-    var loginBtn = document.getElementById('steam-login-btn');
-    var userEl   = document.getElementById('steam-user');
-    var avatarEl = document.getElementById('steam-avatar');
-    var nameEl   = document.getElementById('steam-name');
-    if (loginBtn) loginBtn.style.display = 'none';
-    if (userEl)   userEl.style.display = 'flex';
-    if (avatarEl) avatarEl.src = data.steamAvatar || '';
-    if (nameEl)   nameEl.textContent = data.steamName || data.steamId;
-    // Мобильное меню
-    var mobLogin  = document.getElementById('mob-steam-login');
-    var mobUser   = document.getElementById('mob-steam-user');
-    var mobAvatar = document.getElementById('mob-steam-avatar');
-    var mobName   = document.getElementById('mob-steam-name');
-    if (mobLogin) mobLogin.style.display = 'none';
-    if (mobUser)  mobUser.style.display = 'flex';
-    if (mobAvatar) mobAvatar.src = data.steamAvatar || '';
-    if (mobName)  mobName.textContent = data.steamName || data.steamId;
-  }
-
-  function hideUser() {
-    var loginBtn = document.getElementById('steam-login-btn');
-    var userEl   = document.getElementById('steam-user');
-    if (loginBtn) loginBtn.style.display = 'flex';
-    if (userEl)   userEl.style.display = 'none';
-    // Мобильное меню
-    var mobLogin = document.getElementById('mob-steam-login');
-    var mobUser  = document.getElementById('mob-steam-user');
-    if (mobLogin) mobLogin.style.display = '';
-    if (mobUser)  mobUser.style.display = 'none';
-  }
-
-  // Проверяем #token= в URL (после редиректа с Steam)
-  var hash = window.location.hash;
-  if (hash.indexOf('#token=') === 0) {
-    var token = hash.substring(7);
-    var data = parseJwt(token);
-    if (data && data.steamId) {
-      sessionStorage.setItem('shelter_steam_token', token);
-      sessionStorage.setItem('shelter_steam_user', JSON.stringify(data));
-      showUser(data);
-    }
-    // Убираем токен из URL
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  } else if (hash.indexOf('#auth_error=') === 0) {
-    console.warn('[Steam Auth] Error:', hash.substring(12));
-    history.replaceState(null, '', window.location.pathname + window.location.search);
-  }
-
-  // Восстанавливаем сессию из sessionStorage
-  var savedUser = sessionStorage.getItem('shelter_steam_user');
-  if (savedUser) {
-    try {
-      var userData = JSON.parse(savedUser);
-      var savedToken = sessionStorage.getItem('shelter_steam_token');
-      var decoded = savedToken ? parseJwt(savedToken) : null;
-      // Проверяем что токен не истёк
-      if (decoded && decoded.exp && decoded.exp * 1000 > Date.now()) {
-        showUser(userData);
-      } else {
-        sessionStorage.removeItem('shelter_steam_token');
-        sessionStorage.removeItem('shelter_steam_user');
-        hideUser();
-      }
-    } catch(e) { hideUser(); }
-  }
-
-  // Кнопка выхода
-  var logoutBtn = document.getElementById('steam-logout');
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-      sessionStorage.removeItem('shelter_steam_token');
-      sessionStorage.removeItem('shelter_steam_user');
-      hideUser();
-    });
-  }
-})();
-
-// ── RESTART TIMER (every 3h from 00:00 MSK) ──
-(function() {
-  const el = document.getElementById('rt-time');
-  if(!el) return;
-  function tick() {
-    // UTC+3 Moscow time — независимо от часового пояса пользователя
-    const now = new Date();
-    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-    const msk = new Date(utc + 3 * 60 * 60000);
-    const h = msk.getHours(), m = msk.getMinutes(), s = msk.getSeconds();
-    const totalSec = h * 3600 + m * 60 + s;
-    const interval = 3 * 3600; // 3 hours
-    const nextRestart = Math.ceil(totalSec / interval) * interval;
-    let diff = nextRestart - totalSec;
-    if(diff === 0) diff = interval; // just restarted
-    const rh = Math.floor(diff / 3600);
-    const rm = Math.floor((diff % 3600) / 60);
-    const rs = diff % 60;
-    el.textContent = rh > 0
-      ? rh + ':' + String(rm).padStart(2,'0') + ':' + String(rs).padStart(2,'0')
-      : String(rm).padStart(2,'0') + ':' + String(rs).padStart(2,'0');
-    el.classList.toggle('urgent', diff <= 300); // red pulse in last 5 min
-  }
-  tick();
-  setInterval(tick, 1000);
-})();
-
-// ── PARALLAX ──
-(function(){
-  const hero = document.querySelector('.hero');
-  const layers = document.querySelectorAll('.px-layer');
-  if(!hero || !layers.length) return;
-  document.addEventListener('mousemove', e => {
-    const cx = window.innerWidth/2, cy = window.innerHeight/2;
-    const dx = (e.clientX - cx)/cx, dy = (e.clientY - cy)/cy;
-    layers.forEach((l,i)=>{
-      const strength = (i+1)*6;
-      l.style.transform = `translate(${dx*strength}px, ${dy*strength}px)`;
-    });
-  });
-})();
-
-// ── LOGO GLITCH REVEAL ──
-(function(){
-  const img = document.getElementById('logo-img');
-  const wrap = document.getElementById('logo-wrap');
-  if (!img || !wrap) return;
-  // Запускаем через 300ms после загрузки
-  setTimeout(() => {
-    img.classList.add('glitch');
-    // Брэкеты появляются чуть позже
-    setTimeout(() => wrap.classList.add('revealed'), 500);
-  }, 300);
-})();
-
-// ── BURGER MENU ──
-const burgerBtn = document.getElementById('burger');
-const mobileNav = document.getElementById('mobile-nav');
-const mobileOverlay = document.getElementById('mobile-nav-overlay');
-function openNav() {
-  burgerBtn.classList.add('open');
-  burgerBtn.setAttribute('aria-expanded','true');
-  mobileNav.classList.add('show');
-  mobileOverlay.classList.add('show');
-  document.body.style.overflow='hidden';
-}
-function closeNav() {
-  burgerBtn.classList.remove('open');
-  burgerBtn.setAttribute('aria-expanded','false');
-  mobileNav.classList.remove('show');
-  mobileOverlay.classList.remove('show');
-  document.body.style.overflow='';
-}
-burgerBtn.addEventListener('click', () => {
-  burgerBtn.classList.contains('open') ? closeNav() : openNav();
-});
-document.querySelectorAll('.mob-link[href^="#"]').forEach(a => {
-  a.addEventListener('click', () => setTimeout(closeNav, 120));
-});
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeNav(); });
-
-
-
-// ── NEWS — 3 вкладки, данные с VPS ──
-(function() {
-  const API = 'https://shelter-dayz.ru/api';
-
-  // Маппинг channel → tab id
-  const CHANNEL_MAP = {
-    'новости':         'novosti',
-    'изменения':       'izmeneniya',
-    'обновления-модов':'mody',
-    // fallback по тегу
-    'НОВОСТИ':         'novosti',
-    'ИЗМЕНЕНИЯ':       'izmeneniya',
-    'ОБНОВЛЕНИЯ МОДОВ':'mody',
-  };
-
-  let allNews = [];
-
-  function getTab(item) {
-    if (item.channel) return CHANNEL_MAP[item.channel] || 'novosti';
-    if (item.tag)     return CHANNEL_MAP[item.tag]     || 'novosti';
-    return 'novosti';
-  }
-
-  function renderEntry(n) {
-    const date = n.date || '';
-    const text = (n.text || '').replace(/</g,'&lt;');
-    // Показываем до 3 строк текста
-    return `<div class="news-entry">
-      <div class="news-entry-top">
-        <span class="news-entry-date">${date}</span>
-        ${n.author ? `<span class="news-entry-date" style="margin-left:.5rem;color:var(--khaki)">${n.author}</span>` : ''}
-      </div>
-      <div class="news-entry-title">${n.title || ''}</div>
-      <div class="news-entry-text" style="-webkit-line-clamp:3">${text}</div>
-    </div>`;
-  }
-
-  function renderAll() {
-    const tabs = { novosti:[], izmeneniya:[], mody:[] };
-    allNews.forEach(n => {
-      const t = getTab(n);
-      if (tabs[t]) tabs[t].push(n);
-    });
-
-    ['novosti','izmeneniya','mody'].forEach(tab => {
-      const items = tabs[tab].slice(0, 10);
-      const listEl = document.getElementById('list-' + tab);
-      const cntEl  = document.getElementById('cnt-'  + tab);
-      if (!listEl) return;
-      cntEl.textContent = items.length;
-      listEl.innerHTML = items.length
-        ? items.map(renderEntry).join('')
-        : '<div class="news-empty">Записей пока нет.<br>Следи за обновлениями!</div>';
-    });
-  }
-
-  async function fetchNews() {
-    try {
-      const data = await fetch(API + '/news').then(r => r.json());
-      if (Array.isArray(data) && data.length) {
-        allNews = data.slice().reverse(); // новые сверху
-        renderAll();
-        return;
-      }
-    } catch(e) {}
-    // fallback: localStorage
-    try { allNews = JSON.parse(localStorage.getItem('shelter_news')) || []; } catch(e) { allNews = []; }
-    renderAll();
-  }
-
-  window.switchNewsTab = function(tab) {
-    document.querySelectorAll('.news-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    ['novosti','izmeneniya','mody'].forEach(t => {
-      document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
-    });
-  };
-
-  fetchNews();
-  // Автообновление каждые 5 минут
-  setInterval(fetchNews, 5 * 60 * 1000);
-})();
-
-</script>
-<div id="ip-toast" class="ip-toast">✓ IP скопирован в буфер</div>
-
-<!-- Модалка: как подключиться -->
-<div class="connect-modal-overlay" id="connect-modal" onclick="if(event.target===this)this.classList.remove('active')">
-  <div class="connect-modal">
-    <button class="connect-modal-close" onclick="document.getElementById('connect-modal').classList.remove('active')">&times;</button>
-    <h3>Как подключиться</h3>
-    <ol>
-      <li>Нажми <strong>«Подключиться»</strong> — DayZ запустится и подключится автоматически</li>
-      <li>Если не сработало — нажми <strong>«Скопировать IP»</strong></li>
-      <li>Открой DayZ &rarr; <strong>Серверы</strong> &rarr; <strong>Remote</strong> &rarr; вставь IP <code>217.168.247.192:2312</code></li>
-      <li>Или используй <strong>DayZ Launcher</strong> &rarr; Direct Connect &rarr; вставь IP</li>
-    </ol>
+<div class="modal-overlay" id="modal-how">
+  <div class="modal">
+    <button class="modal__close" id="modal-close">✕</button>
+    <h3 class="modal__title">Как подключиться</h3>
+    <div class="modal__step">
+      <span class="modal__step-num">1</span>
+      <p class="modal__step-text">Нажми <strong>«Подключиться»</strong> — DayZ запустится и подключится автоматически</p>
+    </div>
+    <div class="modal__step">
+      <span class="modal__step-num">2</span>
+      <p class="modal__step-text">Если не сработало — нажми <strong>«Скопировать IP»</strong></p>
+    </div>
+    <div class="modal__step">
+      <span class="modal__step-num">3</span>
+      <p class="modal__step-text">Открой DayZ → <strong>Серверы</strong> → <strong>Remote</strong> → вставь IP <code>217.168.247.192:2312</code></p>
+    </div>
+    <div class="modal__step">
+      <span class="modal__step-num">4</span>
+      <p class="modal__step-text">Или используй <strong>DayZ Launcher</strong> → Direct Connect → вставь IP</p>
+    </div>
   </div>
 </div>
+
+<!-- ============================
+     JAVASCRIPT
+============================ -->
+
+<script>
+const API = 'https://shelter-dayz.ru/api';
+
+// ---- Навигация прокрутка ----
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ---- Бургер меню ----
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobile-menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+// Закрыть при клике на ссылку
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
+// ---- Тост ----
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' toast--' + type : '');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ---- Копировать IP ----
+function copyIP() {
+  navigator.clipboard.writeText('217.168.247.192:2312').then(() => showToast('IP скопирован ✓', 'success'));
+}
+document.getElementById('copy-ip-btn')?.addEventListener('click', copyIP);
+document.getElementById('footer-copy-ip')?.addEventListener('click', copyIP);
+
+// ---- Модалка ----
+const modalHow = document.getElementById('modal-how');
+document.getElementById('how-to-connect')?.addEventListener('click', () => modalHow.classList.add('open'));
+document.getElementById('modal-close')?.addEventListener('click', () => modalHow.classList.remove('open'));
+modalHow?.addEventListener('click', e => { if (e.target === modalHow) modalHow.classList.remove('open'); });
+
+// ---- Онлайн сервера ----
+async function fetchServer() {
+  try {
+    const r = await fetch(API + '/server');
+    const d = await r.json();
+    const str = d.online ? `${d.players}/${d.maxPlayers}` : '–/–';
+    document.getElementById('players-count').textContent = str;
+    document.getElementById('nav-players').textContent = str;
+  } catch {}
+}
+fetchServer();
+setInterval(fetchServer, 60000);
+
+// ---- Таймер рестарта ----
+function updateRestartTimer() {
+  const now = new Date();
+  const msk = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Moscow' }));
+  const h = msk.getHours(), m = msk.getMinutes(), s = msk.getSeconds();
+  const restarts = [3, 9, 15, 21];
+  let next = null;
+  for (const rh of restarts) {
+    if (rh > h || (rh === h && m > 0) || (rh === h && m === 0 && s > 0)) {
+      next = rh; break;
+    }
+  }
+  if (next === null) next = restarts[0];
+  const nowSec = h * 3600 + m * 60 + s;
+  let nextSec = next * 3600;
+  if (nextSec <= nowSec) nextSec += 24 * 3600;
+  const diff = nextSec - nowSec;
+  const hh = String(Math.floor(diff / 3600)).padStart(2, '0');
+  const mm = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+  const ss = String(diff % 60).padStart(2, '0');
+  const el = document.getElementById('restart-timer');
+  if (el) el.textContent = `${hh}:${mm}:${ss}`;
+}
+updateRestartTimer();
+setInterval(updateRestartTimer, 1000);
+
+// ---- Steam авторизация ----
+function checkAuth() {
+  const token = sessionStorage.getItem('shelter_token');
+  if (!token) return;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.steamName) {
+      document.getElementById('nav-login-btn').style.display = 'none';
+      const profile = document.getElementById('nav-profile');
+      profile.style.display = 'flex';
+      document.getElementById('nav-username').textContent = payload.steamName;
+      if (payload.steamAvatar) document.getElementById('nav-avatar').src = payload.steamAvatar;
+    }
+  } catch {}
+}
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('token')) {
+  sessionStorage.setItem('shelter_token', urlParams.get('token'));
+  history.replaceState({}, '', window.location.pathname);
+}
+checkAuth();
+document.getElementById('nav-logout')?.addEventListener('click', () => {
+  sessionStorage.removeItem('shelter_token');
+  document.getElementById('nav-login-btn').style.display = '';
+  document.getElementById('nav-profile').style.display = 'none';
+});
+
+// ---- Новости ----
+const typeLabels = { news: 'Новость', server_update: 'Обновление', mod_update: 'Мод' };
+const typeClasses = { news: '', server_update: 'news-card__type--update', mod_update: 'news-card__type--mod' };
+
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function buildNewsCard(item) {
+  const img = item.images && item.images[0]
+    ? `<img src="${item.images[0]}" alt="${item.title}" class="news-card__img" loading="lazy">`
+    : '';
+  const modVer = item.type === 'mod_update' && item.modVersionFrom
+    ? `<div class="news-card__version">
+        <span class="news-card__version-from">${item.modVersionFrom}</span>
+        <span class="news-card__version-arrow">→</span>
+        <span class="news-card__version-to">${item.modVersionTo || '?'}</span>
+       </div>`
+    : '';
+  const modName = item.modName ? `<div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-dim);margin-bottom:6px">${item.modName}</div>` : '';
+  const body = item.body ? item.body.replace(/<[^>]+>/g, '').slice(0, 180) + (item.body.length > 180 ? '…' : '') : '';
+  return `
+    <div class="news-card">
+      ${img}
+      <div class="news-card__meta">
+        <span class="news-card__type ${typeClasses[item.type] || ''}">${typeLabels[item.type] || item.type}</span>
+        <span class="news-card__date">${formatDate(item.publishedAt || item.createdAt)}</span>
+      </div>
+      ${modName}${modVer}
+      <h3 class="news-card__title">${item.title}</h3>
+      <p class="news-card__body">${body}</p>
+    </div>
+  `;
+}
+
+async function loadNews() {
+  try {
+    const r = await fetch(API + '/news');
+    const all = await r.json();
+    const byType = { news: [], server_update: [], mod_update: [] };
+    for (const item of all) {
+      const t = item.type || 'news';
+      if (byType[t]) byType[t].push(item);
+    }
+    for (const [type, items] of Object.entries(byType)) {
+      const grid = document.getElementById('grid-' + (type === 'server_update' ? 'update' : type === 'mod_update' ? 'mods' : type));
+      const countEl = document.getElementById('count-' + (type === 'server_update' ? 'update' : type === 'mod_update' ? 'mods' : type));
+      if (countEl) countEl.textContent = items.length;
+      if (grid && items.length > 0) {
+        grid.innerHTML = items.slice(0, 6).map(buildNewsCard).join('');
+      }
+    }
+  } catch {}
+}
+loadNews();
+
+// Табы
+document.querySelectorAll('.news__tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.news__tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.news__panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab)?.classList.add('active');
+  });
+});
+
+// ---- Галерея ----
+(function() {
+  const track = document.getElementById('gallery-track');
+  const dotsEl = document.getElementById('gallery-dots');
+  const currentEl = document.getElementById('gallery-current');
+  const slides = track.querySelectorAll('.gallery__slide');
+  const total = slides.length;
+  let current = 0;
+  let perView = window.innerWidth < 768 ? 1 : 3;
+
+  document.getElementById('gallery-total').textContent = String(total).padStart(2, '0');
+
+  // Создать точки
+  const numDots = Math.ceil(total / perView);
+  for (let i = 0; i < numDots; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i * perView));
+    dotsEl.appendChild(dot);
+  }
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(idx, total - perView));
+    const slideW = slides[0].offsetWidth + 2;
+    track.style.transform = `translateX(-${current * slideW}px)`;
+    track.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+    currentEl.textContent = String(current + 1).padStart(2, '0');
+    dotsEl.querySelectorAll('.gallery__dot').forEach((d, i) => {
+      d.classList.toggle('active', i === Math.floor(current / perView));
+    });
+  }
+
+  document.getElementById('gallery-prev')?.addEventListener('click', () => goTo(current - perView));
+  document.getElementById('gallery-next')?.addEventListener('click', () => goTo(current + perView));
+
+  // Свайп
+  let startX = 0;
+  track.addEventListener('touchstart', e => startX = e.touches[0].clientX, { passive: true });
+  track.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+  });
+
+  window.addEventListener('resize', () => {
+    perView = window.innerWidth < 768 ? 1 : 3;
+    goTo(0);
+  });
+})();
+</script>
+
 </body>
 </html>
